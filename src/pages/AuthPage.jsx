@@ -1,6 +1,6 @@
-import React from 'react';
-import background from '../assets/image.png';
-import logo from '../assets/logo.png';
+import React from "react";
+import background from "../assets/image.png";
+import logo from "../assets/logo.png";
 
 const LoginPage = () => {
   return (
@@ -11,14 +11,14 @@ const LoginPage = () => {
       <div className="flex-grow flex items-center justify-center">
         <div
           className="bg-[#F7F4EF] p-10 rounded-2xl shadow-lg"
-          style={{ width: '512px', height: '600px' }}
+          style={{ width: "512px", height: "600px" }}
         >
           {/* Logo */}
           <div className="flex justify-center mb-6">
             <img
               src={logo}
               alt="tendr logo"
-              style={{ width: '326px', height: '106px' }}
+              style={{ width: "326px", height: "106px" }}
             />
           </div>
 
@@ -29,7 +29,7 @@ const LoginPage = () => {
 
           {/* Form */}
           <form className="space-y-4 ">
-            <div style={{ width: '415px', height: '65px' }}>
+            <div style={{ width: "415px", height: "65px" }}>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Email
               </label>
@@ -39,7 +39,7 @@ const LoginPage = () => {
               />
             </div>
 
-            <div style={{ width: '415px', height: '65px' }}>
+            <div style={{ width: "415px", height: "65px" }}>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Password
               </label>
@@ -54,28 +54,32 @@ const LoginPage = () => {
             </div>
 
             <div className="flex justify-center">
-  <button
-    type="submit"
-    className="text-white font-semibold rounded-xl"
-    style={{ backgroundColor: '#CCAB4A', width: '137px', height: '37px' }}
-  >
-    Sign In
-  </button>
-</div>
+              <button
+                type="submit"
+                className="text-white font-semibold rounded-xl"
+                style={{
+                  backgroundColor: "#CCAB4A",
+                  width: "137px",
+                  height: "37px",
+                }}
+              >
+                Sign In
+              </button>
+            </div>
           </form>
 
           {/* Create account */}
           <div
             className="mt-6 flex items-center justify-center text-sm"
-            style={{ width: '424px', height: '57px' }}
+            style={{ width: "424px", height: "57px" }}
           >
             <span className="text-gray-700 font-bold">New to tendr?</span>
             <span
-  className="ml-1 font-semibold cursor-pointer hover:underline"
-  style={{ color: '#CCAB4A' }}
->
-  Create an account
-</span>
+              className="ml-1 font-semibold cursor-pointer hover:underline"
+              style={{ color: "#CCAB4A" }}
+            >
+              Create an account
+            </span>
           </div>
         </div>
       </div>
@@ -85,13 +89,21 @@ const LoginPage = () => {
         <div className="flex flex-wrap justify-center gap-4">
           <span>tendr ©</span>
           <span>|</span>
-          <span>Support</span>
+          <a href="#" className="hover:underline cursor-pointer">
+            Support
+          </a>
           <span>|</span>
-          <span>Help Center</span>
+          <a href="#" className="hover:underline cursor-pointer">
+            Help Center
+          </a>
           <span>|</span>
-          <span>Vendor Support</span>
+          <a href="#" className="hover:underline cursor-pointer">
+            Vendor Support
+          </a>
           <span>|</span>
-          <span>Get in touch</span>
+          <a href="#" className="hover:underline cursor-pointer">
+            Get in touch
+          </a>
         </div>
       </footer>
     </div>
