@@ -15,7 +15,10 @@ const AuthPage = () => {
       className="w-screen min-h-screen flex flex-col bg-cover bg-center relative"
       style={{ backgroundImage: `url(${isSignup ? signupbackground : loginbackground})` }}
     >
-      <div className="flex-grow flex items-center justify-center px-4">
+      {/* Background Overlay */}
+      <div className="absolute inset-0 bg-[#CCAB4A] opacity-30 z-0" />
+
+      <div className="flex-grow flex items-center justify-center px-4 relative z-10">
         <div className={`bg-[#F7F4EF] ${isSignup ? 'py-6 px-6' : 'p-8 sm:p-10'} rounded-2xl shadow-lg w-full max-w-sm`}>
           {/* Logo */}
           <div className="flex justify-center mb-4 sm:mb-6">
