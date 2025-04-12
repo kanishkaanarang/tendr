@@ -1,10 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import loginbackground from "../assets/login-bg-image.png";
 import signupbackground from "../assets/signup-bg-image.png";
 import logo from "../assets/logo.png";
+import { useLocation } from 'react-router-dom';
 
 const AuthPage = () => {
-  const [isSignup, setIsSignup] = useState(false);
+const location = useLocation();
+const isSignupPath = location.pathname === '/signup';
+const [isSignup, setIsSignup] = useState(isSignupPath);
+
+useEffect(() => {
+  setIsSignup(location.pathname === '/signup');
+}, [location.pathname]);
 
   const toggleAuthMode = () => {
     setIsSignup(!isSignup);
@@ -18,7 +25,7 @@ const AuthPage = () => {
       {/* Background Overlay */}
       <div className="absolute inset-0 bg-[#CCAB4A] opacity-30 z-0" />
 
-      <div className="flex-grow flex items-center justify-center px-4 relative z-10">
+      <div className="flex-grow flex items-center justify-center px-4 pt-4 relative z-10">
         <div className={`bg-[#F7F4EF] ${isSignup ? 'py-6 px-6' : 'p-8 sm:p-10'} rounded-2xl shadow-lg w-full max-w-sm`}>
           {/* Logo */}
           <div className="flex justify-center mb-4 sm:mb-6">
@@ -60,7 +67,7 @@ const AuthPage = () => {
               <div className="flex justify-center">
                 <button
                   type="submit"
-                  className="text-white text-sm font-semibold rounded-xl w-28 h-9"
+                  className="text-white text-sm font-semibold rounded-xl w-28 h-9 mt-1"
                   style={{ backgroundColor: "#CCAB4A" }}
                 >
                   Sign Up
