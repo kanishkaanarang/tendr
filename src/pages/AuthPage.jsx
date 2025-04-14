@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import loginbackground from "../assets/login-bg-image.png";
 import signupbackground from "../assets/signup-bg-image.png";
-import logo from "../assets/logo.png";
+import logo from "../assets/logo2.png";
 import { useLocation } from 'react-router-dom';
 
 const AuthPage = () => {
