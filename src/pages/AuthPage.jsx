@@ -3,7 +3,7 @@ import loginbackground from "../assets/login-bg-image.png";
 import signupbackground from "../assets/signup-bg-image.png";
 import logo from "../assets/logo.png";
 import { useLocation } from "react-router-dom";
-const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const BASE_URL = "http://localhost:8080";
 
 const AuthPage = () => {
   const location = useLocation();
@@ -38,7 +38,7 @@ const AuthPage = () => {
   const handleSignupSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`${BASE_URL}/api/users/userSignup`, {
+      const response = await fetch(`${BASE_URL}/api/users/userSignUp`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
