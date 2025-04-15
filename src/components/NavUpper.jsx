@@ -1,7 +1,9 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom';
 import logo from "../assets/logo2.png";
 
 const NavUpper = () => {
+    const navigate = useNavigate();
     return (
         <>
             <div className="navupper flex  justify-between pl-10 pr-10 pt-3">

@@ -1,5 +1,8 @@
 import React, { useState } from 'react'
+
 import NavUpper from '../components/NavUpper';
+import FilterBar from '../components/FilterBar';
+
 import Christmas from "../assets/Home-Christmas.jpg";
 import Halloween from "../assets/Home-Halloween.jpg";
 import Kids_Theme from "../assets/Home-Kids.jpg";
@@ -9,10 +12,12 @@ import Decorator from "../assets/Home-Decorator.jpg";
 import Photographer from "../assets/Home-Photographer.jpg";
 import MoreToCome from "../assets/Home-MoreToCome.jpg";
 import Gift from "../assets/Home-Gift.jpg";
-import { useNavigate } from 'react-router-dom';
+
+// import { useNavigate } from 'react-router-dom';
+// import EastIcon from '@mui/icons-material/East';
 
 const LandingPage = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [isLoaded, setIsLoaded] = useState(false);
   return (
     <>
@@ -21,49 +26,14 @@ const LandingPage = () => {
 
         <div className='container mx-auto'>
 
-          <NavUpper/>
+          <NavUpper />
 
           <div className="navlower pb-5">
-            <div className="bardiv flex justify-center">
-              <div className="bar w-[950px] h-[66px] bg-white rounded-full flex justify-between items-center">
 
-                <div className="text flex">
-                  <div className="event p-3 pl-10 flex flex-col text-sm pr-24">
-                    <span className='font-medium'>Event Type</span>
-                    <span className='font-medium text-[#CCAB4A]'>Select events</span>
-                  </div>
+            <FilterBar/>
 
-                  <div className='bg-[#CCAB4A] mt-2 mb-2 w-[1px] ml-5 mr-5'></div>
-
-                  <div className="date p-3 pl-2 flex flex-col text-sm pr-12">
-                    <span className='font-medium'>Date</span>
-                    <span className='font-medium text-[#CCAB4A]'>Add dates</span>
-                  </div>
-
-                  <div className='bg-[#CCAB4A] mt-2 mb-2 w-[1px] ml-5 mr-5'></div>
-
-                  <div className="location p-3 pl-2 flex flex-col text-sm pr-12">
-                    <span className='font-medium'>Location</span>
-                    <span className='font-medium text-[#CCAB4A]'>Add location</span>
-                  </div>
-
-                  <div className='bg-[#CCAB4A] mt-2 mb-2 w-[1px] ml-5 mr-5'></div>
-
-                  <div className="guests p-3 pl-2 flex flex-col text-sm pr-12">
-                    <span className='font-medium'>Guests</span>
-                    <span className='font-medium text-[#CCAB4A]'>Number of guests</span>
-                  </div>
-                </div>
-
-
-                <div className="flex justify-center items-center">
-                  <button type="button" onClick={() => { navigate("/SecondPage") }} className="arrowButton mr-3 w-[45px] h-[45px] bg-[#CCAB4A] rounded-full"></button>
-                  {/*The above needs to be filled */}
-                </div>
-
-              </div>
-            </div>
           </div>
+
 
         </div>
 
@@ -153,13 +123,13 @@ const LandingPage = () => {
           <div className="fourth moretocome relative w-[350px] h-[500px] rounded-[18px] cursor-pointer overflow-hidden">
             {isLoaded && (<div className='font-bold text-7xl ml-9 absolute z-20 flex items-center h-full'>
               <span>
-              More
-              <br />
-              To
-              <br />
-              Come
-              <br />
-              Soon.
+                More
+                <br />
+                To
+                <br />
+                Come
+                <br />
+                Soon...
               </span>
             </div>)}
             <img
