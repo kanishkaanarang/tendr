@@ -44,20 +44,22 @@ const LandingPage = () => {
         <div className="vendor_images mt-4 flex gap-10">
 
           <div className="first">
-            <div className="relative catering mb-5 w-[360px] h-[240px] rounded-[18px] cursor-pointer overflow-hidden">
+
+            <div className="catering relative mb-5 w-[360px] h-[240px] rounded-[18px] cursor-pointer overflow-hidden">
               {isLoaded && (<div className='bg-white text-black font-bold rounded-full m-3 absolute z-20 flex items-center justify-center'>
                 <span className='pl-2 pr-2'>Catering</span>
               </div>)}
               <img
                 src={Catering}
                 alt="Catering"
-                className={`object-cover w-full h-full rounded-2xl transition-all duration-500 hover:scale-110 ${isLoaded ? "opacity-100" : "opacity-0"}`}
+                className={`object-cover w-full h-full rounded-2xl transition-all duration-200 hover:scale-110 ${isLoaded ? "opacity-100" : "opacity-0"}`}
                 onLoad={() => setIsLoaded(true)}
               />
               {!isLoaded && (
                 <div className="absolute inset-0 bg-gray-100 rounded-2xl z-10" />
               )}
             </div>
+
             <div className="entertainment w-[360px] h-[240px] rounded-[18px] cursor-pointer overflow-hidden">
               {isLoaded && (<div className='bg-white text-black font-bold rounded-full m-3 absolute z-20 flex items-center justify-center'>
                 <span className='pl-2 pr-2'>Entertainment</span>
@@ -65,7 +67,7 @@ const LandingPage = () => {
               <img
                 src={Entertainment}
                 alt="Entertainment"
-                className={`object-cover w-full h-full rounded-2xl transition-all duration-500 hover:scale-110 ${isLoaded ? "opacity-100" : "opacity-0"}`}
+                className={`object-cover w-full h-full rounded-2xl transition-all duration-200 hover:scale-110 ${isLoaded ? "opacity-100" : "opacity-0"}`}
                 onLoad={() => setIsLoaded(true)}
               />
               {!isLoaded && (
@@ -81,7 +83,7 @@ const LandingPage = () => {
             <img
               src={Decorator}
               alt="Decorator"
-              className={`object-cover w-full h-full rounded-2xl transition-all duration-500 hover:scale-110 ${isLoaded ? "opacity-100" : "opacity-0"}`}
+              className={`object-cover w-full h-full rounded-2xl transition-all duration-200 hover:scale-110 ${isLoaded ? "opacity-100" : "opacity-0"}`}
               onLoad={() => setIsLoaded(true)}
             />
             {!isLoaded && (
@@ -90,6 +92,7 @@ const LandingPage = () => {
           </div>
 
           <div className="third">
+
             <div className="photographer relative mb-5 w-[360px] h-[240px] rounded-[18px] cursor-pointer overflow-hidden">
               {isLoaded && (<div className='bg-white text-black font-bold rounded-full m-3 absolute z-20 flex items-center justify-center'>
                 <span className='pl-2 pr-2'>Photographer</span>
@@ -97,13 +100,14 @@ const LandingPage = () => {
               <img
                 src={Photographer}
                 alt="Photographer"
-                className={`object-cover w-full h-full rounded-2xl transition-all duration-500 hover:scale-110 ${isLoaded ? "opacity-100" : "opacity-0"}`}
+                className={`object-cover w-full h-full rounded-2xl transition-all duration-200 hover:scale-110 ${isLoaded ? "opacity-100" : "opacity-0"}`}
                 onLoad={() => setIsLoaded(true)}
               />
               {!isLoaded && (
                 <div className="absolute inset-0 bg-gray-100 rounded-2xl z-10" />
               )}
             </div>
+
             <div className="gift relative w-[360px] h-[240px] rounded-[18px] cursor-pointer overflow-hidden">
               {isLoaded && (<div className='bg-white text-black font-bold rounded-full m-3 absolute z-20 flex items-center justify-center'>
                 <span className='pl-2 pr-2'>Gift</span>
@@ -111,7 +115,7 @@ const LandingPage = () => {
               <img
                 src={Gift}
                 alt="Gift"
-                className={`object-cover w-full h-full rounded-2xl transition-all duration-500 hover:scale-110 ${isLoaded ? "opacity-100" : "opacity-0"}`}
+                className={`object-cover w-full h-full rounded-2xl transition-all duration-200 hover:scale-110 ${isLoaded ? "opacity-100" : "opacity-0"}`}
                 onLoad={() => setIsLoaded(true)}
               />
               {!isLoaded && (
@@ -135,7 +139,7 @@ const LandingPage = () => {
             <img
               src={MoreToCome}
               alt="More To Come"
-              className={`object-cover w-full h-full rounded-2xl transition-all duration-400 ${isLoaded ? "opacity-100" : "opacity-0"}`}
+              className={`object-cover w-full h-full rounded-2xl transition-all duration-500 ${isLoaded ? "opacity-100" : "opacity-0"}`}
               onLoad={() => setIsLoaded(true)}
             />
             {!isLoaded && (
