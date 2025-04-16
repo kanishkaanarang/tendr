@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import logo from "../assets/logo.png";
+import logo from "../assets/logo2.png";
 
 const OTPPage = () => {
   const [otp, setOtp] = useState(["", "", "", ""]);
