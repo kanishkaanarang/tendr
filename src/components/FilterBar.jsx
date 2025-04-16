@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import EastIcon from '@mui/icons-material/East';
 import { useNavigate } from 'react-router-dom';
 import { style } from '@mui/system';
@@ -9,37 +9,53 @@ const FilterBar = () => {
     const navigate = useNavigate();
 
     const [eventType, setEventType] = useState("");
-
-    const [showDropdownEvent, setshowDropdownEvent] = useState(false)
-
+    const [activeDropdown, setactiveDropdown] = useState(null)
 
     const eventOptions = ['Wedding', 'Birthday Party', 'Corporate Event', 'Concert'];
+
+    const handleOptionClick = (option) => {
+        setEventType(option);
+        setactiveDropdown(null);
+    };
+    
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+          if (!e.target.closest(".dropdown-wrapper")) {
+            setactiveDropdown(null);
+          }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+      }, []);
 
     return (
         <form>
 
             <div className="bardiv flex justify-center">
 
-                <div
-                    className="bar w-[950px] h-[66px] bg-white rounded-full flex justify-between items-center ring-[1px] ring-[#CCAB4A] shadow-[0_2px_10px_rgba(0,0,0,0.25)]"
-                    onClick={() => { setshowDropdownEvent(true) }}
-                >
+                <div className="bar w-[950px] h-[66px] bg-white rounded-full flex justify-between items-center ring-[1px] ring-[#CCAB4A] shadow-[0_2px_10px_rgba(0,0,0,0.25)]">
                     <div className="flex w-full h-full justify-between">
 
                         <div className="event p-3 pl-12 flex flex-col text-sm rounded-full w-[250px] hover:bg-[#ffe69e4a] relative">
-                            <label className='font-semibold text-[16px] cursor-pointer'>Event Type</label>
+                            <label className='font-semibold text-[16px] cursor-pointer' onClick={() => { setactiveDropdown("event") }}>Event Type</label>
                             <input
                                 type="text"
-                                className='font-bold text-[#CCAB4A] placeholder-[#CCAB4A] placeholder:font-medium outline-none bg-transparent pl-[1px] cursor-pointer'
+                                className='font-bold text-[#CCAB4A] placeholder-[#CCAB4A] placeholder:font-medium outline-none bg-transparent pl-[1px] cursor-pointer w-full'
                                 value={eventType}
                                 onChange={(e) => setEventType(e.target.value)}
+                                onClick={() => { setactiveDropdown("event") }}
                                 placeholder="Select events"
+                                readOnly
                             />
 
-                            {showDropdownEvent &&
-                                <div className="absolute left-0 top-[75px] w-[350px] h-[250px] bg-white rounded-3xl z-30 shadow-[0_2px_10px_rgba(0,0,0,0.25)] overflow-y-hidden">
+                            {activeDropdown === "event" &&
+                                <div className="dropdown-wrapper absolute left-0 top-[75px] w-[350px] h-[250px] bg-white rounded-3xl z-30 shadow-[0_2px_10px_rgba(0,0,0,0.25)] overflow-y-auto">
                                     {eventOptions.map((option, index) => {
-                                      return <div key={index} className='cursor-pointer text-lg p-3 pl-10 pr-10 hover:bg-[#ffe79e45] ml-5 mr-5 mt-2 rounded-full font-medium text-[#CCAB4A]'>
+                                      return <div 
+                                      key={index}
+                                      onClick={() => handleOptionClick(option)}
+                                      className={`cursor-pointer text-lg p-3 pl-10 pr-10 ml-5 mr-5 mt-2 rounded-full font-medium text-black ${eventType === option ? 'bg-[#ffe69e]' : 'hover:bg-[#ffe79e45]'}`}
+                                      >
                                         {option}
                                       </div>
                                     }
