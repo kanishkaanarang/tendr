@@ -15,6 +15,8 @@ import SmartRecommendations from './pages/SmartRecommendations';
 import PlanEventCheckout from './pages/PlanEventCheckout';
 import WhatsAppFlow from './pages/WhatsAppFlow';
 import NotFound from './pages/NotFound';
+import OtpPage from "./pages/Otpverification";
+
 
 export const router = createBrowserRouter([
   { path: '/', element: <LandingPage /> },
@@ -50,6 +52,7 @@ export const router = createBrowserRouter([
   },
   { path: '/chatbot', element: <WhatsAppFlow /> },
   { path: '*', element: <NotFound /> },
+  { path: '/otp', element: <OtpPage /> },
 ]);
 
 function App() {

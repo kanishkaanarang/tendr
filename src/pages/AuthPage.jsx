@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import loginbackground from "../assets/login-bg-image.png";
 import signupbackground from "../assets/signup-bg-image.png";
 import logo from "../assets/logo.png";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const AuthPage = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const isSignupPath = location.pathname === "/signup";
   const [isSignup, setIsSignup] = useState(isSignupPath);
 
@@ -34,7 +36,6 @@ const AuthPage = () => {
     }));
   };
 
-  // Handle the form submission for signup
   const handleSignupSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -48,8 +49,15 @@ const AuthPage = () => {
 
       const result = await response.json();
       console.log("Server Response:", result);
+
+      if (response.ok) {
+        navigate("/otp");
+      } else {
+        alert(result.message || "Signup failed. Please try again.");
+      }
     } catch (error) {
       console.error("Signup Error:", error);
+      alert("An error occurred. Please try again later.");
     }
   };
 
@@ -57,9 +65,7 @@ const AuthPage = () => {
     <div
       className="w-screen min-h-screen flex flex-col bg-cover bg-center relative"
       style={{
-        backgroundImage: `url(${
-          isSignup ? signupbackground : loginbackground
-        })`,
+        backgroundImage: `url(${isSignup ? signupbackground : loginbackground})`,
       }}
     >
       <div className="absolute inset-0 bg-[#CCAB4A] opacity-30 z-0" />
@@ -166,6 +172,7 @@ const AuthPage = () => {
                 </label>
                 <input
                   type="email"
+                  name="email"
                   value={formData.email}
                   onChange={handleChange}
                   className="w-full px-4 py-2 border border-yellow-400 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-500"
@@ -177,6 +184,7 @@ const AuthPage = () => {
                 </label>
                 <input
                   type="password"
+                  name="password"
                   value={formData.password}
                   onChange={handleChange}
                   className="w-full px-4 py-2 border border-yellow-400 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-500"
@@ -198,9 +206,7 @@ const AuthPage = () => {
           )}
 
           <div className="mt-5 flex flex-col sm:flex-row items-center justify-center text-sm text-gray-700 font-bold gap-1 bg-white rounded-xl p-3">
-            <span>
-              {isSignup ? "Already have an account?" : "New to tendr?"}
-            </span>
+            <span>{isSignup ? "Already have an account?" : "New to tendr?"}</span>
             <span
               className="font-semibold cursor-pointer hover:underline"
               style={{ color: "#CCAB4A" }}
