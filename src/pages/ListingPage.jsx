@@ -7,7 +7,7 @@ const ListingPage = () => {
   return (
     <>
       
-      <div className="navbar bg-[#EBE7DE] sticky top-0 border-b-2 border-[#CCAB4A]">
+      <div className="navbar bg-[#EBE7DE] sticky top-0">    {/* border-b-2 border-[#CCAB4A] */}
           <ListingsNav/>
       </div>
 
