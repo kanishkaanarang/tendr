@@ -1,23 +1,23 @@
 import React from 'react'
 
-import NavUpper from '../components/NavUpper';
+import ListingsNav from '../components/ListingsNav';
 
 
 const ListingPage = () => {
   return (
     <>
       
-      <div className="navbar bg-[#EBE7DE] border-b-2 border-[#CCAB4A]">
-          <NavUpper/>
+      <div className="navbar bg-[#EBE7DE] sticky top-0 border-b-2 border-[#CCAB4A]">
+          <ListingsNav/>
       </div>
 
-      <div className="mainbody w-full h-[100vh] flex">
+      <div className="mainbody w-full h-[200vh] flex">
 
-          <div className="left w-[35%] h-full bg-[#FDFAF0]">
+          <div className="left w-[30%] h-full bg-[#FDFAF0]">
             LEFT
           </div>
 
-          <div className="right w-[65%] bg-white border-l-2 border-[#CCAB4A]">
+          <div className="right w-[70%] bg-white border-l-2 border-[#CCAB4A]">
             RIGHT
           </div>
 
