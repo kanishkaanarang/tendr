@@ -29,6 +29,7 @@ const NavUpper = () => {
                 </div>
                 <div className="buttons flex gap-5 items-start pt-1">
                     <button type="button" onClick={() => { setactiveDropdown("user") }} className='bg-white outline-none hover:ring-2 hover:ring-[#CCAB4A] rounded-full pl-2.5 pr-2.5 pt-1 pb-1 flex items-center justify-center gap-2 text-white font-bold w-[80px]'>
+                        {/* Remove the ring in above */}
                         <MenuIcon className='text-[#CCAB4A]' fontSize="medium" />
                         <AccountCircleIcon className='text-[#CCAB4A]' fontSize="large" />
                     </button>
