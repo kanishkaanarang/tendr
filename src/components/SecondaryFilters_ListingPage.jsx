@@ -68,8 +68,6 @@ const SecondaryFilters_ListingPage = () => {
                     </div>
                 </div>
 
-
-
                 <div className="secondary_heading ml-12 mb-5 mt-9 font-bold text-2xl">Vendor Ratings</div>
 
                 {/* Ratings */}

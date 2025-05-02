@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 
+import WestIcon from '@mui/icons-material/West';
+
 import ListingsNav from '../components/ListingsNav';
 import PrimaryFilters_ListingPage from '../components/PrimaryFilters_ListingPage';
 import SecondaryFilters_ListingPage from '../components/SecondaryFilters_ListingPage';
-
-import WestIcon from '@mui/icons-material/West';
+import Footer1 from '../components/Footer1';
 import VendorList_ListingPage from '../components/VendorList_ListingPage';
+
+
 
 const ListingPage = () => {
   const navigate = useNavigate();
@@ -23,10 +26,7 @@ const ListingPage = () => {
 
       <div className="mainbody w-full h-fit flex">
 
-
-
-
-        <div className="left w-[30%] h-full bg-[#FDFAF0]">
+        <div className="left w-[30%] h-full bg-[#FDFAF0] border-b-2 border-[#CCAB4A]">
           <div className="left_content p-2">
 
             <div className="back_btn">
@@ -36,11 +36,11 @@ const ListingPage = () => {
             </div>
 
             <div className="primary_filter">
-              <PrimaryFilters_ListingPage/>
+              <PrimaryFilters_ListingPage />
             </div>
 
             <div className="secondary_filter">
-              <SecondaryFilters_ListingPage/>
+              <SecondaryFilters_ListingPage />
             </div>
 
           </div>
@@ -50,16 +50,11 @@ const ListingPage = () => {
 
 
 
-        <div className="right w-[70%] bg-white border-l-2 border-[#CCAB4A]">
-          <div className="right_content px-7 pt-6">
-
-            {/* <div className="border-[1px] border-black h-[100vh]"> */}
-              <VendorList_ListingPage/>
-            {/* </div> */}
-
+        <div className="right w-[70%] bg-white border-l-2 border-[#CCAB4A] border-b-2">
+          <div className="right_content px-7 pt-5 h-full">
+            <VendorList_ListingPage />
           </div>
         </div>
-
 
 
 
@@ -69,7 +64,10 @@ const ListingPage = () => {
 
 
 
-      <div className="blackbox border-2 bg-emerald-400 border-black h-56 w-full"></div>
+
+      <div className="footer">
+        <Footer1/>
+      </div>
 
     </>
   )
