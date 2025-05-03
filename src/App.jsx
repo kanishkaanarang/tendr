@@ -16,9 +16,12 @@ import PlanEventCheckout from './pages/PlanEventCheckout';
 import WhatsAppFlow from './pages/WhatsAppFlow';
 import NotFound from './pages/NotFound';
 import OtpPage from "./pages/Otpverification";
+import VendorDetails from './pages/VendorDetails';
+import ChatPage from './pages/ChatPage';
 
 
 export const router = createBrowserRouter([
+  { path: '/chat', element: <ChatPage /> },
   { path: '/', element: <LandingPage /> },
   { path: '/explore', element: <ExploreVendors /> },
   { path: '/login', element: <AuthPage /> },
@@ -40,6 +43,10 @@ export const router = createBrowserRouter([
   {
     path: '/vendors/:category',
     element: <VendorListings />,
+  },
+  {
+    path: '/VendorDetails',
+    element: <VendorDetails />,
   },
   {
     path: '/plan-event',
