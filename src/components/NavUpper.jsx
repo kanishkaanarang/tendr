@@ -4,9 +4,10 @@ import logo from "../assets/logo2.png";
 
 const NavUpper = () => {
     const navigate = useNavigate();
+
     return (
         <>
-            <div className="navupper flex  justify-between pl-10 pr-10 pt-3">
+            <div className="navupper flex justify-between pl-5 pr-5 pt-3 pb-3 bg-[#EBE7DE]">
                 <div className="logo">
                     <img src={logo} alt="tendr logo" style={{ height: "84px" }} />
                 </div>
