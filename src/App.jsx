@@ -17,9 +17,12 @@ import WhatsAppFlow from './pages/WhatsAppFlow';
 import NotFound from './pages/NotFound';
 import OtpPage from "./pages/Otpverification";
 import ListingPage from './pages/ListingPage';
+import VendorDetails from './pages/VendorDetails';
+import ChatPage from './pages/ChatPage';
 
 
 export const router = createBrowserRouter([
+  { path: '/chat', element: <ChatPage /> },
   { path: '/', element: <LandingPage2 /> },
   { path: '/listings', element: <ListingPage /> },
   { path: '/login', element: <AuthPage /> },
