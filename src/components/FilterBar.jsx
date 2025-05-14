@@ -119,7 +119,7 @@ const FilterBar = () => {
                         <Separator_FilterBar />
 
 
-                        <div className="service p-3 pl-12 flex flex-col text-sm rounded-full w-[200px] hover:bg-[#ffe69e4a] relative">
+                        <div className="service p-3 pl-5 flex flex-col text-sm rounded-full w-[200px] hover:bg-[#ffe69e4a] relative">
                             <label className='font-semibold text-[16px] cursor-pointer' onClick={() => { setactiveDropdown("service") }}>Service Type</label>
                             <input
                                 type="text"
