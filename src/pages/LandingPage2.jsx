@@ -18,16 +18,18 @@ const LandingPage2 = () => {
 
 
 
-                    <div className="top flex w-full justify-between px-2 pt-2">
+                    <div className="top flex w-full justify-between px-3 pt-2">
                         <div className="logo">
                             <img src={logo} alt="tendr logo" style={{ height: "70px" }} />
                         </div>
-                        <div className="btns flex items-center justify-between w-[220px]">
-                            <button type="button" onClick={() => { navigate("/signup") }} className='bg-[#CCAB4A] hover:bg-[#a98d3b] rounded-xl pl-2.5 pr-2.5 pt-1 pb-1.5 flex items-center justify-center text-white font-bold w-[100px] h-[40px]'>
+                        <div className="btns flex items-center justify-between w-[220px] px-1">
+                            <button type="button" onClick={() => { navigate("/signup") }} className='bg-transparent hover:bg-white border-[3px] border-white hover:text-transparent rounded-xl pl-2.5 pr-2.5 pt-1 pb-1.5 flex items-center justify-center text-white font-bold w-[100px] h-[40px]'>
                                 <span>Sign Up</span>
                             </button>
-                            <button type="button" onClick={() => { navigate("/login") }} className='bg-white hover:ring-1 hover:ring-[#CCAB4A] rounded-xl pl-2.5 pr-2.5 pt-1 pb-1.5 flex items-center justify-center font-bold w-[100px] h-[40px]'>
-                                <span>Sign In</span>
+                            <button type="button" onClick={() => { navigate("/login") }} className='bg-white rounded-xl pl-2.5 pr-2.5 pt-1 pb-1.5 flex items-center justify-center font-extrabold w-[100px] h-[40px]'>
+                                <span className="text-transparent bg-clip-text" 
+                                style={{ backgroundImage: `url(${LandingPage1})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+                                >Sign In</span>
                             </button>
                         </div>
                     </div>
