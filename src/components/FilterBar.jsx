@@ -55,6 +55,7 @@ const FilterBar = () => {
                 },
                 body: JSON.stringify({
                     eventType,
+                    serviceType,
                     date,
                     locationType,
                     guestCount
