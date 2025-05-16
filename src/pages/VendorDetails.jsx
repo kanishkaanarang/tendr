@@ -23,7 +23,7 @@ const VendorDetailsPage = () => {
 
   const selectedVendor = {
     name: "Luxe Experience",
-    approved: true, // or false, depending on your use case
+    approved: true,
   };
 
   const filtersData = {
@@ -34,6 +34,7 @@ const VendorDetailsPage = () => {
     foodType: "South Indian",
     decorTheme: "Royal",
   };
+
   return (
     <div className="w-full min-h-screen bg-[#F7F4EF] text-gray-800">
       {/* Navbar */}
@@ -98,11 +99,25 @@ const VendorDetailsPage = () => {
           <p className="text-sm text-gray-700">Response time: 1 hour</p>
         </div>
 
+        {/* Booking + Message Preview */}
         <div className="bg-white p-5 rounded-2xl shadow-lg space-y-4 border border-yellow-400">
           <h2 className="text-xl font-semibold">Price to be updated</h2>
           <div className="text-sm text-gray-600">
             Event Location, Date & Time
           </div>
+
+          {/* Message Preview */}
+          <div className="bg-yellow-50 border border-yellow-200 text-sm p-3 rounded-xl whitespace-pre-line text-gray-800">
+            {`Guest: ${filtersData.guest}
+Location: ${filtersData.location}
+Date: ${filtersData.date}
+Time: ${filtersData.time}
+Food Type: ${filtersData.foodType}
+Decor Theme: ${filtersData.decorTheme}
+
+Are you available?`}
+          </div>
+
           {/* Chat Button */}
           <button
             onClick={() =>

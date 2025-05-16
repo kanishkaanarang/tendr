@@ -42,7 +42,6 @@ const PrimaryFilters_ListingPage = () => {
 
     const handleSearch = async () => {
         console.log("Sending filter bar data selected by user:", { eventType, date, locationType, guestCount });
-
         try {
             const response = await fetch(`${BASE_URL}/api/filter`, {
                 method: 'POST',

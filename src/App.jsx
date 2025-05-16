@@ -22,6 +22,7 @@ import ChatPage from './pages/ChatPage';
 
 export const router = createBrowserRouter([
   { path: '/chat', element: <ChatPage /> },
+  { path: '/VendorDetails', element: < VendorDetails/> },
   { path: '/', element: <LandingPage /> },
   { path: '/listings', element: <ListingPage /> },
   { path: '/login', element: <AuthPage /> },

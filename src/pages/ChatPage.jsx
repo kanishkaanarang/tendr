@@ -18,13 +18,12 @@ Are you available?
 `.trim();
 };
 
-
 const ChatPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { vendor, filters } = location.state || {};
 
-  const vendorApproved = vendor?.approved;
+  const vendorApproved = vendor?.approved || false;
 
   const [message, setMessage] = useState("");
   const [isVendorTyping, setIsVendorTyping] = useState(false);
@@ -33,7 +32,7 @@ const ChatPage = () => {
 
   // Send filters automatically after vendor approval
   useEffect(() => {
-    if (!hasSentInitialMessage && filters && Object.keys(filters).length > 0) {
+    if (filters && !hasSentInitialMessage && Object.keys(filters).length > 0) {
       const initialMessage = {
         text: compileFiltersMessage(filters),
         sender: "user",
@@ -42,20 +41,20 @@ const ChatPage = () => {
       setHasSentInitialMessage(true);
     }
   }, [hasSentInitialMessage, filters]);
-  
 
+  // Handle User Typing
   const handleUserTyping = (e) => {
     setMessage(e.target.value);
-
     clearTimeout(window.vendorTypingTimeout);
     window.vendorTypingTimeout = setTimeout(() => {
       setIsVendorTyping(true);
     }, 1000);
   };
 
+  // Handle Send Message
   const handleSendMessage = (e) => {
     e.preventDefault();
-    if (!vendorApproved) return;
+    if (!vendorApproved) return; // Ensure chat is not sent unless approved
 
     if (message.trim()) {
       const userMessage = { text: message, sender: "user" };
