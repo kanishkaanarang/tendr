@@ -2,7 +2,7 @@ import { createBrowserRouter, Router, RouterProvider } from 'react-router-dom'
 import './App.css'
 
 import LandingPage from './pages/LandingPage';
-import LandingPage2 from './pages/LandingPage2';
+import LandingPageNew from './pages/LandingPageNew';
 import AuthPage from './pages/AuthPage';
 import VendorRegistration from './pages/VendorRegistration';
 import VendorDashboard from './pages/VendorDashboard';
@@ -23,7 +23,7 @@ import ChatPage from './pages/ChatPage';
 
 export const router = createBrowserRouter([
   { path: '/chat', element: <ChatPage /> },
-  { path: '/', element: <LandingPage2 /> },
+  { path: '/', element: <LandingPageNew /> },
   { path: '/listings', element: <ListingPage /> },
   { path: '/login', element: <AuthPage /> },
   { path: '/signup', element: <AuthPage /> },
@@ -40,6 +40,10 @@ export const router = createBrowserRouter([
       { path: '', element: <SelectServiceType /> },
       { path: 'checkout', element: <BookServiceCheckout /> },
     ],
+  },
+  {
+    path: '/VendorDetails',
+    element: <VendorDetails />,
   },
   // {
   //   path: '/vendors/:category',

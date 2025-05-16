@@ -4,15 +4,15 @@ import NavUpper from '../components/NavUpper';
 import FilterBar from '../components/FilterBar';
 import Footer1 from '../components/Footer1';
 
-import Christmas from "../assets/Home-Christmas.jpg";
-import Halloween from "../assets/Home-Halloween.jpg";
-import Kids_Theme from "../assets/Home-Kids.jpg";
-import Catering from "../assets/Home-Catering.jpg";
-import Entertainment from "../assets/Home-Entertainment.jpg";
-import Decorator from "../assets/Home-Decorator.jpg";
-import Photographer from "../assets/Home-Photographer.jpg";
-import MoreToCome from "../assets/Home-MoreToCome.jpg";
-import Gift from "../assets/Home-Gift.jpg";
+// import Christmas from "../assets/Home-Christmas.jpg";
+// import Halloween from "../assets/Home-Halloween.jpg";
+// import Kids_Theme from "../assets/Home-Kids.jpg";
+// import Catering from "../assets/Home-Catering.jpg";
+// import Entertainment from "../assets/Home-Entertainment.jpg";
+// import Decorator from "../assets/Home-Decorator.jpg";
+// import Photographer from "../assets/Home-Photographer.jpg";
+// import MoreToCome from "../assets/Home-MoreToCome.jpg";
+// import Gift from "../assets/Home-Gift.jpg";
 
 // import { useNavigate } from 'react-router-dom';
 // import EastIcon from '@mui/icons-material/East';
