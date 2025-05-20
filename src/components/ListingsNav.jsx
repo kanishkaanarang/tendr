@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom';
 import logo from "../assets/logo2.png";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import MenuIcon from '@mui/icons-material/Menu';
 
 const NavUpper = () => {
-    const navigate = useNavigate();
     const [activeDropdown, setactiveDropdown] = useState(null)
 
     useEffect(() => {

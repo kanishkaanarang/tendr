@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-
+import { useNavigate } from 'react-router-dom';
 import ClearIcon from '@mui/icons-material/Clear';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import EastIcon from '@mui/icons-material/East';
@@ -7,9 +7,9 @@ import EastIcon from '@mui/icons-material/East';
 const BASE_URL = "http://localhost:8080";
 
 
-
 const PrimaryFilters_ListingPage = () => {
 
+    const navigate = useNavigate();
     const [eventType, setEventType] = useState("");
     const [locationType, setLocationType] = useState("");
     const [date, setDate] = useState("");
@@ -74,7 +74,6 @@ const PrimaryFilters_ListingPage = () => {
     return (
         <>
             <div className="primary_heading ml-12 mt-5 font-bold text-2xl">Event Details</div>
-
             <div className="primary_filter_options flex flex-col gap-2 mt-4 ml-12">
 
                 {/* Event Type */}
@@ -270,4 +269,4 @@ const PrimaryFilters_ListingPage = () => {
     )
 }
 
-export default PrimaryFilters_ListingPage
+export default PrimaryFilters_ListingPage;
