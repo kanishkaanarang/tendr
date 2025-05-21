@@ -42,6 +42,9 @@ const HeroSection_LandingPage = () => {
     <>
       <div className="Hero_section relative h-[110vh] w-full bg-cover bg-bottom rounded-b-[80px]" style={{ backgroundImage: `url(${LandingPage1})`, backgroundPosition: 'center top -50px' }}>
 
+
+
+        {/* TOP PART CONTAINING SIGN IN, SIGN UP AND LOGO */}
         <div className="top flex w-full justify-between px-3 py-3">
 
           <div className="logo">
@@ -74,8 +77,10 @@ const HeroSection_LandingPage = () => {
 
         </div>
 
-        <div
-          className="banner_text pl-[132px] pr-16 py-14 font-black text-white text-[90px] leading-[100px]"
+
+
+        {/* BANNER PART WITH WORDS CHANGING ANIMATION */}
+        <div className="banner_text pl-[132px] pr-16 py-14 font-black text-white text-[90px] leading-[100px]"
           style={{ WebkitTextStroke: "1px #CCAB4A" }}
         >
           <span>Everything You Need to Plan the Perfect </span>
@@ -88,10 +93,14 @@ const HeroSection_LandingPage = () => {
         </div>
 
 
+
+        {/* FILTER BAR PART */}
         <div className="filterbar_container pt-5 pb-14">
           <FilterBar />
         </div>
 
+
+        {/* GROUP BOOKING TEXT AND BTN PART */}
         <div className="make_a_group pt-5 flex flex-col items-center gap-5">
 
           <div className="make_a_group_text font-extrabold text-2xl">
@@ -123,6 +132,8 @@ const HeroSection_LandingPage = () => {
           </div>
 
         </div>
+
+
 
       </div>
     </>

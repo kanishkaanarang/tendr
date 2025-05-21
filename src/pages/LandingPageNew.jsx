@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 
 import { useNavigate } from 'react-router-dom';
 
-// import FilterBar from '../components/FilterBar';
 import HeroSection_LandingPage from '../components/HeroSection_LandingPage';
 
 import EastIcon from '@mui/icons-material/East';
@@ -18,9 +17,7 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import FacebookIcon from '@mui/icons-material/Facebook';
 
-// import logo from "../assets/logo2.png";
 
-// import LandingPage1 from "../assets/LandingPage1.jpg";
 import LandingPage2 from "../assets/LandingPage2.jpg";
 
 import Catering from "../assets/LandingPageCatering.jpg";
@@ -31,35 +28,43 @@ import Photographer from "../assets/LandingPagePhotographer.jpg";
 import NotSure from "../assets/LandingPageNotSure.jpg";
 import VendorNetwork from "../assets/LandingPageVendorNetwork.jpg";
 
+
+
+// ARRAY CONTAINING FAQ QUESTION AND ANSWERS
 const ques_ans = [
     {
         key: 1,
-        question: "Do I have to pay the full amount upfront?",
-        answer: "No, most vendors offer flexible payment options. You can choose to pay partially upfront and the rest closer to the event date."
+        question: "How does this platform work?",
+        answer: "We help you book everything you need for a house party or corporate event — from caterers and decorators to artists and venues. Just choose your service, chat with the vendor, and book in a few clicks."
     },
     {
         key: 2,
-        question: "Can I book vendors for multiple events at once?",
-        answer: "Yes! Our platform supports multi-event bookings. You can coordinate all your vendors across various events with ease."
+        question: "Is your platform for individuals or companies?",
+        answer: "Both! We serve house parties, birthdays, weekend get-togethers, and also cater to offices for team outings, festive events, and internal functions."
     },
     {
         key: 3,
-        question: "Can I contact vendors before booking?",
-        answer: "Absolutely. You can chat or schedule calls with vendors to discuss details before making a commitment."
+        question: "How do I book a service?",
+        answer: "Simply click on a vendor or package, start a chat to finalize details, and pay 40% upfront to confirm. The rest can be paid closer to the event"
     },
     {
         key: 4,
-        question: "Are there discounts for booking multiple services?",
-        answer: "Yes, many vendors offer bundled service discounts. Look for the 'Package Deal' badge when browsing listings."
+        question: "What if I need help during the event?",
+        answer: "Every booking comes with a dedicated team member from our side to assist you before and during the event. You're never alone!"
     }
 ];
 
+
+
+// ARRAY CONTAINING OBJECTS OF RECOMMENDED VENDORS IMAGES AND LABEL
 const recommended_arr = [
     { src: Catering, label: "Catering" },
     { src: Entertainment, label: "Entertainment" },
     { src: Decorator, label: "Decorator" },
     { src: Photographer, label: "Photographer" }
 ]
+
+
 
 //UPDATE QUESTIONS PART AND ADD SHOW MORE
 //MAKE ALL THE BUTTONS AND CLICKABLE THINGS WORK
@@ -69,6 +74,11 @@ const recommended_arr = [
 //ADD SERVICE NAME,CURSOR-POINTER,ZOOM AND MOVE UP A BIT EFFECT EFFECT IN RECOMMEND VENDORS
 //DELETE OLD LANDING PAGE, COMPONENTS AND IMAGES ASSOCIATED WITH IT
 //MAKE IT RESPONSIVE
+//WORK DURATION OF SLOGAN BANNER AND MAKE IT SUCH THAT TEXT DONT OVERFLOW IT
+//WORK ON TEXT ABOVE GROUP BOOKING OPTION
+//ADD BUTTON TO GO UP AND IF POSSIBLE ALSO TO GO DOWN LIKE IN MOST WEBSITES IN THE RIGHT CORENER OF THE SCREEN LIKE IN SPOTIFY
+//MAKE SIGN IN AND SIGN UP BUTTON AS SUCH THAT WHEN PRESSED IT SHRINKS A LITTLE BIT
+//ASK FOR SVG VERSION OF LOGO OF THE SITE
 
 
 
@@ -91,8 +101,12 @@ const LandingPageNew = () => {
         <>
             <div className='h-fit'>
 
+
+
                 {/* HERO SECTION PART */}
                 <HeroSection_LandingPage />
+
+
 
                 {/* SLOGAN BANNER */}
                 <div className="slogan_banner group my-24 mx-4 md:mx-16 h-[422px] rounded-[80px] flex items-center justify-center text-center bg-center bg-cover cursor-pointer transition-transform duration-500 ease-in-out hover:scale-105 overflow-hidden"
@@ -109,6 +123,8 @@ const LandingPageNew = () => {
                         “We Curate You Celebrate”
                     </div>
                 </div>
+
+
 
                 {/* RECOMMENDED VENDORS */}
                 <div className="recommendedvendors my-24">
@@ -139,6 +155,8 @@ const LandingPageNew = () => {
                         ))}
                     </div>
                 </div>
+
+
 
                 {/* WHY YOU WILL LOVE US */}
                 <div className="why_love_us my-24 mx-16 h-[480px] bg-[#FFD3C3] rounded-[80px] flex flex-col gap-14 items-center cursor-pointer transition-transform duration-700 ease-in-out hover:scale-105">
@@ -178,6 +196,8 @@ const LandingPageNew = () => {
 
                 </div>
 
+
+
                 {/* NOT SURE BOX */}
                 <div className="not_sure mx-16 my-24 flex justify-center gap-20">
 
@@ -199,6 +219,8 @@ const LandingPageNew = () => {
                     </div>
 
                 </div>
+
+
 
                 {/* JOIN VENDOR NETWORK BOX */}
                 <div className="vendornetwork my-24 mx-16 flex justify-center gap-20">
@@ -246,6 +268,8 @@ const LandingPageNew = () => {
                     ></div>
 
                 </div>
+
+
 
                 {/* FAQ QUESTIONS AND ANSWERS */}
                 <div className="questions-answers my-24">
@@ -305,6 +329,8 @@ const LandingPageNew = () => {
                     </div>
                 </div>
 
+
+
                 {/* FOOTER PART */}
                 <div className="footer h-fit pt-20 pb-5 bg-[#FFD3C3] text-[#D48060] rounded-t-[80px] transition-colors duration-300">
 
@@ -358,6 +384,8 @@ const LandingPageNew = () => {
                     </div>
 
                 </div>
+
+
 
             </div >
 
