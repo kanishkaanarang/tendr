@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 // import FilterBar from '../components/FilterBar';
 import HeroSection_LandingPage from '../components/HeroSection_LandingPage';
@@ -73,7 +73,7 @@ const recommended_arr = [
 
 
 const LandingPageNew = () => {
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
 
     const [activeQuestion, setactiveQuestion] = useState(null)
 
@@ -129,7 +129,7 @@ const LandingPageNew = () => {
                                 <div className="label_btn absolute bottom-4 left-0 right-0 mx-auto w-fit group cursor-pointer bg-white text-[#D48060] hover:bg-[#D48060] hover:text-white font-bold text-lg rounded-2xl h-[40px] px-5 pl-4 pr-2 flex items-center justify-between transform transition-transform duration-300 ease-in-out hover:scale-105 active:scale-95 hover:-translate-y-1">
                                     <span className="pb-[2px]">{item.label}</span>
                                     <span
-                                        onClick={() => handleSearch()}
+                                        // onClick={() => handleSearch()}
                                         className="arrowButton ml-2 w-[30px] h-[30px] bg-[#D48060] group-hover:bg-white rounded-xl flex items-center justify-center transition duration-300"
                                     >
                                         <EastIcon className="text-white group-hover:text-[#D48060] transition duration-300" fontSize="medium" />
@@ -228,7 +228,7 @@ const LandingPageNew = () => {
 
                                 <span
                                     type="button"
-                                    onClick={() => handleSearch()}
+                                    // onClick={() => handleSearch()}
                                     className="group-hover:bg-white arrowButton w-[30px] h-[30px] bg-[#D48060] rounded-xl flex items-center justify-center transition duration-300"
                                 >
                                     <EastIcon className="text-white group-hover:text-[#D48060] transition duration-300" fontSize="medium" />

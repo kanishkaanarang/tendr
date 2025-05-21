@@ -112,7 +112,7 @@ const HeroSection_LandingPage = () => {
 
               <span
                 type="button"
-                onClick={() => handleSearch()}
+                // onClick={() => handleSearch()}
                 className="arrowButton w-[30px] h-[30px] bg-[#CCAB4A] group-hover:bg-white rounded-xl flex items-center justify-center transition duration-300"
               >
                 <EastIcon className="text-white transition duration-300 group-hover:text-[#CCAB4A]" fontSize="medium" />

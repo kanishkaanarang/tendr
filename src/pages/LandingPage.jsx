@@ -4,18 +4,18 @@ import NavUpper from '../components/NavUpper';
 import FilterBar from '../components/FilterBar';
 import Footer1 from '../components/Footer1';
 
-// import Christmas from "../assets/Home-Christmas.jpg";
-// import Halloween from "../assets/Home-Halloween.jpg";
-// import Kids_Theme from "../assets/Home-Kids.jpg";
+import Christmas from "../assets/Home-Christmas.jpg";
+import Halloween from "../assets/Home-Halloween.jpg";
+import Kids_Theme from "../assets/Home-Kids.jpg";
 // import Catering from "../assets/Home-Catering.jpg";
 // import Entertainment from "../assets/Home-Entertainment.jpg";
 // import Decorator from "../assets/Home-Decorator.jpg";
 // import Photographer from "../assets/Home-Photographer.jpg";
-// import MoreToCome from "../assets/Home-MoreToCome.jpg";
-// import Gift from "../assets/Home-Gift.jpg";
+import MoreToCome from "../assets/Home-MoreToCome.jpg";
+import Gift from "../assets/Home-Gift.jpg";
 
 // import { useNavigate } from 'react-router-dom';
-// import EastIcon from '@mui/icons-material/East';
+import EastIcon from '@mui/icons-material/East';
 
 const LandingPage = () => {
   // const navigate = useNavigate();
@@ -51,7 +51,7 @@ const LandingPage = () => {
                 <span className='pl-2 pr-2'>Catering</span>
               </div>)}
               <img
-                src={Catering}
+                // src={Catering}
                 alt="Catering"
                 className={`object-cover w-full h-full rounded-2xl transition-all duration-200 hover:scale-110 ${isLoaded ? "opacity-100" : "opacity-0"}`}
                 onLoad={() => setIsLoaded(true)}
@@ -66,7 +66,7 @@ const LandingPage = () => {
                 <span className='pl-2 pr-2'>Entertainment</span>
               </div>)}
               <img
-                src={Entertainment}
+                // src={Entertainment}
                 alt="Entertainment"
                 className={`object-cover w-full h-full rounded-2xl transition-all duration-200 hover:scale-110 ${isLoaded ? "opacity-100" : "opacity-0"}`}
                 onLoad={() => setIsLoaded(true)}
@@ -82,7 +82,7 @@ const LandingPage = () => {
               <span className='pl-2 pr-2'>Decorator</span>
             </div>)}
             <img
-              src={Decorator}
+              // src={Decorator}
               alt="Decorator"
               className={`object-cover w-full h-full rounded-2xl transition-all duration-200 hover:scale-110 ${isLoaded ? "opacity-100" : "opacity-0"}`}
               onLoad={() => setIsLoaded(true)}
@@ -99,7 +99,7 @@ const LandingPage = () => {
                 <span className='pl-2 pr-2'>Photographer</span>
               </div>)}
               <img
-                src={Photographer}
+                // src={Photographer}
                 alt="Photographer"
                 className={`object-cover w-full h-full rounded-2xl transition-all duration-200 hover:scale-110 ${isLoaded ? "opacity-100" : "opacity-0"}`}
                 onLoad={() => setIsLoaded(true)}
