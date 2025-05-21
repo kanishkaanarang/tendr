@@ -2,6 +2,7 @@ import { createBrowserRouter, Router, RouterProvider } from 'react-router-dom'
 import './App.css'
 
 import LandingPage from './pages/LandingPage';
+import LandingPage2 from './pages/LandingPage2';
 import LandingPageNew from './pages/LandingPageNew';
 import AuthPage from './pages/AuthPage';
 import VendorRegistration from './pages/VendorRegistration';
