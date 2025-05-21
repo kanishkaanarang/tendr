@@ -15,9 +15,9 @@ const FilterBar = () => {
 
     const [activeDropdown, setactiveDropdown] = useState(null)
 
-    const eventOptions = ['Wedding', 'Birthday Party', 'Corporate Event', 'Concert'];
-    const locationOptions = ['Delhi', 'Bengaluru', 'Chennai', 'Mumbai'];
-    const serviceOptions = ['Decorator', 'Entertainer', 'Caterer', 'Photographer'];
+    const eventOptions = ['Get-together', 'Birthday', 'Office Party', 'Concert', 'Anniversary', 'Pre Wedding', 'Rituals', 'Festival', 'Others',];
+    const locationOptions = ['Delhi', 'Noida', 'Greater Noida', 'Gurugram', 'Ghaziabad'];
+    const serviceOptions = ['Decorator', 'Entertainment', 'Catering', 'Photographer'];
 
     const handleOptionClickEvent = (option) => {
         setEventType(option);
@@ -55,6 +55,7 @@ const FilterBar = () => {
                 },
                 body: JSON.stringify({
                     eventType,
+                    serviceType,
                     date,
                     locationType,
                     guestCount
