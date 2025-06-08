@@ -1,8 +1,6 @@
 import { createBrowserRouter, Router, RouterProvider } from 'react-router-dom'
 import './App.css'
 
-import LandingPage from './pages/LandingPage';
-import LandingPage2 from './pages/LandingPage2';
 import LandingPageNew from './pages/LandingPageNew';
 import AuthPage from './pages/AuthPage';
 import VendorRegistration from './pages/VendorRegistration';
@@ -24,9 +22,9 @@ import VendorFlow from './pages/VendorFlow';
 
 
 export const router = createBrowserRouter([
+  { path: '/', element: <LandingPageNew /> },
   { path: '/chat', element: <ChatPage /> },
   { path: '/VendorDetails', element: < VendorDetails/> },
-  { path: '/', element: <LandingPage2 /> },
   { path: '/listings', element: <ListingPage /> },
   { path: '/login', element: <AuthPage /> },
   { path: '/signup', element: <AuthPage /> },
