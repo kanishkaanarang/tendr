@@ -192,20 +192,20 @@ export default function ServiceSpecificFields({ service, onChange, initialFilter
 
         return (
           <div key={field.name} ref={(el) => (containerRefs.current[field.name] = el)} className="relative">
-            <label className="block mb-2 font-medium text-[#6B4226]">{field.label}</label>
+            <label className="block mb-2 font-medium text-[#6B4226] text-sm">{field.label}</label>
             <div
               onClick={() => toggleDropdown(field.name)}
-              className="w-full border border-[#6B4226] rounded-xl p-3 cursor-pointer bg-white text-[#6B4226]"
+              className="w-full border border-[#6B4226] rounded-lg p-2 cursor-pointer bg-white text-[#6B4226] text-sm"
             >
               {renderDisplayText(field)}
             </div>
 
             {isOpen && (
-              <div className="absolute z-10 mt-1 w-full max-h-60 overflow-auto border border-[#6B4226] rounded-xl bg-white shadow-md">
+              <div className="absolute z-10 mt-1 w-full max-h-60 overflow-auto border border-[#6B4226] rounded-lg bg-white shadow-md text-sm">
                 {field.options.map((option) => (
                   <label
                     key={option}
-                    className="block px-4 py-2 text-sm cursor-pointer hover:bg-yellow-100 text-[#6B4226]"
+                    className="block px-4 py-2 cursor-pointer hover:bg-yellow-100 text-[#6B4226]"
                   >
                     {isSingle ? (
                       <input
@@ -227,8 +227,7 @@ export default function ServiceSpecificFields({ service, onChange, initialFilter
                     {option}
                   </label>
                 ))}
-                {((isSingle && selected === "Other") ||
-                  (!isSingle && selected?.includes("Other"))) && (
+                {((isSingle && selected === "Other") || (!isSingle && selected?.includes("Other"))) && (
                   <div className="px-4 py-2">
                     <input
                       type="text"
@@ -247,13 +246,13 @@ export default function ServiceSpecificFields({ service, onChange, initialFilter
 
       {/* Photo Upload Section */}
       <div className="mt-6">
-        <label className="block mb-2 font-medium text-[#6B4226]">Upload Photos</label>
+        <label className="block mb-2 font-medium text-[#6B4226] text-sm">Upload Photos</label>
         <input
           type="file"
           multiple
           accept="image/*"
           onChange={handlePhotoChange}
-          className="w-full border border-[#6B4226] rounded-xl p-2 bg-white text-[#6B4226]"
+          className="w-full border border-[#6B4226] rounded-lg p-2 bg-white text-[#6B4226] text-sm"
         />
         {photos.length > 0 && (
           <p className="text-sm mt-2 text-[#6B4226]">{photos.length} photo(s) selected.</p>

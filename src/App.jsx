@@ -20,6 +20,7 @@ import OtpPage from "./pages/Otpverification";
 import ListingPage from './pages/ListingPage';
 import VendorDetails from './pages/VendorDetails';
 import ChatPage from './pages/ChatPage';
+import VendorFlow from './pages/VendorFlow';
 
 
 export const router = createBrowserRouter([
@@ -32,7 +33,7 @@ export const router = createBrowserRouter([
   {
     path: '/vendor',
     children: [
-      { path: 'register', element: <VendorRegistration /> },
+      { path: 'register', element: <VendorFlow/> },
       { path: 'dashboard', element: <VendorDashboard /> },
     ],
   },

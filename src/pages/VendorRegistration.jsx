@@ -1,200 +1,299 @@
 import React, { useState } from "react";
 import ServiceSpecificFields from "./ServiceSpecificFields";
 
-export default function VendorRegistration() {
+export default function VendorRegistration({ prefilled = {} }) {
   const [formData, setFormData] = useState({
-    name: "",
-    location: "",
-    phoneNumber: "",
-    address: "",
-    gstNumber: "",
+    name: prefilled.name || "",
+    gstNumber: prefilled.gstNumber || "",
+    phoneNumber: prefilled.phoneNumber || "",
+    address: prefilled.address || "",
+    email: prefilled.email || "",
+
     teamSize: "",
     experience: "",
-    totalEvents: "",
+    eventsCompleted: "",
     concurrentEvents: "",
-    service: "",
-    customService: "",
-    serviceFilters: {},
-    accountHolder: "",
+    clientReference: "",
+    governmentId: "",
+
+    accHolderName: "",
     bankName: "",
-    accountNumber: "",
+    accNumber: "",
     ifscCode: "",
     upiId: "",
-    clientReferences: "",
-    governmentId: "",
-    portfolioFiles: [],
+
+    serviceType: "",
+    servicesOffered: [],
+    portfolioLinks: [],
+    images: [],
   });
 
   const [errors, setErrors] = useState({});
 
-  const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    if (files) {
-      setFormData((prev) => ({ ...prev, [name]: Array.from(files) }));
-    } else {
-      setFormData((prev) => ({ ...prev, [name]: value }));
-    }
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleServiceFiltersChange = (filters) => {
-    setFormData((prev) => ({ ...prev, serviceFilters: filters }));
+  const handleServiceChange = (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      serviceType: e.target.value,
+      servicesOffered: [],
+    }));
+  };
+
+  const handleSubServices = (subServices) => {
+    setFormData((prev) => ({ ...prev, servicesOffered: subServices }));
+  };
+
+  const handleImageUpload = (e) => {
+    const files = Array.from(e.target.files);
+    setFormData((prev) => ({
+      ...prev,
+      images: files.map((file) => URL.createObjectURL(file)),
+    }));
   };
 
   const validate = () => {
-    const newErrors = {};
-    if (!formData.name) newErrors.name = "Name is required";
-    if (!formData.phoneNumber || !/^\d{10}$/.test(formData.phoneNumber)) {
-      newErrors.phoneNumber = "Valid 10-digit phone number required";
+    const requiredFields = [
+      "name",
+      "phoneNumber",
+      "gstNumber",
+      "address",
+      "email",
+      "serviceType",
+    ];
+    const tempErrors = {};
+    requiredFields.forEach((field) => {
+      if (!formData[field] || formData[field].toString().trim() === "") {
+        tempErrors[field] = "Required";
+      }
+    });
+    if (formData.phoneNumber && !/^\d{10}$/.test(formData.phoneNumber)) {
+      tempErrors.phoneNumber = "Enter a valid 10-digit phone number";
     }
-    if (!formData.address) newErrors.address = "Address is required";
-    if (!formData.location) newErrors.location = "Location is required";
-    if (!formData.service) newErrors.service = "Service type is required";
-    if (!formData.accountHolder) newErrors.accountHolder = "Account holder name required";
-    if (!formData.bankName) newErrors.bankName = "Bank name is required";
-    if (!formData.accountNumber) newErrors.accountNumber = "Account number is required";
-    if (!formData.ifscCode) newErrors.ifscCode = "IFSC code is required";
-    return newErrors;
+    if (
+      formData.email &&
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())
+    ) {
+      tempErrors.email = "Enter a valid email address";
+    }
+    return tempErrors;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const validationErrors = validate();
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
-    }
+    const tempErrors = validate();
+    setErrors(tempErrors);
+    if (Object.keys(tempErrors).length > 0) return;
 
     console.log("Form submitted:", formData);
-    alert("Vendor registered successfully!");
+    alert("Registration Submitted!");
   };
 
-  const inputClass =
-    "border border-[#6B4226] p-3 rounded-xl text-sm text-[#6B4226] placeholder-[#A9746E] focus:outline-none focus:ring-2 focus:ring-yellow-500";
-
   return (
-    <div className="min-h-screen bg-[#F7F4EF] flex items-center justify-center px-4 py-12">
+    <div className="min-h-screen bg-[#F7F4EF] p-4 md:p-10">
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-4xl bg-white p-6 sm:p-8 rounded-2xl shadow-md space-y-8 border border-[#6B4226]"
+        className="max-w-3xl mx-auto bg-white p-6 rounded-2xl shadow-md border border-[#6B4226] space-y-5"
       >
-        <h2 className="text-3xl font-bold text-[#6B4226]">Register as a Vendor</h2>
+        <h2 className="text-xl font-bold text-[#6B4226]">
+          Register as a Vendor
+        </h2>
 
-        {/* SECTION 1: PRIMARY DETAILS */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {[
-            { name: "name", placeholder: "Vendor Name" },
-            { name: "phoneNumber", placeholder: "Phone Number" },
-            { name: "location", placeholder: "Locations You Serve" },
-            { name: "address", placeholder: "Full Address" },
-            { name: "gstNumber", placeholder: "GST Number" },
-            { name: "teamSize", placeholder: "Team Size" },
-            { name: "experience", placeholder: "Years of Experience" },
-            { name: "totalEvents", placeholder: "Total Events Completed" },
-            { name: "concurrentEvents", placeholder: "Concurrent Events You Can Handle" },
-            { name: "clientReferences", placeholder: "Past Client References" },
-            { name: "governmentId", placeholder: "Govt ID (Aadhaar, PAN)" },
-          ].map(({ name, placeholder }, i) => (
-            <div key={i}>
-              <input
-                name={name}
-                placeholder={placeholder}
-                value={formData[name]}
-                onChange={handleChange}
-                className={inputClass + " w-full"}
-              />
-              {errors[name] && <p className="text-red-500 text-xs mt-1">{errors[name]}</p>}
-            </div>
-          ))}
+        <div className="grid md:grid-cols-2 gap-4">
+          <input
+            name="name"
+            value={formData.name}
+            onChange={handleInputChange}
+            placeholder="Vendor Name"
+            className="w-full p-2 border border-[#6B4226] rounded-lg text-sm text-[#6B4226]"
+          />
+          <input
+            name="phoneNumber"
+            value={formData.phoneNumber}
+            onChange={handleInputChange}
+            placeholder="Phone Number"
+            className="w-full p-2 border border-[#6B4226] rounded-lg text-sm text-[#6B4226]"
+          />
         </div>
 
-        {/* SECTION 4: BANK DETAILS */}
+        <div className="grid md:grid-cols-2 gap-4">
+          <input
+            name="address"
+            value={formData.address}
+            onChange={handleInputChange}
+            placeholder="Location You Serve"
+            className="w-full p-2 border border-[#6B4226] rounded-lg text-sm text-[#6B4226]"
+          />
+          <input
+            name="email"
+            value={formData.email}
+            onChange={handleInputChange}
+            placeholder="Email Address"
+            className="w-full p-2 border border-[#6B4226] rounded-lg text-sm text-[#6B4226]"
+          />
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-4">
+          <input
+            name="gstNumber"
+            value={formData.gstNumber}
+            onChange={handleInputChange}
+            placeholder="GST Number"
+            className="w-full p-2 border border-[#6B4226] rounded-lg text-sm text-[#6B4226]"
+          />
+          <input
+            name="teamSize"
+            value={formData.teamSize}
+            onChange={handleInputChange}
+            placeholder="Team Size"
+            className="w-full p-2 border border-[#6B4226] rounded-lg text-sm text-[#6B4226]"
+          />
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-4">
+          <input
+            name="experience"
+            value={formData.experience}
+            onChange={handleInputChange}
+            placeholder="Years of Experience"
+            className="w-full p-2 border border-[#6B4226] rounded-lg text-sm text-[#6B4226]"
+          />
+          <input
+            name="eventsCompleted"
+            value={formData.eventsCompleted}
+            onChange={handleInputChange}
+            placeholder="Total Events Completed"
+            className="w-full p-2 border border-[#6B4226] rounded-lg text-sm text-[#6B4226]"
+          />
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-4">
+          <input
+            name="concurrentEvents"
+            value={formData.concurrentEvents}
+            onChange={handleInputChange}
+            placeholder="Concurrent Events You Can Handle"
+            className="w-full p-2 border border-[#6B4226] rounded-lg text-sm text-[#6B4226]"
+          />
+          <input
+            name="clientReference"
+            value={formData.clientReference}
+            onChange={handleInputChange}
+            placeholder="Past Client Reference"
+            className="w-full p-2 border border-[#6B4226] rounded-lg text-sm text-[#6B4226]"
+          />
+        </div>
+
+        <input
+          name="governmentId"
+          value={formData.governmentId}
+          onChange={handleInputChange}
+          placeholder="Govt. ID (Aadhar or PAN)"
+          className="w-full p-2 border border-[#6B4226] rounded-lg text-sm text-[#6B4226]"
+        />
+
+        <h3 className="text-lg font-semibold text-[#6B4226] mt-4">
+          Bank Details
+        </h3>
+
+        <div className="grid md:grid-cols-2 gap-4">
+          <input
+            name="accHolderName"
+            value={formData.accHolderName}
+            onChange={handleInputChange}
+            placeholder="Account Holder Name"
+            className="w-full p-2 border border-[#6B4226] rounded-lg text-sm text-[#6B4226]"
+          />
+          <input
+            name="bankName"
+            value={formData.bankName}
+            onChange={handleInputChange}
+            placeholder="Bank Name & Branch"
+            className="w-full p-2 border border-[#6B4226] rounded-lg text-sm text-[#6B4226]"
+          />
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-4">
+          <input
+            name="accNumber"
+            value={formData.accNumber}
+            onChange={handleInputChange}
+            placeholder="Account Number"
+            className="w-full p-2 border border-[#6B4226] rounded-lg text-sm text-[#6B4226]"
+          />
+          <input
+            name="ifscCode"
+            value={formData.ifscCode}
+            onChange={handleInputChange}
+            placeholder="IFSC Code"
+            className="w-full p-2 border border-[#6B4226] rounded-lg text-sm text-[#6B4226]"
+          />
+        </div>
+
+        <input
+          name="upiId"
+          value={formData.upiId}
+          onChange={handleInputChange}
+          placeholder="UPI ID (Optional)"
+          className="w-full p-2 border border-[#6B4226] rounded-lg text-sm text-[#6B4226]"
+        />
+
         <div>
-          <h3 className="text-xl font-semibold text-[#6B4226] mb-4">Bank Details</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {[
-              { name: "accountHolder", placeholder: "Account Holder Name" },
-              { name: "bankName", placeholder: "Bank Name" },
-              { name: "accountNumber", placeholder: "Account Number" },
-              { name: "ifscCode", placeholder: "IFSC Code" },
-              { name: "upiId", placeholder: "UPI ID (Optional)" },
-            ].map(({ name, placeholder }, i) => (
-              <div key={i}>
-                <input
-                  name={name}
-                  placeholder={placeholder}
-                  value={formData[name]}
-                  onChange={handleChange}
-                  className={inputClass + " w-full"}
-                />
-                {errors[name] && <p className="text-red-500 text-xs mt-1">{errors[name]}</p>}
-              </div>
+          <label className="block text-sm font-medium text-[#6B4226] mb-1">
+            Upload Portfolio (Image/Video)
+          </label>
+          <input
+            type="file"
+            accept="image/*,video/*"
+            multiple
+            onChange={handleImageUpload}
+            className="w-full text-sm"
+          />
+          <div className="grid grid-cols-3 gap-2 mt-3">
+            {formData.images.map((img, i) => (
+              <img
+                key={i}
+                src={img}
+                alt={`preview-${i}`}
+                className="w-full h-20 object-cover rounded-lg"
+              />
             ))}
           </div>
         </div>
 
-        {/* SECTION 5: PORTFOLIO FILE UPLOAD */}
-        <div>
-          <label className="block mb-2 font-medium text-[#6B4226]">Upload Portfolio Files (Images, Videos)</label>
-          <input
-            type="file"
-            name="portfolioFiles"
-            multiple
-            accept="image/*,video/*"
-            onChange={handleChange}
-            className="w-full border border-[#6B4226] rounded-xl p-2 bg-white text-[#6B4226]"
-          />
-          {formData.portfolioFiles.length > 0 && (
-            <p className="text-sm mt-2 text-[#6B4226]">
-              {formData.portfolioFiles.length} file(s) selected.
-            </p>
-          )}
-        </div>
-                {/* SECTION 2: SERVICE SELECTION */}
-        <div>
-          <label className="block mb-2 text-[#6B4226] font-medium">Service Type</label>
-          <select
-            name="service"
-            value={formData.service}
-            onChange={handleChange}
-            className={inputClass + " w-full"}
-          >
-            <option value="">Select Service</option>
-            <option value="caterer">Caterer</option>
-            <option value="dj">DJ</option>
-            <option value="decorator">Decorator</option>
-            <option value="photographer">Photographer</option>
-            <option value="other">Other</option>
-          </select>
-          {errors.service && <p className="text-red-500 text-xs mt-1">{errors.service}</p>}
-        </div>
-
-        {formData.service === "other" && (
-          <div>
-            <input
-              name="customService"
-              placeholder="Specify your Service"
-              value={formData.customService}
-              onChange={handleChange}
-              className={inputClass + " w-full"}
-            />
-          </div>
+        <select
+          name="serviceType"
+          value={formData.serviceType}
+          onChange={handleServiceChange}
+          className="w-full p-2 border border-[#6B4226] rounded-lg text-sm text-[#6B4226]"
+        >
+          <option value="">Select Service Type</option>
+          <option value="caterer">Caterer</option>
+          <option value="decorator">Decorator</option>
+          <option value="dj">DJ</option>
+          <option value="photographer">Photographer</option>
+          <option value="other">Other</option>
+        </select>
+        {errors.serviceType && (
+          <p className="text-red-500 text-xs">{errors.serviceType}</p>
         )}
 
-        {/* SECTION 3: DYNAMIC SERVICE FIELDS */}
-        {formData.service && (
+        {formData.serviceType && (
           <ServiceSpecificFields
-            service={formData.service}
-            onChange={handleServiceFiltersChange}
-            initialFilters={formData.serviceFilters}
+            service={formData.serviceType}
+            onChange={handleSubServices}
+            initialFilters={formData.servicesOffered}
           />
         )}
 
-        {/* SUBMIT */}
         <button
           type="submit"
-          className="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold px-6 py-3 rounded-xl w-full"
+          className="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 rounded-lg text-sm"
         >
-          Submit
+          Submit Registration
         </button>
       </form>
     </div>
