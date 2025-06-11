@@ -1,5 +1,5 @@
-import { createBrowserRouter, Router, RouterProvider } from 'react-router-dom'
-import './App.css'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import './App.css';
 
 import LandingPageNew from './pages/LandingPageNew';
 import AuthPage from './pages/AuthPage';
@@ -14,24 +14,23 @@ import SmartRecommendations from './pages/SmartRecommendations';
 import PlanEventCheckout from './pages/PlanEventCheckout';
 import WhatsAppFlow from './pages/WhatsAppFlow';
 import NotFound from './pages/NotFound';
-import OtpPage from "./pages/Otpverification";
+import OtpPage from './pages/OtpVerification'; // Ensure case matches file
 import ListingPage from './pages/ListingPage';
 import VendorDetails from './pages/VendorDetails';
 import ChatPage from './pages/ChatPage';
 import VendorFlow from './pages/VendorFlow';
 
-
 export const router = createBrowserRouter([
   { path: '/', element: <LandingPageNew /> },
   { path: '/chat', element: <ChatPage /> },
-  { path: '/VendorDetails', element: < VendorDetails/> },
+  { path: '/VendorDetails', element: <VendorDetails /> },
   { path: '/listings', element: <ListingPage /> },
   { path: '/login', element: <AuthPage /> },
   { path: '/signup', element: <AuthPage /> },
   {
     path: '/vendor',
     children: [
-      { path: 'register', element: <VendorFlow/> },
+      { path: 'register', element: <VendorFlow /> },
       { path: 'dashboard', element: <VendorDashboard /> },
     ],
   },
@@ -43,14 +42,6 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    path: '/VendorDetails',
-    element: <VendorDetails />,
-  },
-  // {
-  //   path: '/vendors/:category',
-  //   element: <VendorListings />,
-  // },
-  {
     path: '/plan-event',
     children: [
       { path: '', element: <PlanFullEvent /> },
@@ -60,16 +51,16 @@ export const router = createBrowserRouter([
     ],
   },
   { path: '/chatbot', element: <WhatsAppFlow /> },
-  { path: '*', element: <NotFound /> },
   { path: '/otp', element: <OtpPage /> },
+  { path: '*', element: <NotFound /> },
 ]);
 
 function App() {
   return (
-  <div>
-    <RouterProvider router={router} />
-  </div>
-  )
+    <div>
+      <RouterProvider router={router} />
+    </div>
+  );
 }
 
-export default App
+export default App;
