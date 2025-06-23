@@ -6,7 +6,7 @@ import AuthPage from './pages/AuthPage';
 import VendorRegistration from './pages/VendorRegistration';
 import VendorDashboard from './pages/VendorDashboard';
 import SelectServiceType from './pages/SelectServiceType';
-// import VendorListings from './pages/VendorListings';
+import GroupBooking from './pages/GroupBooking';
 import BookServiceCheckout from './pages/BookServiceCheckout';
 import PlanFullEvent from './pages/PlanFullEvent';
 import EventForm from './pages/EventForm';
@@ -28,6 +28,7 @@ export const router = createBrowserRouter([
   { path: '/listings', element: <ListingPage /> },
   { path: '/login', element: <AuthPage /> },
   { path: '/signup', element: <AuthPage /> },
+  { path: '/GroupBooking', element: <GroupBooking /> },
   {
     path: '/vendor',
     children: [
@@ -41,10 +42,6 @@ export const router = createBrowserRouter([
       { path: '', element: <SelectServiceType /> },
       { path: 'checkout', element: <BookServiceCheckout /> },
     ],
-  },
-  {
-    path: '/VendorDetails',
-    element: <VendorDetails />,
   },
   // {
   //   path: '/vendors/:category',
