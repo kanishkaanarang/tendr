@@ -2,99 +2,25 @@ import React, { useState, useEffect, useRef } from "react";
 
 const SERVICE_FIELDS = {
   caterer: [
-    {
-      name: "cuisine",
-      label: "Cuisine Types",
-      options: [
-        "North Indian",
-        "South Indian",
-        "Snacks",
-        "Chinese Starters",
-        "Punjabi",
-        "Sweets",
-        "Italian",
-        "Other",
-      ],
-    },
-    {
-      name: "serviceType",
-      label: "Service Type",
-      options: ["Buffet", "Food Stations", "Live Counters", "Family Style"],
-    },
-    {
-      name: "menuType",
-      label: "Menu Type",
-      options: ["Veg", "Non Veg", "Jain"],
-    },
-    {
-      name: "beverage",
-      label: "Beverage",
-      options: ["Yes", "No", "Other"],
-    },
+    { name: "cuisine", label: "Cuisine Types", options: ["North Indian", "South Indian", "Snacks", "Chinese Starters", "Punjabi", "Sweets", "Italian", "Other"] },
+    { name: "serviceType", label: "Service Type", options: ["Buffet", "Food Stations", "Live Counters", "Family Style"] },
+    { name: "menuType", label: "Menu Type", options: ["Veg", "Non Veg", "Jain"] },
+    { name: "beverage", label: "Beverage", options: ["Yes", "No", "Other"] }
   ],
   dj: [
-    {
-      name: "setup",
-      label: "Setup Type",
-      options: ["Basic Setup", "Full Production"],
-    },
-    {
-      name: "lightIncluded",
-      label: "Light Included?",
-      options: ["Yes", "No"],
-    },
-    {
-      name: "eventType",
-      label: "Event Type",
-      options: ["House Party", "Corporate", "Venue"],
-    },
+    { name: "setup", label: "Setup Type", options: ["Basic Setup", "Full Production"] },
+    { name: "lightIncluded", label: "Light Included?", options: ["Yes", "No"] },
+    { name: "eventType", label: "Event Type", options: ["House Party", "Corporate", "Venue"] }
   ],
   decorator: [
-    {
-      name: "decorationType",
-      label: "Type of Decoration",
-      options: [
-        "Themed Decoration",
-        "Floral",
-        "Lighting",
-        "Balloon Art",
-        "Traditional",
-        "Modern",
-        "Rustic",
-        "Minimalist",
-        "Other",
-      ],
-    },
-    {
-      name: "coverage",
-      label: "Venue Coverage",
-      options: [
-        "Interior",
-        "Exterior",
-        "Full",
-        "Stage Setup",
-        "Entrance Focus",
-        "Backdrop",
-      ],
-    },
+    { name: "decorationType", label: "Type of Decoration", options: ["Themed Decoration", "Floral", "Lighting", "Balloon Art", "Traditional", "Modern", "Rustic", "Minimalist", "Other"] },
+    { name: "coverage", label: "Venue Coverage", options: ["Interior", "Exterior", "Full", "Stage Setup", "Entrance Focus", "Backdrop"] }
   ],
   photographer: [
-    {
-      name: "photographyType",
-      label: "Photography Type",
-      options: ["Candid", "Drone", "Traditional", "Cinematic"],
-    },
-    {
-      name: "hoursIncluded",
-      label: "Hours Included",
-      options: ["2", "4", "8", "Full Day"],
-    },
-    {
-      name: "editingTime",
-      label: "Editing Time (days)",
-      options: ["2", "5", "7", "10+"],
-    },
-  ],
+    { name: "photographyType", label: "Photography Type", options: ["Candid", "Drone", "Traditional", "Cinematic"] },
+    { name: "hoursIncluded", label: "Hours Included", options: ["2", "4", "8", "Full Day"] },
+    { name: "editingTime", label: "Editing Time (days)", options: ["2", "5", "7", "10+"] }
+  ]
 };
 
 export default function ServiceSpecificFields({ service, onChange, initialFilters }) {
@@ -129,7 +55,7 @@ export default function ServiceSpecificFields({ service, onChange, initialFilter
       }
     });
     onChange(mergedFilters);
-  }, [filters, otherInputs, photos]);
+  }, [filters, otherInputs, photos, onChange]); // ✅ Fixed: added onChange
 
   const toggleDropdown = (field) => {
     setDropdownOpen((prev) => ({ ...prev, [field]: !prev[field] }));
@@ -169,9 +95,7 @@ export default function ServiceSpecificFields({ service, onChange, initialFilter
   const renderDisplayText = (field) => {
     const selected = filters[field.name];
     const other = otherInputs[`${field.name}_other`];
-    if (!selected || (Array.isArray(selected) && selected.length === 0)) {
-      return "Click to select";
-    }
+    if (!selected || (Array.isArray(selected) && selected.length === 0)) return "Click to select";
     if (Array.isArray(selected)) {
       return selected.map((item) => (item === "Other" && other ? other : item)).join(", ");
     }
@@ -203,10 +127,7 @@ export default function ServiceSpecificFields({ service, onChange, initialFilter
             {isOpen && (
               <div className="absolute z-10 mt-1 w-full max-h-60 overflow-auto border border-[#6B4226] rounded-lg bg-white shadow-md text-sm">
                 {field.options.map((option) => (
-                  <label
-                    key={option}
-                    className="block px-4 py-2 cursor-pointer hover:bg-yellow-100 text-[#6B4226]"
-                  >
+                  <label key={option} className="block px-4 py-2 cursor-pointer hover:bg-yellow-100 text-[#6B4226]">
                     {isSingle ? (
                       <input
                         type="radio"
@@ -244,7 +165,6 @@ export default function ServiceSpecificFields({ service, onChange, initialFilter
         );
       })}
 
-      {/* Photo Upload Section */}
       <div className="mt-6">
         <label className="block mb-2 font-medium text-[#6B4226] text-sm">Upload Photos</label>
         <input

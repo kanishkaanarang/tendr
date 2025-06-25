@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState, useCallback } from "react";
 import ServiceSpecificFields from "./ServiceSpecificFields";
 
 export default function VendorRegistration({ prefilled = {} }) {
@@ -43,9 +43,10 @@ export default function VendorRegistration({ prefilled = {} }) {
     }));
   };
 
-  const handleSubServices = (subServices) => {
-    setFormData((prev) => ({ ...prev, servicesOffered: subServices }));
-  };
+const handleSubServices = useCallback((subServices) => {
+  setFormData((prev) => ({ ...prev, servicesOffered: subServices }));
+}, []);
+
 
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
