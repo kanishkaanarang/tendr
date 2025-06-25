@@ -113,7 +113,7 @@ const HeroSection_LandingPage = () => {
 
             <button
               type="button"
-              onClick={() => { navigate("") }}
+              onClick={() => { navigate("/GroupBooking") }}
               className="group cursor-pointer bg-white hover:bg-[#CCAB4A] hover:text-white rounded-2xl pl-4 pr-2 flex items-center justify-between text-[#CCAB4A] font-bold w-[220px] h-[45px] transform transition-transform duration-300 ease-in-out hover:scale-105 active:scale-95 hover:-translate-y-1"
             >
 
