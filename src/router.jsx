@@ -19,6 +19,7 @@ import ListingPage from './pages/ListingPage';
 import VendorDetails from './pages/VendorDetails';
 import ChatPage from './pages/ChatPage';
 import VendorFlow from './pages/VendorFlow';
+import CorporateBooking from './pages/CorporateBooking';
 
 const router = createBrowserRouter([
   { path: '/', element: <LandingPageNew /> },
@@ -28,6 +29,7 @@ const router = createBrowserRouter([
   { path: '/login', element: <AuthPage /> },
   { path: '/signup', element: <AuthPage /> },
   { path: '/GroupBooking', element: <GroupBooking /> },
+  { path: '/CorporateBooking', element: <CorporateBooking /> },
   {
     path: '/vendor',
     children: [
