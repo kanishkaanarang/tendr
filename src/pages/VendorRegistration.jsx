@@ -1,7 +1,9 @@
+
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ServiceSpecificFields from "./ServiceSpecificFields";
 import { signupVendorOtp, verifyVendorOtp, completeVendorSignup } from "../apis";
+
 
 export default function VendorRegistration() {
   const navigate = useNavigate();
@@ -17,14 +19,14 @@ export default function VendorRegistration() {
     gstNumber: "",
     teamSize: "",
     experience: "",
-    totalEvents: "",
+    eventsCompleted: "",
     concurrentEvents: "",
-    service: "",
-    customService: "",
-    serviceFilters: {},
-    accountHolder: "",
+    clientReference: "",
+    governmentId: "",
+
+    accHolderName: "",
     bankName: "",
-    accountNumber: "",
+    accNumber: "",
     ifscCode: "",
     upiId: "",
     clientReferences: "",
@@ -83,13 +85,17 @@ export default function VendorRegistration() {
     fetchCities();
   }, []);
 
-  const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    if (files) {
-      setFormData((prev) => ({ ...prev, [name]: Array.from(files) }));
-    } else {
-      setFormData((prev) => ({ ...prev, [name]: value }));
-    }
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleServiceChange = (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      serviceType: e.target.value,
+      servicesOffered: [],
+    }));
   };
 
   const handleOtpChange = (index, value) => {
