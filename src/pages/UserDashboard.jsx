@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout, fetchUserProfile } from '../redux/authSlice';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css'; // Default styles (we'll override)
 import logo from "../assets/logo2.png";
 import EventIcon from '@mui/icons-material/Event';
 import HistoryIcon from '@mui/icons-material/History';
@@ -13,17 +15,15 @@ import PersonIcon from '@mui/icons-material/Person';
 import LogoutIcon from '@mui/icons-material/Logout';
 
 // Mock API calls (replace with actual API integration)
-const fetchUpcomingEvents = async () => {
-  return [
+const fetchEvents = async () => {
+  const upcoming = [
     { id: 1, eventName: "Birthday Party", date: "2025-06-15", venue: "The Grand Hall" },
     { id: 2, eventName: "Office Party", date: "2025-06-20", venue: "Sky Lounge" },
   ];
-};
-
-const fetchPastEvents = async () => {
-  return [
+  const past = [
     { id: 3, eventName: "Anniversary Celebration", date: "2025-05-10", venue: "Riverside Gardens" },
   ];
+  return [...upcoming, ...past]; // Combine into a single list
 };
 
 const fetchBookings = async () => {
@@ -58,27 +58,25 @@ const UserDashboard = () => {
   const dispatch = useDispatch();
   const { user, profile, loading, error } = useSelector((state) => state.auth);
 
-  const [upcomingEvents, setUpcomingEvents] = useState([]);
-  const [pastEvents, setPastEvents] = useState([]);
+  const [events, setEvents] = useState([]);
   const [bookings, setBookings] = useState([]);
   const [payments, setPayments] = useState([]);
   const [notifications, setNotifications] = useState([]);
   const [groupBookings, setGroupBookings] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState(null);
 
   useEffect(() => {
     dispatch(fetchUserProfile()); // Fetch user profile on component mount
 
     const loadData = async () => {
-      const upcoming = await fetchUpcomingEvents();
-      const past = await fetchPastEvents();
+      const allEvents = await fetchEvents();
       const userBookings = await fetchBookings();
       const userPayments = await fetchPayments();
       const userNotifications = await fetchNotifications();
       const userGroupBookings = await fetchGroupBookings();
 
-      setUpcomingEvents(upcoming);
-      setPastEvents(past);
+      setEvents(allEvents);
       setBookings(userBookings);
       setPayments(userPayments);
       setNotifications(userNotifications);
@@ -96,6 +94,35 @@ const UserDashboard = () => {
 
   const userInitial = user?.name ? user.name.charAt(0).toUpperCase() : '';
 
+  // Custom tile content for calendar to show events
+  const tileContent = ({ date, view }) => {
+    if (view === "month") {
+      const dateString = date.toISOString().split('T')[0];
+      const dayEvents = events.filter((event) => event.date === dateString);
+      return dayEvents.length > 0 ? (
+        <div className="flex flex-col items-center mt-1">
+          {dayEvents.map((event) => (
+            <div
+              key={event.id}
+              className="w-2 h-2 bg-[#CCAB4A] rounded-full"
+              onClick={() => setSelectedEvent(event)}
+            />
+          ))}
+        </div>
+      ) : null;
+    }
+    return null;
+  };
+
+  const tileClassName = ({ date, view }) => {
+    if (view === "month") {
+      const dateString = date.toISOString().split('T')[0];
+      const hasEvents = events.some((event) => event.date === dateString);
+      return hasEvents ? "bg-[#FFD3C3] rounded-full" : "";
+    }
+    return "";
+  };
+
   return (
     <div className="flex h-screen bg-[#F7F4EF]">
       {/* Sidebar */}
@@ -106,10 +133,7 @@ const UserDashboard = () => {
           </div>
           <nav className="flex flex-col gap-4">
             <div className="flex items-center gap-3 text-[#D48060] font-bold text-lg cursor-pointer hover:bg-[#fbbfa7] p-3 rounded-xl transition-colors duration-300">
-              <EventIcon /> Upcoming Events
-            </div>
-            <div className="flex items-center gap-3 text-[#D48060] font-bold text-lg cursor-pointer hover:bg-[#fbbfa7] p-3 rounded-xl transition-colors duration-300">
-              <HistoryIcon /> Past Events
+              <EventIcon /> Events Calendar
             </div>
             <div className="flex items-center gap-3 text-[#D48060] font-bold text-lg cursor-pointer hover:bg-[#fbbfa7] p-3 rounded-xl transition-colors duration-300">
               <BookIcon /> Bookings
@@ -174,32 +198,33 @@ const UserDashboard = () => {
           )}
         </div>
 
-        {/* Upcoming Events */}
+        {/* Events Calendar */}
         <div className="bg-[#FFD3C3] p-6 rounded-[30px] mb-6 shadow-md">
-          <h2 className="text-2xl font-bold text-[#D48060] mb-4">Upcoming Events</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {upcomingEvents.map((event) => (
-              <div key={event.id} className="bg-[#F7F4EF] p-4 rounded-xl shadow-sm hover:bg-[#fbbfa7] transition-colors duration-300">
-                <p className="text-[#D48060] font-semibold">{event.eventName}</p>
-                <p className="text-[#D48060]">{event.date}</p>
-                <p className="text-[#D48060]">{event.venue}</p>
-              </div>
-            ))}
+          <h2 className="text-2xl font-bold text-[#D48060] mb-4">Events Calendar</h2>
+          <div className="flex justify-center">
+            <Calendar
+              value={new Date("2025-06-08")} // Current date
+              tileContent={tileContent}
+              tileClassName={tileClassName}
+              className="bg-white rounded-xl shadow-sm border-none text-[#D48060] font-semibold w-full max-w-lg"
+              navigationLabel={({ date }) =>
+                `${date.toLocaleString('default', { month: 'long' })} ${date.getFullYear()}`
+              }
+            />
           </div>
-        </div>
-
-        {/* Past Events */}
-        <div className="bg-[#FFD3C3] p-6 rounded-[30px] mb-6 shadow-md">
-          <h2 className="text-2xl font-bold text-[#D48060] mb-4">Past Events</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {pastEvents.map((event) => (
-              <div key={event.id} className="bg-[#F7F4EF] p-4 rounded-xl shadow-sm hover:bg-[#fbbfa7] transition-colors duration-300">
-                <p className="text-[#D48060] font-semibold">{event.eventName}</p>
-                <p className="text-[#D48060]">{event.date}</p>
-                <p className="text-[#D48060]">{event.venue}</p>
-              </div>
-            ))}
-          </div>
+          {selectedEvent && (
+            <div className="mt-4 p-4 bg-[#F7F4EF] rounded-xl shadow-sm">
+              <h3 className="text-lg font-semibold text-[#D48060]">{selectedEvent.eventName}</h3>
+              <p className="text-[#D48060]">Date: {selectedEvent.date}</p>
+              <p className="text-[#D48060]">Venue: {selectedEvent.venue}</p>
+              <button
+                onClick={() => setSelectedEvent(null)}
+                className="mt-2 text-[#D48060] font-semibold hover:underline"
+              >
+                Close
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Bookings */}
@@ -260,6 +285,56 @@ const UserDashboard = () => {
           </div>
         </div>
       </div>
+
+      {/* Custom Calendar Styles */}
+      <style>{`
+        .react-calendar {
+          border: none !important;
+        }
+        .react-calendar__navigation {
+          display: flex;
+          justify-content: center;
+          margin-bottom: 1rem;
+        }
+        .react-calendar__navigation button {
+          color: #D48060 !important;
+          font-weight: bold;
+          font-size: 1.2rem;
+          padding: 0.5rem 1rem;
+          background: none;
+          border: none;
+          cursor: pointer;
+        }
+        .react-calendar__navigation button:hover {
+          background: #fbbfa7 !important;
+          border-radius: 0.75rem;
+        }
+        .react-calendar__tile {
+          color: #D48060 !important;
+          padding: 0.75rem;
+          font-weight: 500;
+        }
+        .react-calendar__tile--now {
+          background: #CCAB4A !important;
+          color: white !important;
+          border-radius: 50%;
+        }
+        .react-calendar__tile--active {
+          background: #D48060 !important;
+          color: white !important;
+          border-radius: 50%;
+        }
+        .react-calendar__tile:hover {
+          background: #fbbfa7 !important;
+          border-radius: 50%;
+        }
+        .react-calendar__month-view__days__day--weekend {
+          color: #D48060 !important;
+        }
+        .react-calendar__month-view__days__day--neighboringMonth {
+          color: #A9746E !important;
+        }
+      `}</style>
     </div>
   );
 };

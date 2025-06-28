@@ -175,7 +175,7 @@ const LandingPageNew = () => {
                         <div className="btn flex justify-center">
                             <button
                                 type="button"
-                                onClick={() => navigate("")}
+                                onClick={() => navigate("/vendor/register")}
                                 className="group cursor-pointer bg-white hover:bg-[#D48060] hover:text-white rounded-2xl pl-4 pr-2 flex items-center justify-between text-[#D48060] font-bold w-[240px] h-[45px] transform transition-transform duration-300 ease-in-out hover:scale-105 hover:-translate-y-1 active:scale-95"
                             >
                                 <span className="pb-[2px] text-lg">BECOME A PARTNER</span>
