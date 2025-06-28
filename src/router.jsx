@@ -23,6 +23,7 @@ import CorporateBooking from './pages/CorporateBooking';
 
 const router = createBrowserRouter([
   { path: '/', element: <LandingPageNew /> },
+  { path: '/VendorRegistration', element: <VendorRegistration /> },
   { path: '/chat', element: <ChatPage /> },
   { path: '/VendorDetails', element: <VendorDetails /> },
   { path: '/listings', element: <ListingPage /> },
