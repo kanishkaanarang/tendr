@@ -1,14 +1,22 @@
-import { useState, useCallback } from "react";
+
+import React, { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import ServiceSpecificFields from "./ServiceSpecificFields";
+import { signupVendorOtp, verifyVendorOtp, completeVendorSignup } from "../apis";
 
-export default function VendorRegistration({ prefilled = {} }) {
+
+export default function VendorRegistration() {
+  const navigate = useNavigate();
+  const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
-    name: prefilled.name || "",
-    gstNumber: prefilled.gstNumber || "",
-    phoneNumber: prefilled.phoneNumber || "",
-    address: prefilled.address || "",
-    email: prefilled.email || "",
-
+    phoneNumber: "",
+    secondaryPhoneNumber: "",
+    otp: "",
+    name: "",
+    location: "",
+    address: "",
+    state: "",
+    gstNumber: "",
     teamSize: "",
     experience: "",
     eventsCompleted: "",
@@ -21,14 +29,61 @@ export default function VendorRegistration({ prefilled = {} }) {
     accNumber: "",
     ifscCode: "",
     upiId: "",
-
-    serviceType: "",
-    servicesOffered: [],
-    portfolioLinks: [],
-    images: [],
+    clientReferences: "",
+    governmentId: "",
+    aadhaarNumber: "",
+    password: "",
+    portfolioFiles: [],
   });
 
+  const [otpDigits, setOtpDigits] = useState(["", "", "", ""]);
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [apiError, setApiError] = useState("");
+  const [canResend, setCanResend] = useState(true);
+  const [resendCooldown, setResendCooldown] = useState(0);
+  const [supportedCities, setSupportedCities] = useState([]);
+  const [citiesLoading, setCitiesLoading] = useState(false);
+  const [citiesError, setCitiesError] = useState("");
+  const otpInputRefs = useRef([]);
+
+  useEffect(() => {
+    const fetchCities = async () => {
+      setCitiesLoading(true);
+      setCitiesError("");
+      try {
+        console.log("Fetching supported cities...");
+        const response = await fetch("http://localhost:8080/cities", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        console.log("Cities API response status:", response.status);
+        const contentType = response.headers.get("Content-Type");
+        if (!contentType || !contentType.includes("application/json")) {
+          const text = await response.text();
+          throw new Error(`Expected JSON, but received: ${text.substring(0, 100)}...`);
+        }
+
+        const result = await response.json();
+        if (!response.ok) {
+          throw new Error(result.message || "Failed to fetch supported cities");
+        }
+        console.log("Supported cities fetched:", result.data);
+        setSupportedCities(result.data || []);
+      } catch (error) {
+        console.error("Error fetching supported cities:", error);
+        setCitiesError(error.message || "Failed to fetch supported cities");
+      } finally {
+        setCitiesLoading(false);
+        console.log("Cities loading complete, citiesLoading:", false);
+      }
+    };
+
+    fetchCities();
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -43,260 +98,493 @@ export default function VendorRegistration({ prefilled = {} }) {
     }));
   };
 
-const handleSubServices = useCallback((subServices) => {
-  setFormData((prev) => ({ ...prev, servicesOffered: subServices }));
-}, []);
-
-
-  const handleImageUpload = (e) => {
-    const files = Array.from(e.target.files);
-    setFormData((prev) => ({
-      ...prev,
-      images: files.map((file) => URL.createObjectURL(file)),
-    }));
+  const handleOtpChange = (index, value) => {
+    if (!/^\d?$/.test(value)) return;
+    const newOtpDigits = [...otpDigits];
+    newOtpDigits[index] = value;
+    setOtpDigits(newOtpDigits);
+    const newOtp = newOtpDigits.join("");
+    setFormData((prev) => ({ ...prev, otp: newOtp }));
+    if (value && index < 3) {
+      otpInputRefs.current[index + 1].focus();
+    }
+    if (!value && index > 0) {
+      otpInputRefs.current[index - 1].focus();
+    }
   };
 
-  const validate = () => {
-    const requiredFields = [
-      "name",
-      "phoneNumber",
-      "gstNumber",
-      "address",
-      "email",
-      "serviceType",
-    ];
-    const tempErrors = {};
-    requiredFields.forEach((field) => {
-      if (!formData[field] || formData[field].toString().trim() === "") {
-        tempErrors[field] = "Required";
-      }
-    });
-    if (formData.phoneNumber && !/^\d{10}$/.test(formData.phoneNumber)) {
-      tempErrors.phoneNumber = "Enter a valid 10-digit phone number";
+  const handleOtpPaste = (e) => {
+    const pastedData = e.clipboardData.getData("text").trim();
+    if (/^\d{4}$/.test(pastedData)) {
+      const newOtpDigits = pastedData.split("");
+      setOtpDigits(newOtpDigits);
+      setFormData((prev) => ({ ...prev, otp: pastedData }));
+      otpInputRefs.current[3].focus();
     }
-    if (
-      formData.email &&
-      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())
-    ) {
-      tempErrors.email = "Enter a valid email address";
-    }
-    return tempErrors;
-  };
-
-  const handleSubmit = (e) => {
     e.preventDefault();
-    const tempErrors = validate();
-    setErrors(tempErrors);
-    if (Object.keys(tempErrors).length > 0) return;
-
-    console.log("Form submitted:", formData);
-    alert("Registration Submitted!");
   };
+
+  const handleServiceFiltersChange = (filters) => {
+    setFormData((prev) => ({ ...prev, serviceFilters: filters }));
+  };
+
+  const validateStep1 = () => {
+    const newErrors = {};
+    if (!formData.phoneNumber || !/^\d{10}$/.test(formData.phoneNumber)) {
+      newErrors.phoneNumber = "Valid 10-digit phone number required";
+    }
+    return newErrors;
+  };
+
+  const validateStep2 = () => {
+    const newErrors = {};
+    if (!formData.otp || formData.otp.length !== 4 || !/^\d{4}$/.test(formData.otp)) {
+      newErrors.otp = "Enter a valid 4-digit OTP";
+    }
+    return newErrors;
+  };
+
+  const validateStep3 = () => {
+    const newErrors = {};
+    if (!formData.name) newErrors.name = "Name is required";
+    if (!formData.address) newErrors.address = "Street address is required";
+    if (!formData.state) newErrors.state = "State is required";
+    if (!formData.location) newErrors.location = "Location is required";
+    if (!supportedCities.includes(formData.location)) newErrors.location = "Location must be a supported city";
+    if (!formData.service) newErrors.service = "Service type is required";
+    if (!formData.gstNumber) newErrors.gstNumber = "GST number is required";
+    if (!formData.teamSize) newErrors.teamSize = "Team size is required";
+    if (formData.teamSize && (isNaN(formData.teamSize) || formData.teamSize < 1)) {
+      newErrors.teamSize = "Team size must be a positive integer";
+    }
+    if (!formData.accountHolder) newErrors.accountHolder = "Account holder name required";
+    if (!formData.bankName) newErrors.bankName = "Bank name is required";
+    if (!formData.accountNumber) newErrors.accountNumber = "Account number is required";
+    if (!formData.ifscCode) newErrors.ifscCode = "IFSC code is required";
+    if (formData.secondaryPhoneNumber && !/^\d{10}$/.test(formData.secondaryPhoneNumber)) {
+      newErrors.secondaryPhoneNumber = "Secondary phone number must be 10 digits if provided";
+    }
+    if (formData.experience && (isNaN(formData.experience) || formData.experience < 0)) {
+      newErrors.experience = "Years of experience must be a non-negative integer";
+    }
+    if (formData.totalEvents && isNaN(formData.totalEvents)) newErrors.totalEvents = "Total events must be a number";
+    if (formData.concurrentEvents && isNaN(formData.concurrentEvents)) newErrors.concurrentEvents = "Concurrent events must be a number";
+    if (!formData.governmentId) newErrors.governmentId = "PAN number is required";
+    if (!formData.aadhaarNumber || !/^\d{12}$/.test(formData.aadhaarNumber)) {
+      newErrors.aadhaarNumber = "Aadhaar number must be 12 digits";
+    }
+    if (!formData.password || formData.password.length < 8) {
+      newErrors.password = "Password must be at least 8 characters";
+    }
+    console.log("Validation errors:", newErrors);
+    return newErrors;
+  };
+
+  const handleStep1Submit = async (e) => {
+    e.preventDefault();
+    const validationErrors = validateStep1();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+
+    setLoading(true);
+    setApiError("");
+    setErrors({});
+    try {
+      await signupVendorOtp(formData.phoneNumber);
+      setStep(2);
+    } catch (error) {
+      try {
+        const parsedErrors = JSON.parse(error.message);
+        const apiErrors = {};
+        parsedErrors.forEach((err) => {
+          if (err.path) {
+            apiErrors[err.path] = err.msg;
+          }
+        });
+        setErrors((prev) => ({ ...prev, ...apiErrors }));
+        if (!Object.keys(apiErrors).length) {
+          setApiError(error.message || "Failed to send OTP");
+        }
+      } catch {
+        setApiError(error.message || "Failed to send OTP");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResendOtp = async () => {
+    setCanResend(false);
+    setResendCooldown(30);
+    setApiError("");
+    setErrors({});
+    try {
+      await signupVendorOtp(formData.phoneNumber);
+      alert("OTP resent successfully!");
+    } catch (error) {
+      try {
+        const parsedErrors = JSON.parse(error.message);
+        const apiErrors = {};
+        parsedErrors.forEach((err) => {
+          if (err.path) {
+            apiErrors[err.path] = err.msg;
+          }
+        });
+        setErrors((prev) => ({ ...prev, ...apiErrors }));
+        if (!Object.keys(apiErrors).length) {
+          setApiError(error.message || "Failed to resend OTP");
+        }
+      } catch {
+        setApiError(error.message || "Failed to resend OTP");
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (resendCooldown > 0) {
+      const timer = setTimeout(() => {
+        setResendCooldown((prev) => prev - 1);
+        if (resendCooldown === 1) setCanResend(true);
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [resendCooldown]);
+
+  const handleStep2Submit = async (e) => {
+    e.preventDefault();
+    const validationErrors = validateStep2();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+
+    setLoading(true);
+    setApiError("");
+    setErrors({});
+    try {
+      await verifyVendorOtp({ phoneNumber: formData.phoneNumber, otp: formData.otp });
+      setStep(3);
+    } catch (error) {
+      try {
+        const parsedErrors = JSON.parse(error.message);
+        const apiErrors = {};
+        parsedErrors.forEach((err) => {
+          if (err.path) {
+            apiErrors[err.path] = err.msg;
+          }
+        });
+        setErrors((prev) => ({ ...prev, ...apiErrors }));
+        if (!Object.keys(apiErrors).length) {
+          setApiError(error.message || "OTP verification failed");
+        }
+      } catch {
+        setApiError(error.message || "OTP verification failed");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleStep3Submit = async (e) => {
+    e.preventDefault();
+    console.log("Step 3 form submitted, formData:", formData);
+    const validationErrors = validateStep3();
+    if (Object.keys(validationErrors).length > 0) {
+      console.log("Validation failed, errors:", validationErrors);
+      setErrors(validationErrors);
+      return;
+    }
+
+    setLoading(true);
+    setApiError("");
+    setErrors({});
+    try {
+      console.log("Calling completeVendorSignup with formData:", formData);
+      const response = await completeVendorSignup(formData);
+      console.log("Vendor signup successful, response:", response);
+      alert("Vendor registered successfully!");
+      navigate("/vendor/dashboard", { state: { vendor: response.vendor, token: response.token } });
+    } catch (error) {
+      console.error("Error during vendor signup:", error);
+      try {
+        const parsedErrors = JSON.parse(error.message);
+        const apiErrors = {};
+        parsedErrors.forEach((err) => {
+          if (err.path === "address.street") apiErrors.address = err.msg;
+          else if (err.path === "address.city" || err.path === "locations") apiErrors.location = err.msg;
+          else if (err.path === "address.state") apiErrors.state = err.msg;
+          else if (err.path === "yearsofExperience") apiErrors.experience = err.msg;
+          else if (err.path === "panNumber") apiErrors.governmentId = err.msg;
+          else if (err.path === "serviceType") apiErrors.service = err.msg;
+          else if (err.path) apiErrors[err.path] = err.msg;
+        });
+        setErrors((prev) => ({ ...prev, ...apiErrors }));
+        if (!Object.keys(apiErrors).length) {
+          setApiError(error.message || "An error occurred during registration");
+        }
+      } catch {
+        setApiError(error.message || "An error occurred during registration");
+      }
+    } finally {
+      setLoading(false);
+      console.log("Submission complete, loading:", false);
+    }
+  };
+
+  const inputClass =
+    "border border-[#D48060] p-3 rounded-xl text-sm text-[#D48060] placeholder-[#D48060] focus:outline-none focus:ring-2 focus:ring-[#CCAB4A] bg-white transition-all duration-300";
+
+  const otpInputClass =
+    "w-12 h-12 border border-[#D48060] rounded-xl text-center text-[#D48060] text-xl font-semibold focus:outline-none focus:ring-2 focus:ring-[#CCAB4A] bg-white transition-all duration-300";
 
   return (
-    <div className="min-h-screen bg-[#F7F4EF] p-4 md:p-10">
-      <form
-        onSubmit={handleSubmit}
-        className="max-w-3xl mx-auto bg-white p-6 rounded-2xl shadow-md border border-[#6B4226] space-y-5"
-      >
-        <h2 className="text-xl font-bold text-[#6B4226]">
-          Register as a Vendor
-        </h2>
+    <div className="min-h-screen bg-[#F7F4EF] flex items-center justify-center px-4 py-12">
+      <div className="w-full max-w-4xl bg-[#FFD3C3] p-6 sm:p-8 rounded-[40px] shadow-lg space-y-8">
+        <h2 className="text-3xl font-extrabold text-[#D48060] text-center">Register as a Vendor</h2>
+        {apiError && <p className="text-red-500 text-center font-medium">{apiError}</p>}
+        {citiesError && <p className="text-red-500 text-center font-medium">{citiesError}</p>}
 
-        <div className="grid md:grid-cols-2 gap-4">
-          <input
-            name="name"
-            value={formData.name}
-            onChange={handleInputChange}
-            placeholder="Vendor Name"
-            className="w-full p-2 border border-[#6B4226] rounded-lg text-sm text-[#6B4226]"
-          />
-          <input
-            name="phoneNumber"
-            value={formData.phoneNumber}
-            onChange={handleInputChange}
-            placeholder="Phone Number"
-            className="w-full p-2 border border-[#6B4226] rounded-lg text-sm text-[#6B4226]"
-          />
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-4">
-          <input
-            name="address"
-            value={formData.address}
-            onChange={handleInputChange}
-            placeholder="Location You Serve"
-            className="w-full p-2 border border-[#6B4226] rounded-lg text-sm text-[#6B4226]"
-          />
-          <input
-            name="email"
-            value={formData.email}
-            onChange={handleInputChange}
-            placeholder="Email Address"
-            className="w-full p-2 border border-[#6B4226] rounded-lg text-sm text-[#6B4226]"
-          />
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-4">
-          <input
-            name="gstNumber"
-            value={formData.gstNumber}
-            onChange={handleInputChange}
-            placeholder="GST Number"
-            className="w-full p-2 border border-[#6B4226] rounded-lg text-sm text-[#6B4226]"
-          />
-          <input
-            name="teamSize"
-            value={formData.teamSize}
-            onChange={handleInputChange}
-            placeholder="Team Size"
-            className="w-full p-2 border border-[#6B4226] rounded-lg text-sm text-[#6B4226]"
-          />
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-4">
-          <input
-            name="experience"
-            value={formData.experience}
-            onChange={handleInputChange}
-            placeholder="Years of Experience"
-            className="w-full p-2 border border-[#6B4226] rounded-lg text-sm text-[#6B4226]"
-          />
-          <input
-            name="eventsCompleted"
-            value={formData.eventsCompleted}
-            onChange={handleInputChange}
-            placeholder="Total Events Completed"
-            className="w-full p-2 border border-[#6B4226] rounded-lg text-sm text-[#6B4226]"
-          />
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-4">
-          <input
-            name="concurrentEvents"
-            value={formData.concurrentEvents}
-            onChange={handleInputChange}
-            placeholder="Concurrent Events You Can Handle"
-            className="w-full p-2 border border-[#6B4226] rounded-lg text-sm text-[#6B4226]"
-          />
-          <input
-            name="clientReference"
-            value={formData.clientReference}
-            onChange={handleInputChange}
-            placeholder="Past Client Reference"
-            className="w-full p-2 border border-[#6B4226] rounded-lg text-sm text-[#6B4226]"
-          />
-        </div>
-
-        <input
-          name="governmentId"
-          value={formData.governmentId}
-          onChange={handleInputChange}
-          placeholder="Govt. ID (Aadhar or PAN)"
-          className="w-full p-2 border border-[#6B4226] rounded-lg text-sm text-[#6B4226]"
-        />
-
-        <h3 className="text-lg font-semibold text-[#6B4226] mt-4">
-          Bank Details
-        </h3>
-
-        <div className="grid md:grid-cols-2 gap-4">
-          <input
-            name="accHolderName"
-            value={formData.accHolderName}
-            onChange={handleInputChange}
-            placeholder="Account Holder Name"
-            className="w-full p-2 border border-[#6B4226] rounded-lg text-sm text-[#6B4226]"
-          />
-          <input
-            name="bankName"
-            value={formData.bankName}
-            onChange={handleInputChange}
-            placeholder="Bank Name & Branch"
-            className="w-full p-2 border border-[#6B4226] rounded-lg text-sm text-[#6B4226]"
-          />
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-4">
-          <input
-            name="accNumber"
-            value={formData.accNumber}
-            onChange={handleInputChange}
-            placeholder="Account Number"
-            className="w-full p-2 border border-[#6B4226] rounded-lg text-sm text-[#6B4226]"
-          />
-          <input
-            name="ifscCode"
-            value={formData.ifscCode}
-            onChange={handleInputChange}
-            placeholder="IFSC Code"
-            className="w-full p-2 border border-[#6B4226] rounded-lg text-sm text-[#6B4226]"
-          />
-        </div>
-
-        <input
-          name="upiId"
-          value={formData.upiId}
-          onChange={handleInputChange}
-          placeholder="UPI ID (Optional)"
-          className="w-full p-2 border border-[#6B4226] rounded-lg text-sm text-[#6B4226]"
-        />
-
-        <div>
-          <label className="block text-sm font-medium text-[#6B4226] mb-1">
-            Upload Portfolio (Image/Video)
-          </label>
-          <input
-            type="file"
-            accept="image/*,video/*"
-            multiple
-            onChange={handleImageUpload}
-            className="w-full text-sm"
-          />
-          <div className="grid grid-cols-3 gap-2 mt-3">
-            {formData.images.map((img, i) => (
-              <img
-                key={i}
-                src={img}
-                alt={`preview-${i}`}
-                className="w-full h-20 object-cover rounded-lg"
+        {step === 1 && (
+          <form onSubmit={handleStep1Submit} className="space-y-6">
+            <div>
+              <label className="block mb-2 text-[#D48060] font-semibold">Phone Number</label>
+              <input
+                name="phoneNumber"
+                placeholder="Enter your 10-digit phone number"
+                value={formData.phoneNumber}
+                onChange={handleChange}
+                className={inputClass + " w-full"}
               />
-            ))}
-          </div>
-        </div>
-
-        <select
-          name="serviceType"
-          value={formData.serviceType}
-          onChange={handleServiceChange}
-          className="w-full p-2 border border-[#6B4226] rounded-lg text-sm text-[#6B4226]"
-        >
-          <option value="">Select Service Type</option>
-          <option value="caterer">Caterer</option>
-          <option value="decorator">Decorator</option>
-          <option value="dj">DJ</option>
-          <option value="photographer">Photographer</option>
-          <option value="other">Other</option>
-        </select>
-        {errors.serviceType && (
-          <p className="text-red-500 text-xs">{errors.serviceType}</p>
+              {errors.phoneNumber && <p className="text-red-500 text-xs mt-1">{errors.phoneNumber}</p>}
+            </div>
+            <button
+              type="submit"
+              disabled={loading}
+              className={`bg-[#CCAB4A] hover:bg-[#D48060] text-white font-semibold px-6 py-3 rounded-xl w-full transform transition-transform duration-300 ease-in-out hover:scale-105 active:scale-95 ${
+                loading ? "opacity-50 cursor-not-allowed" : ""
+              }`}
+            >
+              {loading ? "Sending OTP..." : "Send OTP"}
+            </button>
+          </form>
         )}
 
-        {formData.serviceType && (
-          <ServiceSpecificFields
-            service={formData.serviceType}
-            onChange={handleSubServices}
-            initialFilters={formData.servicesOffered}
-          />
+        {step === 2 && (
+          <form onSubmit={handleStep2Submit} className="space-y-6">
+            <div>
+              <label className="block mb-2 text-[#D48060] font-semibold">Enter OTP</label>
+              <div className="flex justify-center gap-4" onPaste={handleOtpPaste}>
+                {otpDigits.map((digit, index) => (
+                  <input
+                    key={index}
+                    type="text"
+                    maxLength="1"
+                    value={digit}
+                    onChange={(e) => handleOtpChange(index, e.target.value)}
+                    ref={(el) => (otpInputRefs.current[index] = el)}
+                    className={otpInputClass}
+                    autoFocus={index === 0}
+                  />
+                ))}
+              </div>
+              {errors.otp && <p className="text-red-500 text-center text-xs mt-2">{errors.otp}</p>}
+            </div>
+            <div className="flex justify-center">
+              <button
+                type="button"
+                onClick={handleResendOtp}
+                disabled={!canResend}
+                className={`text-[#D48060] font-semibold hover:underline mt-2 ${
+                  !canResend ? "opacity-50 cursor-not-allowed" : ""
+                }`}
+              >
+                {canResend ? "Resend OTP" : `Resend OTP (${resendCooldown}s)`}
+              </button>
+            </div>
+            <button
+              type="submit"
+              disabled={loading}
+              className={`bg-[#CCAB4A] hover:bg-[#D48060] text-white font-semibold px-6 py-3 rounded-xl w-full transform transition-transform duration-300 ease-in-out hover:scale-105 active:scale-95 ${
+                loading ? "opacity-50 cursor-not-allowed" : ""
+              }`}
+            >
+              {loading ? "Verifying OTP..." : "Verify OTP"}
+            </button>
+            <button
+              type="button"
+              onClick={() => setStep(1)}
+              className="text-[#D48060] font-semibold hover:underline mt-2"
+            >
+              Back
+            </button>
+          </form>
         )}
 
-        <button
-          type="submit"
-          className="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 rounded-lg text-sm"
-        >
-          Submit Registration
-        </button>
-      </form>
+        {step === 3 && (
+          <form onSubmit={handleStep3Submit} className="space-y-6">
+            {citiesLoading && <p className="text-[#D48060] text-center">Loading supported cities...</p>}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              {[
+                { name: "name", placeholder: "Vendor Name *" },
+                { name: "location", placeholder: "Select City *", type: "select", options: supportedCities },
+                { name: "address", placeholder: "Street Address *" },
+                { name: "state", placeholder: "State *" },
+                { name: "gstNumber", placeholder: "GST Number *" },
+                { name: "teamSize", placeholder: "Team Size *" },
+                { name: "experience", placeholder: "Years of Service" },
+                { name: "totalEvents", placeholder: "Total Events Completed" },
+                { name: "concurrentEvents", placeholder: "Concurrent Events You Can Handle" },
+                { name: "clientReferences", placeholder: "Past Client References" },
+                { name: "governmentId", placeholder: "PAN Number *" },
+                { name: "aadhaarNumber", placeholder: "Aadhaar Number (12 digits) *" },
+                { name: "secondaryPhoneNumber", placeholder: "Secondary Phone Number (Optional)" },
+              ].map(({ name, placeholder, type, options }, i) => (
+                <div key={i}>
+                  {type === "select" ? (
+                    <select
+                      name={name}
+                      value={formData[name]}
+                      onChange={handleChange}
+                      className={inputClass + " w-full"}
+                      disabled={citiesLoading}
+                    >
+                      <option value="">{placeholder}</option>
+                      {options.map((option) => (
+                        <option key={option} value={option}>
+                          {option}
+                        </option>
+                      ))}
+                    </select>
+                  ) : (
+                    <input
+                      name={name}
+                      placeholder={placeholder}
+                      value={formData[name]}
+                      onChange={handleChange}
+                      className={inputClass + " w-full"}
+                    />
+                  )}
+                  {errors[name] && <p className="text-red-500 text-xs mt-1">{errors[name]}</p>}
+                </div>
+              ))}
+            </div>
+
+            <div>
+              <label className="block mb-2 text-[#D48060] font-semibold">Service Type *</label>
+              <select
+                name="service"
+                value={formData.service}
+                onChange={handleChange}
+                className={inputClass + " w-full"}
+              >
+                <option value="">Select Service</option>
+                <option value="caterer">Caterer</option>
+                <option value="dj">DJ</option>
+                <option value="decorator">Decorator</option>
+                <option value="photographer">Photographer</option>
+                <option value="others">Others</option>
+              </select>
+              {errors.service && <p className="text-red-500 text-xs mt-1">{errors.service}</p>}
+            </div>
+
+            {formData.service === "others" && (
+              <div>
+                <input
+                  name="customService"
+                  placeholder="Specify Your Service"
+                  value={formData.customService}
+                  onChange={handleChange}
+                  className={inputClass + " w-full"}
+                />
+              </div>
+            )}
+
+            {formData.service && (
+              <ServiceSpecificFields
+                service={formData.service}
+                onChange={handleServiceFiltersChange}
+                initialFilters={formData.serviceFilters}
+              />
+            )}
+
+            <div>
+              <h3 className="text-xl font-bold text-[#D48060] mb-4">Bank Details</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                {[
+                  { name: "accountHolder", placeholder: "Account Holder Name *" },
+                  { name: "bankName", placeholder: "Bank Name *" },
+                  { name: "accountNumber", placeholder: "Account Number *" },
+                  { name: "ifscCode", placeholder: "IFSC Code *" },
+                  { name: "upiId", placeholder: "UPI ID (Optional)" },
+                ].map(({ name, placeholder }, i) => (
+                  <div key={i}>
+                    <input
+                      name={name}
+                      placeholder={placeholder}
+                      value={formData[name]}
+                      onChange={handleChange}
+                      className={inputClass + " w-full"}
+                    />
+                    {errors[name] && <p className="text-red-500 text-xs mt-1">{errors[name]}</p>}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <label className="block mb-2 text-[#D48060] font-semibold">Password *</label>
+              <input
+                type="password"
+                name="password"
+                placeholder="Enter your password (min 8 characters)"
+                value={formData.password}
+                onChange={handleChange}
+                className={inputClass + " w-full"}
+              />
+              {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
+            </div>
+
+            <div>
+              <label className="block mb-2 font-semibold text-[#D48060]">
+                Upload Portfolio Files (Images, Videos)
+              </label>
+              <input
+                type="file"
+                name="portfolioFiles"
+                multiple
+                accept="image/*,video/*"
+                onChange={handleChange}
+                className="w-full border border-[#D48060] rounded-xl p-2 bg-white text-[#D48060] file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-[#CCAB4A] file:text-white hover:file:bg-[#D48060] transition-all duration-300"
+              />
+              {formData.portfolioFiles.length > 0 && (
+                <p className="text-sm mt-2 text-[#D48060]">
+                  {formData.portfolioFiles.length} file(s) selected.
+                </p>
+              )}
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading || citiesLoading}
+              className={`bg-[#CCAB4A] hover:bg-[#D48060] text-white font-semibold px-6 py-3 rounded-xl w-full transform transition-transform duration-300 ease-in-out hover:scale-105 active:scale-95 ${
+                (loading || citiesLoading) ? "opacity-50 cursor-not-allowed" : ""
+              }`}
+              onClick={() => console.log("Submit button clicked, disabled:", loading || citiesLoading)}
+            >
+              {loading ? "Submitting..." : "Complete Registration"}
+            </button>
+            <button
+              type="button"
+              onClick={() => setStep(2)}
+              className="text-[#D48060] font-semibold hover:underline mt-2"
+            >
+              Back
+            </button>
+          </form>
+        )}
+      </div>
     </div>
   );
 }
