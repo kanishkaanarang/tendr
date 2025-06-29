@@ -14,12 +14,13 @@ import SmartRecommendations from './pages/SmartRecommendations';
 import PlanEventCheckout from './pages/PlanEventCheckout';
 import WhatsAppFlow from './pages/WhatsAppFlow';
 import NotFound from './pages/NotFound';
-import OtpPage from './pages/OtpVerification'; // Make sure file name matches
+import OtpPage from './pages/OtpVerification';
 import ListingPage from './pages/ListingPage';
 import VendorDetails from './pages/VendorDetails';
 import ChatPage from './pages/ChatPage';
 import VendorFlow from './pages/VendorFlow';
 import CorporateBooking from './pages/CorporateBooking';
+import CorporateSignup from "./pages/CorporateSignUp";
 
 const router = createBrowserRouter([
   { path: '/', element: <LandingPageNew /> },
@@ -27,6 +28,7 @@ const router = createBrowserRouter([
   { path: '/chat', element: <ChatPage /> },
   { path: '/VendorDetails', element: <VendorDetails /> },
   { path: '/listings', element: <ListingPage /> },
+  { path: '/corporate-signup', element: <CorporateSignup /> },
   { path: '/login', element: <AuthPage /> },
   { path: '/signup', element: <AuthPage /> },
   { path: '/GroupBooking', element: <GroupBooking /> },
