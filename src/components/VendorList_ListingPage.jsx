@@ -1,4 +1,6 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+
+import { useNavigate } from 'react-router-dom';
 
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import StarRateRoundedIcon from '@mui/icons-material/StarRateRounded';
@@ -7,7 +9,21 @@ import DummyPhoto from "../assets/GrayDummyPhoto.jpg";
 
 
 
-const VendorList_ListingPage = () => {
+const VendorList_ListingPage = ({
+    eventType: initialEventType,
+    serviceType: initialServiceType,
+    locationType: initialLocationType,
+    date: initialDate,
+    guestCount: initialGuestCount
+}) => {
+
+    const navigate = useNavigate();
+
+    const [eventType, setEventType] = useState(initialEventType || "");
+    const [serviceType, setServiceType] = useState(initialServiceType || "");
+    const [locationType, setLocationType] = useState(initialLocationType || "");
+    const [date, setDate] = useState(initialDate || "");
+    const [guestCount, setGuestCount] = useState(initialGuestCount || 0);
 
     const vendors = [
         { id: 1, name: 'Vendor 1', location: "Chennai", image: DummyPhoto, rating: 4.1, number_of_reviews: 49, price: "11,999" },
@@ -17,7 +33,13 @@ const VendorList_ListingPage = () => {
         { id: 5, name: 'Vendor 5', location: "Mumbai", image: DummyPhoto, rating: 4.7, number_of_reviews: 67, price: "14,999" },
         { id: 6, name: 'Vendor 6', location: "Delhi", image: DummyPhoto, rating: 4.4, number_of_reviews: 26, price: "17,999" },
         { id: 7, name: 'Vendor 7', location: "Kochi", image: DummyPhoto, rating: 4.5, number_of_reviews: 32, price: "8,999" },
-        { id: 8, name: 'Vendor 8', location: "Bengaluru", image: DummyPhoto, rating: 4.9, number_of_reviews: 24, price: "12,999" }
+        { id: 8, name: 'Vendor 8', location: "Bengaluru", image: DummyPhoto, rating: 4.0, number_of_reviews: 24, price: "12,999" },
+        { id: 9, name: 'Vendor 9', location: "Delhi", image: DummyPhoto, rating: 4.1, number_of_reviews: 24, price: "11,999" },
+        { id: 10, name: 'Vendor 10', location: "Kochi", image: DummyPhoto, rating: 4.6, number_of_reviews: 454, price: "19,999" },
+        { id: 11, name: 'Vendor 11', location: "Mumbai", image: DummyPhoto, rating: 4.9, number_of_reviews: 11, price: "17,999" },
+        { id: 12, name: 'Vendor 12', location: "Delhi", image: DummyPhoto, rating: 3.7, number_of_reviews: 4, price: "5,999" },
+        { id: 13, name: 'Vendor 13', location: "Bengaluru", image: DummyPhoto, rating: 3.9, number_of_reviews: 74, price: "8,999" },
+        { id: 14, name: 'Vendor 14', location: "Mumbai", image: DummyPhoto, rating: 4.3, number_of_reviews: 84, price: "11,999" }
     ];
 
 
@@ -30,16 +52,18 @@ const VendorList_ListingPage = () => {
 
                     <div className="header flex justify-between">
 
-                        <div className="leftside leading-7 ">
+                        <div className="leftside leading-7 ml-3">
                             <div className="smaller_text text-sm font-semibold">Top picks for</div>
                             <div className="larger_text text-[25px] font-bold">
-                                <span className="location">Kochi</span>
+                                <span className="event">{eventType}</span>
                                 <span>, </span>
-                                <span className="service">Birthday</span>
+                                <span className="service">{serviceType}</span>
                                 <span>, </span>
-                                <span className="date">15 July</span>
+                                <span className="location">{locationType}</span>
                                 <span>, </span>
-                                <span className="guest">12 guests</span>
+                                <span className="date">{date}</span>
+                                <span>, </span>
+                                <span className="guest">{guestCount} guests</span>
                             </div>
                         </div>
 
@@ -54,7 +78,11 @@ const VendorList_ListingPage = () => {
 
                     <div className="vendorcards grid grid-cols-2 gap-y-[30px] gap-x-[30px] mt-5 w-fit mx-auto">
                         {vendors.map((vendor) => (
-                            <div key={vendor.id} className="p-4 border-[1px] border-gray-200 hover:border-[#CCAB4A] rounded-[18px] shadow-md w-[520px] h-[260px] cursor-pointer transition-colors duration-300">
+                            <div
+                                key={vendor.id}
+                                onClick={() => navigate("/VendorDetails")}
+                                className="p-4 border-[1px] border-gray-200 hover:border-[#CCAB4A] rounded-[18px] shadow-md w-[520px] h-[260px] cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105 hover:-translate-y-1"
+                            >
                                 <div className=" border-black h-full flex justify-between">
 
                                     <div className="img h-full">
@@ -97,7 +125,7 @@ const VendorList_ListingPage = () => {
 
                 </div>
 
-                <div className="second show_more flex-1 flex items-center justify-center">
+                <div className="second show_more flex-1 flex items-center justify-center mt-7 mb-10">
                     <button type="button" className='rounded-full shadow-md px-6 py-2 font-semibold border-[1px] border-[#CCAB4A] transition-colors duration-300'>Show More</button>
                 </div>
 

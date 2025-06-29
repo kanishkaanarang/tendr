@@ -69,8 +69,13 @@ const LandingPageNew = () => {
     return (
         <>
             <div className='h-fit relative'>
+
+
+
                 {/* HERO SECTION PART */}
                 <HeroSection_LandingPage />
+
+
 
                 {/* SLOGAN BANNER */}
                 <div className="slogan_banner group my-24 mx-4 md:mx-16 h-[422px] rounded-[80px] flex items-center justify-center text-center bg-center bg-cover cursor-pointer transition-transform duration-500 ease-in-out hover:scale-105 overflow-hidden"
@@ -86,6 +91,8 @@ const LandingPageNew = () => {
                         “We Curate You Celebrate”
                     </div>
                 </div>
+
+
 
                 {/* RECOMMENDED VENDORS */}
                 <div className="recommendedvendors my-24">
@@ -116,6 +123,8 @@ const LandingPageNew = () => {
                     </div>
                 </div>
 
+
+
                 {/* WHY YOU WILL LOVE US */}
                 <div className="why_love_us my-24 mx-16 h-[480px] bg-[#FFD3C3] rounded-[80px] flex flex-col gap-14 items-center cursor-pointer transition-transform duration-700 ease-in-out hover:scale-105">
                     <div className="first text-[85px] font-extrabold mt-14 text-[#D48060] hover:text-white duration-300">
@@ -145,6 +154,8 @@ const LandingPageNew = () => {
                     </div>
                 </div>
 
+
+
                 {/* NOT SURE BOX */}
                 <div className="not_sure mx-16 my-24 flex justify-center gap-20">
                     <div
@@ -160,6 +171,8 @@ const LandingPageNew = () => {
                         </span>
                     </div>
                 </div>
+
+
 
                 {/* JOIN VENDOR NETWORK BOX */}
                 <div className="vendornetwork my-24 mx-16 flex justify-center gap-20">
@@ -192,6 +205,8 @@ const LandingPageNew = () => {
                         style={{ backgroundImage: `url(${VendorNetwork})`, backgroundSize: '100%' }}
                     ></div>
                 </div>
+
+
 
                 {/* FAQ QUESTIONS AND ANSWERS */}
                 <div className="questions-answers my-24">
@@ -245,6 +260,8 @@ const LandingPageNew = () => {
                     </div>
                 </div>
 
+
+
                 {/* FOOTER PART */}
                 <div className="footer h-fit pt-20 pb-5 bg-[#FFD3C3] text-[#D48060] rounded-t-[80px] transition-colors duration-300">
                     <div className="top mx-20 flex justify-between">
@@ -289,6 +306,9 @@ const LandingPageNew = () => {
                         </div>
                     </div>
                 </div>
+
+
+
             </div>
         </>
     );

@@ -1,27 +1,43 @@
 import React, { useState, useEffect } from 'react'
+
 import { useNavigate } from 'react-router-dom';
+
 import ClearIcon from '@mui/icons-material/Clear';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import EastIcon from '@mui/icons-material/East';
 
-const BASE_URL = "http://localhost:8080";
+// const BASE_URL = "http://localhost:8080";
 
 
-const PrimaryFilters_ListingPage = () => {
+const PrimaryFilters_ListingPage = ({
+    eventType: initialEventType,
+    serviceType: initialServiceType,
+    locationType: initialLocationType,
+    date: initialDate,
+    guestCount: initialGuestCount
+}) => {
 
     const navigate = useNavigate();
-    const [eventType, setEventType] = useState("");
-    const [locationType, setLocationType] = useState("");
-    const [date, setDate] = useState("");
-    const [guestCount, setGuestCount] = useState(0);
 
-    const eventOptions = ['Wedding', 'Birthday Party', 'Corporate Event', 'Concert'];
-    const locationOptions = ['Delhi', 'Bengaluru', 'Chennai', 'Mumbai'];
+    const [eventType, setEventType] = useState(initialEventType || "");
+    const [serviceType, setServiceType] = useState(initialServiceType || "");
+    const [locationType, setLocationType] = useState(initialLocationType || "");
+    const [date, setDate] = useState(initialDate || "");
+    const [guestCount, setGuestCount] = useState(initialGuestCount || 0);
+
+    const eventOptions = ['Get-together', 'Birthday', 'Office Party', 'Concert', 'Anniversary', 'Pre Wedding', 'Rituals', 'Festival', 'Others'];
+    const serviceOptions = ['Decorator', 'Entertainment', 'Catering', 'Photographer'];
+    const locationOptions = ['Delhi', 'Noida', 'Greater Noida', 'Gurugram', 'Ghaziabad'];
 
     const [activeDropdown, setactiveDropdown] = useState(null)
 
     const handleOptionClickEvent = (option) => {
         setEventType(option);
+        setactiveDropdown(null);
+    };
+
+    const handleOptionClickService = (option) => {
+        setServiceType(option);
         setactiveDropdown(null);
     };
 
@@ -40,44 +56,25 @@ const PrimaryFilters_ListingPage = () => {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
-    const handleSearch = async () => {
-        console.log("Sending filter bar data selected by user:", { eventType, date, locationType, guestCount });
-        try {
-            const response = await fetch(`${BASE_URL}/api/filter`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    eventType,
-                    date,
-                    locationType,
-                    guestCount
-                })
-            });
-
-            if (!response.ok) {
-                throw new Error("Network response was not ok");
-            }
-
-            const data = await response.json();
-            console.log('Filter data sent successfully:', data);
-
-            // Navigate after successful submission
-            navigate("/SecondPage");
-
-        } catch (error) {
-            console.error("Error sending filter data:", error);
-        }
+    const handleSearch = () => {
+        // To be filled
     };
+
 
     return (
         <>
-            <div className="primary_heading ml-12 mt-5 font-bold text-2xl">Event Details</div>
-            <div className="primary_filter_options flex flex-col gap-2 mt-4 ml-12">
+
+            <div className="primary_heading ml-12 font-bold text-2xl">Event Details</div>
+
+
+
+            {/* Primary Filter Options */}
+            <div className="primary_filter_options flex flex-col gap-4 mt-4 items-center w-full">
+
+
 
                 {/* Event Type */}
-                <div className="event  flex flex-col text-sm w-[85%] relative">
+                <div className="event flex flex-col text-sm w-[85%] max-w-[450px] relative">
                     <label className='font-semibold text-[14px] cursor-pointer ml-3' onClick={() => { setactiveDropdown("event") }}>Event Type</label>
                     <input
                         type="text"
@@ -122,8 +119,56 @@ const PrimaryFilters_ListingPage = () => {
 
                 </div>
 
+
+
+                {/* Service Type */}
+                <div className="service flex flex-col text-sm w-[85%] max-w-[450px] relative">
+                    <label className='font-semibold text-[14px] cursor-pointer ml-3' onClick={() => { setactiveDropdown("service") }}>Service Type</label>
+                    <input
+                        type="text"
+                        className='font-medium text-base text-[#CCAB4A] placeholder-[#CCAB4A] placeholder:font-medium outline-none bg-white cursor-pointer w-full rounded-full pl-4 p-[8px] border-2 border-[#CCAB4A] mt-[2px]'
+                        value={serviceType}
+                        onChange={(e) => setServiceType(e.target.value)}
+                        onClick={() => { setactiveDropdown("service") }}
+                        placeholder="Select service"
+                        readOnly
+                    />
+
+                    {activeDropdown === "service" &&
+                        <div className="dropdown-wrapper absolute left-0 top-[75px] w-[200px] h-fit bg-white rounded-3xl z-30 shadow-[0_2px_10px_rgba(0,0,0,0.25)] overflow-y-auto">
+                            {serviceOptions.map((option, index) => (
+                                <div
+                                    key={index}
+                                    onClick={() => handleOptionClickService(option)}
+                                    className={`cursor-pointer text-sm p-2 pl-7 ml-5 mr-5 mt-2 mb-2 rounded-[15px] font-medium text-black ${serviceType === option ? 'bg-[#fbc0105e]' : 'hover:bg-[#ffe79e45]'}`}
+                                >
+                                    {option}
+                                </div>
+                            ))}
+                        </div>
+                    }
+
+                    {serviceType ? (
+                        <span
+                            onClick={() => setServiceType("")}
+                            className="absolute right-4 bottom-[9px] flex items-center justify-center text-[#CCAB4A] hover:bg-[#f5cb4d71] w-fit rounded-full cursor-pointer text-lg"
+                        >
+                            <ClearIcon />
+                        </span>
+                    ) : (
+                        <span
+                            onClick={() => setactiveDropdown("service")}
+                            className="absolute right-4 bottom-[9px] flex items-center justify-center text-[#CCAB4A] hover:bg-[#f5cb4d71] w-fit rounded-full cursor-pointer text-sm"
+                        >
+                            <KeyboardArrowDownIcon />
+                        </span>
+                    )}
+                </div>
+
+
+
                 {/* Date */}
-                <div className="date  flex flex-col text-sm w-[85%] relative">
+                <div className="date flex flex-col text-sm w-[85%] max-w-[450px] relative">
                     <label className='font-semibold text-[14px] cursor-pointer ml-3' onClick={() => setactiveDropdown("date")}>Date</label>
                     <input
                         type="text"
@@ -165,8 +210,10 @@ const PrimaryFilters_ListingPage = () => {
 
                 </div>
 
+
+
                 {/* Location */}
-                <div className="location  flex flex-col text-sm w-[85%] relative">
+                <div className="location flex flex-col text-sm w-[85%] max-w-[450px] relative">
                     <label className='font-semibold text-[14px] cursor-pointer ml-3' onClick={() => { setactiveDropdown("location") }}>Location</label>
                     <input
                         type="text"
@@ -211,8 +258,10 @@ const PrimaryFilters_ListingPage = () => {
 
                 </div>
 
+
+
                 {/* Guest Count */}
-                <div className="guest  flex flex-col text-sm w-[85%] relative">
+                <div className="guest flex flex-col text-sm w-[85%] max-w-[450px] relative">
                     <label className='font-semibold text-[14px] cursor-pointer ml-3' onClick={() => setactiveDropdown("guests")}>Guests</label>
                     <input
                         type="text"
@@ -254,17 +303,28 @@ const PrimaryFilters_ListingPage = () => {
 
                 </div>
 
+
+
             </div>
 
+
+
             {/* Search Button */}
-            <div className="search_btn text-center mt-6">
-                <button onClick={handleSearch} className="w-[50%] bg-[#CCAB4A] hover:bg-[#b89b3f] text-white py-1.5 rounded-full shadow-md transition-all duration-200">
-                    <div className='w-full flex gap-3 justify-center items-center'>
-                        <span className='text-xl font-bold'>Search</span>
-                        <EastIcon fontSize="large"/>
-                    </div>
+            <div className="search_btn flex justify-center mt-6">
+                <button
+                    type="button"
+                    onClick={handleSearch}
+                    className="group cursor-pointer bg-white hover:bg-[#CCAB4A] hover:text-white rounded-2xl pl-4 pr-2 flex items-center justify-between text-[#CCAB4A] font-bold w-[140px] h-[45px] transform transition-transform duration-300 ease-in-out hover:scale-105 hover:-translate-y-1 active:scale-95 shadow-md"
+                >
+                    <span className="pb-[2px] text-xl">Search</span>
+                    <span
+                        className="group-hover:bg-white arrowButton w-[30px] h-[30px] bg-[#CCAB4A] rounded-xl flex items-center justify-center transition duration-300"
+                    >
+                        <EastIcon className="text-white group-hover:text-[#CCAB4A] transition duration-300" fontSize="medium" />
+                    </span>
                 </button>
             </div>
+
         </>
     )
 }
