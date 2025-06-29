@@ -49,7 +49,7 @@ export default function CorporateSignup() {
           </h2>
 
           <form onSubmit={handleSubmit} className="space-y-3">
-            {["companyName", "location", "personName", "designation", "email", "password", "confirmPassword", "phone", "teamSize"].map((field, i) => (
+            {["companyName", "location", "personName", "designation", "email", "password", "confirmPassword", "phone", "teamSize"].map((field) => (
               <div key={field}>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   {field === "personName" ? "Your Name" :
