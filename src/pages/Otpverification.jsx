@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from 'react-redux';
-import { verifyOtpAction, resendOtpAction, clearError } from '../redux/authSlice';
+import { useDispatch, useSelector } from "react-redux";
+import {
+  verifyOtpAction,
+  resendOtpAction,
+  clearError,
+} from "../redux/authSlice";
 import logo from "../assets/logo2.png";
 
 const OTPPage = () => {
@@ -10,11 +14,18 @@ const OTPPage = () => {
   const [canResend, setCanResend] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { verificationId, userData, loading, error } = useSelector((state) => state.auth);
+  const { verificationId, userData, loading, error } = useSelector(
+    (state) => state.auth
+  );
 
   useEffect(() => {
-    if (!verificationId || !userData?.phoneNumber) {
-      navigate("/signup"); // Redirect to signup if verificationId or phoneNumber is missing
+    const corporateData = localStorage.getItem("corporatePlan");
+
+    const isCorporateUser = !!corporateData;
+    const isNormalUser = verificationId && userData?.phoneNumber;
+
+    if (!isCorporateUser && !isNormalUser) {
+      navigate("/signup"); // redirecting to signup if not registered
     }
   }, [verificationId, userData, navigate]);
 
@@ -53,18 +64,23 @@ const OTPPage = () => {
     e.preventDefault();
     const finalOtp = otp.join("");
     if (finalOtp.length !== 4) {
-      dispatch({ type: 'auth/verifyOtp/rejected', payload: "Please enter a 4-digit OTP" });
+      dispatch({
+        type: "auth/verifyOtp/rejected",
+        payload: "Please enter a 4-digit OTP",
+      });
       return;
     }
 
-    dispatch(verifyOtpAction({
-      phoneNumber: userData.phoneNumber,
-      name: userData.name,
-      email: userData.email,
-      password: userData.password,
-      otp: finalOtp,
-      verificationId,
-    })).then((result) => {
+    dispatch(
+      verifyOtpAction({
+        phoneNumber: userData.phoneNumber,
+        name: userData.name,
+        email: userData.email,
+        password: userData.password,
+        otp: finalOtp,
+        verificationId,
+      })
+    ).then((result) => {
       if (result.meta.requestStatus === "fulfilled") {
         navigate("/dashboard"); // Redirect to user dashboard after successful verification
       }
@@ -86,12 +102,19 @@ const OTPPage = () => {
     <div className="w-screen min-h-screen flex flex-col bg-[#E8DED1]">
       <div className="flex-grow flex items-center justify-center p-4">
         <div className="bg-[#F7F4EF] rounded-2xl shadow-lg w-[454px] h-[530px] p-6 flex flex-col items-center">
-          <img src={logo} alt="Tendr Logo" className="w-[325px] h-[106px] mb-4" />
-          
+          <img
+            src={logo}
+            alt="Tendr Logo"
+            className="w-[325px] h-[106px] mb-4"
+          />
+
           <div className="w-[424px] h-[312px] flex flex-col items-center">
-            <h2 className="text-xl font-bold text-center mb-2">OTP verification</h2>
+            <h2 className="text-xl font-bold text-center mb-2">
+              OTP verification
+            </h2>
             <p className="text-sm text-center text-gray-700 font-bold mb-4">
-              Please enter the OTP (One-Time Password) sent to your registered phone number to complete your verification.
+              Please enter the OTP (One-Time Password) sent to your registered
+              phone number to complete your verification.
             </p>
             {error && (
               <div className="text-red-500 text-sm text-center mb-4">
@@ -118,13 +141,17 @@ const OTPPage = () => {
               <div className="flex justify-between text-xs text-gray-700 font-medium px-1">
                 <span>
                   Remaining Time:{" "}
-                  <span className="text-yellow-600 font-bold">00:{timeLeft < 10 ? `0${timeLeft}` : timeLeft}s</span>
+                  <span className="text-yellow-600 font-bold">
+                    00:{timeLeft < 10 ? `0${timeLeft}` : timeLeft}s
+                  </span>
                 </span>
                 <span>
                   Didn’t get the code?{" "}
                   <button
                     type="button"
-                    className={`font-semibold hover:underline ${canResend ? 'text-yellow-600' : 'text-gray-400'}`}
+                    className={`font-semibold hover:underline ${
+                      canResend ? "text-yellow-600" : "text-gray-400"
+                    }`}
                     onClick={handleResend}
                     disabled={!canResend || loading}
                   >
@@ -151,13 +178,21 @@ const OTPPage = () => {
         <div className="flex flex-wrap justify-center gap-2 sm:gap-4 font-semibold">
           <span>tendr ©</span>
           <span>|</span>
-          <a href="#" className="hover:underline cursor-pointer">Support</a>
+          <a href="#" className="hover:underline cursor-pointer">
+            Support
+          </a>
           <span>|</span>
-          <a href="#" className="hover:underline cursor-pointer">Help Center</a>
+          <a href="#" className="hover:underline cursor-pointer">
+            Help Center
+          </a>
           <span>|</span>
-          <a href="#" className="hover:underline cursor-pointer">Vendor Support</a>
+          <a href="#" className="hover:underline cursor-pointer">
+            Vendor Support
+          </a>
           <span>|</span>
-          <a href="#" className="hover:underline cursor-pointer">Get in touch</a>
+          <a href="#" className="hover:underline cursor-pointer">
+            Get in touch
+          </a>
         </div>
       </footer>
     </div>
