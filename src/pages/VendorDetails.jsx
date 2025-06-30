@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+
+import ListingsNav from '../components/ListingsNav';
+
 import logo from "../assets/logo2.png";
 import user from "../assets/user.png";
 
@@ -37,29 +40,21 @@ const VendorDetailsPage = () => {
 
   return (
     <div className="w-full min-h-screen bg-[#F7F4EF] text-gray-800">
+
       {/* Navbar */}
-      <nav className="flex justify-between items-center px-6 py-4 shadow-md bg-white sticky top-0 z-50">
-        <img src={logo} alt="logo" className="w-40 md:w-48" />
-        <div className="flex items-center space-x-8">
-          <button className="font-semibold text-sm text-gray-700">
-            Group Planning
-          </button>
-          <img
-            src={user}
-            alt="User Profile"
-            className="w-9 h-9 object-cover rounded-full border border-gray-300"
-          />
-        </div>
-      </nav>
+      <div className="navbar bg-[#FDFAF0]">    {/* border-b-2 border-[#CCAB4A] */}
+        <ListingsNav />
+      </div>
+
+
 
       {/* Gallery */}
       <section className="grid grid-cols-1 lg:grid-cols-2 gap-4 px-6 pt-6">
         <img
           src={main1}
           alt="Main 1"
-          className={`h-[400px] w-full object-cover rounded-2xl transition-all duration-200 ${
-            isLoaded ? "opacity-100" : "opacity-0"
-          }`}
+          className={`h-[400px] w-full object-cover rounded-2xl transition-all duration-200 ${isLoaded ? "opacity-100" : "opacity-0"
+            }`}
           onLoad={() => setIsLoaded(true)}
         />
         <div className="grid grid-cols-2 gap-2">
@@ -68,9 +63,8 @@ const VendorDetailsPage = () => {
               key={idx}
               src={img}
               alt={`Gallery ${idx + 2}`}
-              className={`h-[195px] w-full object-cover rounded-xl transition-all duration-200 ${
-                isLoaded ? "opacity-100" : "opacity-0"
-              }`}
+              className={`h-[195px] w-full object-cover rounded-xl transition-all duration-200 ${isLoaded ? "opacity-100" : "opacity-0"
+                }`}
               onLoad={() => setIsLoaded(true)}
             />
           ))}
@@ -82,6 +76,8 @@ const VendorDetailsPage = () => {
           {showAllPhotos ? "Show less photos" : "Show all photos"}
         </button>
       </section>
+
+
 
       {/* Title and Booking Info */}
       <section className="grid grid-cols-1 lg:grid-cols-3 gap-6 px-6 py-8">
@@ -99,6 +95,8 @@ const VendorDetailsPage = () => {
           <p className="text-sm text-gray-700">Response time: 1 hour</p>
         </div>
 
+
+
         {/* Booking + Message Preview */}
         <div className="bg-white p-5 rounded-2xl shadow-lg space-y-4 border border-yellow-400">
           <h2 className="text-xl font-semibold">Price to be updated</h2>
@@ -109,13 +107,12 @@ const VendorDetailsPage = () => {
           {/* Message Preview */}
           <div className="bg-yellow-50 border border-yellow-200 text-sm p-3 rounded-xl whitespace-pre-line text-gray-800">
             {`Guest: ${filtersData.guest}
-Location: ${filtersData.location}
-Date: ${filtersData.date}
-Time: ${filtersData.time}
-Food Type: ${filtersData.foodType}
-Decor Theme: ${filtersData.decorTheme}
-
-Are you available?`}
+              Location: ${filtersData.location}
+              Date: ${filtersData.date}
+              Time: ${filtersData.time}
+              Food Type: ${filtersData.foodType}
+              Decor Theme: ${filtersData.decorTheme}
+              Are you available?`}
           </div>
 
           {/* Chat Button */}
@@ -143,6 +140,8 @@ Are you available?`}
         </div>
       </section>
 
+
+
       {/* Specializes In */}
       <section className="px-6 pb-12">
         <h3 className="text-xl font-bold mb-4">Specializes In - Catering</h3>
@@ -162,9 +161,8 @@ Are you available?`}
               <img
                 src={item.img}
                 alt={item.title}
-                className={`h-32 w-full object-cover transition-all duration-200 ${
-                  isLoaded ? "opacity-100" : "opacity-0"
-                }`}
+                className={`h-32 w-full object-cover transition-all duration-200 ${isLoaded ? "opacity-100" : "opacity-0"
+                  }`}
                 onLoad={() => setIsLoaded(true)}
               />
               <div className="p-3 text-center font-semibold text-sm text-gray-700">
@@ -174,6 +172,9 @@ Are you available?`}
           ))}
         </div>
       </section>
+
+
+
     </div>
   );
 };

@@ -56,7 +56,7 @@ const PrimaryFilters_ListingPage = ({
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
-    const handleSearch = () => {
+    const handleSearch = () => {``
         // To be filled
     };
 

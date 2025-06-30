@@ -30,7 +30,6 @@ export default function VendorRegistration() {
     ifscCode: "",
     upiId: "",
     clientReferences: "",
-    governmentId: "",
     aadhaarNumber: "",
     password: "",
     portfolioFiles: [],
@@ -354,7 +353,7 @@ export default function VendorRegistration() {
                 name="phoneNumber"
                 placeholder="Enter your 10-digit phone number"
                 value={formData.phoneNumber}
-                onChange={handleChange}
+                onChange={handleInputChange}
                 className={inputClass + " w-full"}
               />
               {errors.phoneNumber && <p className="text-red-500 text-xs mt-1">{errors.phoneNumber}</p>}
@@ -446,7 +445,7 @@ export default function VendorRegistration() {
                     <select
                       name={name}
                       value={formData[name]}
-                      onChange={handleChange}
+                      onChange={handleInputChange}
                       className={inputClass + " w-full"}
                       disabled={citiesLoading}
                     >
@@ -462,7 +461,7 @@ export default function VendorRegistration() {
                       name={name}
                       placeholder={placeholder}
                       value={formData[name]}
-                      onChange={handleChange}
+                      onChange={handleInputChange}
                       className={inputClass + " w-full"}
                     />
                   )}
@@ -476,7 +475,7 @@ export default function VendorRegistration() {
               <select
                 name="service"
                 value={formData.service}
-                onChange={handleChange}
+                onChange={handleInputChange}
                 className={inputClass + " w-full"}
               >
                 <option value="">Select Service</option>
@@ -495,7 +494,7 @@ export default function VendorRegistration() {
                   name="customService"
                   placeholder="Specify Your Service"
                   value={formData.customService}
-                  onChange={handleChange}
+                  onChange={handleInputChange}
                   className={inputClass + " w-full"}
                 />
               </div>
@@ -524,7 +523,7 @@ export default function VendorRegistration() {
                       name={name}
                       placeholder={placeholder}
                       value={formData[name]}
-                      onChange={handleChange}
+                      onChange={handleInputChange}
                       className={inputClass + " w-full"}
                     />
                     {errors[name] && <p className="text-red-500 text-xs mt-1">{errors[name]}</p>}
@@ -540,7 +539,7 @@ export default function VendorRegistration() {
                 name="password"
                 placeholder="Enter your password (min 8 characters)"
                 value={formData.password}
-                onChange={handleChange}
+                onChange={handleInputChange}
                 className={inputClass + " w-full"}
               />
               {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
@@ -555,7 +554,7 @@ export default function VendorRegistration() {
                 name="portfolioFiles"
                 multiple
                 accept="image/*,video/*"
-                onChange={handleChange}
+                onChange={handleInputChange}
                 className="w-full border border-[#D48060] rounded-xl p-2 bg-white text-[#D48060] file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-[#CCAB4A] file:text-white hover:file:bg-[#D48060] transition-all duration-300"
               />
               {formData.portfolioFiles.length > 0 && (
