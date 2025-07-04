@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../redux/authSlice';
@@ -7,13 +8,15 @@ import logo from "../assets/logo2.png";
 import DashboardIcon from '@mui/icons-material/Dashboard'; // Icon for Dashboard
 import LogoutIcon from '@mui/icons-material/Logout'; // Icon for Logout
 
-const NavUpper = () => {
+
+const MakeAGroup_Nav = () => {
+
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { user, token } = useSelector((state) => state.auth); // Get user and token from Redux
     const isAuthenticated = !!user && !!token; // Check if authenticated
-    const [index, setIndex] = useState(0);
-    const [isVisible, setIsVisible] = useState(true);
+    // const [index, setIndex] = useState(0);
+    // const [isVisible, setIsVisible] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
 
     // Get the first letter of the user's name for the badge
@@ -41,6 +44,8 @@ const NavUpper = () => {
         navigate('/dashboard'); // Navigate to dashboard
         setIsModalOpen(false); // Close modal
     };
+
+
 
     return (
         <>
@@ -93,9 +98,9 @@ const NavUpper = () => {
                         <button
                             type="button"
                             onClick={() => navigate("/signup")}
-                            className="group bg-white border-[#CCAB4A] rounded-xl pl-2.5 pr-2.5 pt-1 pb-1.5 flex items-center justify-center text-black font-bold w-[100px] h-[40px] hover:font-extrabold transition duration-300 ease-in-out transform hover:-translate-y-1 active:scale-95"
+                            className="group bg-[#ea7e53] text-white rounded-xl px-4 py-2 flex items-center justify-center font-bold w-[100px] h-[40px] transition duration-300 ease-in-out transform hover:scale-105 hover:-translate-y-1 active:scale-95"
                         >
-                            <span className="transition duration-300 group-hover:text-[#CCAB4A] group-hover:font-extrabold">
+                            <span className="transition duration-300">
                                 Sign Up
                             </span>
                         </button>
@@ -103,9 +108,9 @@ const NavUpper = () => {
                         <button
                             type="button"
                             onClick={() => navigate("/login")}
-                            className="group bg-white rounded-xl pl-2.5 pr-2.5 pt-1 pb-1.5 flex items-center justify-center font-bold w-[100px] h-[40px] transition duration-300 ease-in-out transform hover:-translate-y-1 hover:font-extrabold active:scale-95"
+                            className="group bg-[#ea7e53] text-white rounded-xl px-4 py-2 flex items-center justify-center font-bold w-[100px] h-[40px] transition duration-300 ease-in-out transform hover:scale-105 hover:-translate-y-1 active:scale-95"
                         >
-                            <span className="text-black group-hover:text-[#CCAB4A] transition duration-300 group-hover:font-extrabold">
+                            <span className="transition duration-300">
                                 Sign In
                             </span>
                         </button>
@@ -116,4 +121,4 @@ const NavUpper = () => {
     )
 }
 
-export default NavUpper
+export default MakeAGroup_Nav

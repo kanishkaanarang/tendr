@@ -1,7 +1,5 @@
 import React, { useState } from 'react'
 
-
-
 const SecondaryFilters_ListingPage = () => {
     const [filters, setFilters] = useState({
         customizableMenu: false,
@@ -46,7 +44,7 @@ const SecondaryFilters_ListingPage = () => {
 
     return (
         <>
-            <div className="filter-section mt-9 w-full">
+            <div className="filter-section w-full">
 
                 <div className="secondary_heading ml-12 mb-5 font-bold text-2xl">Filter Options</div>
 
@@ -71,7 +69,7 @@ const SecondaryFilters_ListingPage = () => {
                 <div className="secondary_heading ml-12 mb-5 mt-9 font-bold text-2xl">Vendor Ratings</div>
 
                 {/* Ratings */}
-                <div className="rating_checkbox ml-16 mb-9 w-fit">
+                <div className="rating_checkbox ml-16 mb-5 w-fit">
                     <div className="flex flex-col gap-2 text-lg">
                         {ratingOptions.map(rating => (
                             <label key={rating} className='flex items-center gap-3 cursor-pointer'>

@@ -35,6 +35,69 @@ const VendorDetailsPage = () => {
     decorTheme: "Royal",
   };
 
+  const handlePayment = async () => {
+  try {
+    const totalAmount = 10000; // Update with actual value
+    const conversationId = "YOUR_CONVERSATION_ID"; // Ideally passed as prop or state
+
+    // Step 1: Create Razorpay order
+    const res = await fetch("/api/payments/create-order", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ conversationId, totalAmount }),
+    });
+
+    const { orderId, amount, currency, upfrontAmount, dbPaymentId } = await res.json();
+
+    // Step 2: Launch Razorpay Checkout
+    const options = {
+      key: "YOUR_RAZORPAY_KEY", //env variable
+      amount,
+      currency,
+      name: "Tendr",
+      description: "Vendor Advance Payment",
+      order_id: orderId,
+      handler: async function (response) {
+        const { razorpay_payment_id, razorpay_order_id, razorpay_signature } = response;
+
+        // Step 3: Verify Payment
+        const verifyRes = await fetch("/api/payments/verify", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            conversationId,
+            razorpay_payment_id,
+            razorpay_order_id,
+            razorpay_signature,
+            method: "upi", // or dynamically detect
+          }),
+        });
+
+        const result = await verifyRes.json();
+        if (result.success) {
+          alert("Payment Successful and Verified!");
+          // Optionally navigate or update UI
+        }
+      },
+      prefill: {
+        name: "Ashwani",
+        email: "user@example.com",
+        contact: "9999999999",
+      },
+      theme: {
+        color: "#FEC84B",
+      },
+    };
+
+    const razorpay = new window.Razorpay(options);
+    razorpay.open();
+  } catch (err) {
+    console.error("Payment Error:", err);
+    alert("Failed to initiate payment.");
+  }
+};
+
+
   return (
     <div className="w-full min-h-screen bg-[#F7F4EF] text-gray-800">
       {/* Navbar */}
@@ -135,7 +198,7 @@ Are you available?`}
 
           {/* Pay Button */}
           <button
-            onClick={() => alert("Redirect to payment")}
+            onClick={handlePayment}
             className="w-full px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-white rounded-xl text-sm font-semibold"
           >
             Pay
