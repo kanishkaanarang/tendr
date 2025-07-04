@@ -120,7 +120,7 @@ const authSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(verifyOtpAction.fulfilled, (state, action) => {
+      .addCase(verifyOtpAction.fulfilled, (state) => {
         state.loading = false;
         state.verificationId = null;
         state.userData = null;

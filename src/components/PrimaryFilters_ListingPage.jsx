@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 
 import ClearIcon from '@mui/icons-material/Clear';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -17,7 +17,7 @@ const PrimaryFilters_ListingPage = ({
     guestCount: initialGuestCount
 }) => {
 
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
     const [eventType, setEventType] = useState(initialEventType || "");
     const [serviceType, setServiceType] = useState(initialServiceType || "");

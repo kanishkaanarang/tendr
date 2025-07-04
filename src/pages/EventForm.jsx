@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-
+import { useNavigate } from 'react-router-dom';
 import { ChevronRight, ChevronLeft, Users, IndianRupee, MapPin, Calendar, Music, Camera, Utensils, X, Plus, CheckCircle, Shield, Award, HeartHandshake, Gift } from 'lucide-react';
 import EastIcon from '@mui/icons-material/East';
 
 import MakeAGroup_Nav from '../components/MakeAGroup_Nav';
 
 const EventPlanningForm = () => {
+  const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(0);
   const [showVendorScreen, setShowVendorScreen] = useState(false);
   const [activeModal, setActiveModal] = useState(null);

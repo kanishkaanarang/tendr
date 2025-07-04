@@ -15,8 +15,8 @@ const MakeAGroup_Nav = () => {
     const dispatch = useDispatch();
     const { user, token } = useSelector((state) => state.auth); // Get user and token from Redux
     const isAuthenticated = !!user && !!token; // Check if authenticated
-    const [index, setIndex] = useState(0);
-    const [isVisible, setIsVisible] = useState(true);
+    // const [index, setIndex] = useState(0);
+    // const [isVisible, setIsVisible] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
 
     // Get the first letter of the user's name for the badge
