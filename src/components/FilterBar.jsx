@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import EastIcon from "@mui/icons-material/East";
 import { useNavigate } from "react-router-dom";
 import Separator_FilterBar from "./Separator_FilterBar";
-const BASE_URL = "http://localhost:8080";
+import { getVendors } from "../apis/vendorApi";
 
 const FilterBar = () => {
   const navigate = useNavigate();
@@ -13,7 +13,7 @@ const FilterBar = () => {
   const [serviceType, setServiceType] = useState("");
   const [guestCount, setGuestCount] = useState(0);
 
-  const [activeDropdown, setactiveDropdown] = useState(null);
+  const [activeDropdown, setActiveDropdown] = useState(null);
 
   const eventOptions = [
     "Get-together",
@@ -40,25 +40,15 @@ const FilterBar = () => {
     "Photographer",
   ];
 
-  const handleOptionClickEvent = (option) => {
-    setEventType(option);
-    setactiveDropdown(null);
-  };
-
-  const handleOptionClickService = (option) => {
-    setServiceType(option);
-    setactiveDropdown(null);
-  };
-
-  const handleOptionClickLocation = (option) => {
-    setLocationType(option);
-    setactiveDropdown(null);
+  const handleOptionClick = (setter, option) => {
+    setter(option);
+    setActiveDropdown(null);
   };
 
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (!e.target.closest(".dropdown-wrapper")) {
-        setactiveDropdown(null);
+        setActiveDropdown(null);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -66,39 +56,31 @@ const FilterBar = () => {
   }, []);
 
   const handleSearch = async () => {
-    console.log("Sending filter bar data selected by user:", {
-      eventType,
-      date,
-      locationType,
-      guestCount,
-    });
-
     try {
-      const response = await fetch(`${BASE_URL}/api/filter`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
+      const filters = {
+        location: locationType,
+        serviceTypes: [serviceType],
+        sortBy: "rankingScore",
+        sortOrder: "desc",
+        page: 1,
+        limit: 10,
+      };
+
+      const data = await getVendors(filters);
+
+      navigate("/listings", {
+        state: {
           eventType,
           serviceType,
-          date,
           locationType,
+          date,
           guestCount,
-        }),
+          vendors: data.vendors,
+          pagination: data.pagination,
+        },
       });
-
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-
-      const data = await response.json();
-      console.log("Filter data sent successfully:", data);
-
-    //   Navigate after successful submission
-      navigate("/listings");
     } catch (error) {
-      console.error("Error sending filter data:", error);
+      console.error("Error fetching vendors:", error);
     }
   };
 
@@ -107,118 +89,92 @@ const FilterBar = () => {
       <div className="bardiv flex justify-center">
         <div className="bar w-[1200px] h-[66px] bg-white rounded-full flex justify-between items-center ring-[1px] ring-[#CCAB4A] shadow-[0_2px_10px_rgba(0,0,0,0.25)]">
           <div className="flex w-full h-full justify-between">
+
+            {/* Event Type */}
             <div className="event p-3 pl-12 flex flex-col text-sm rounded-full w-full md:w-[200px] hover:bg-[#ffe69e4a] relative">
-              <label
-                className="font-semibold text-[16px] cursor-pointer"
-                onClick={() => {
-                  setactiveDropdown("event");
-                }}
-              >
+              <label className="font-semibold text-[16px] cursor-pointer" onClick={() => setActiveDropdown("event")}>
                 Event Type
               </label>
               <input
                 type="text"
-                className="font-bold text-[#CCAB4A] placeholder-[#CCAB4A] placeholder:font-medium outline-none bg-transparent pl-[1px] cursor-pointer w-full"
                 value={eventType}
-                onChange={(e) => setEventType(e.target.value)}
-                onClick={() => {
-                  setactiveDropdown("event");
-                }}
+                onClick={() => setActiveDropdown("event")}
                 placeholder="Select events"
                 readOnly
+                className="font-bold text-[#CCAB4A] placeholder-[#CCAB4A] outline-none bg-transparent cursor-pointer"
               />
-
               {activeDropdown === "event" && (
-                <div className="dropdown-wrapper absolute left-0 top-[75px] w-[350px] h-[250px] bg-white rounded-3xl z-30 shadow-[0_2px_10px_rgba(0,0,0,0.25)] overflow-y-auto">
-                  {eventOptions.map((option, index) => {
-                    return (
-                      <div
-                        key={index}
-                        onClick={() => handleOptionClickEvent(option)}
-                        className={`cursor-pointer text-lg p-3 pl-10 pr-10 ml-5 mr-5 mt-2 rounded-full font-medium text-black ${
-                          eventType === option
-                            ? "bg-[#ffe69e]"
-                            : "hover:bg-[#ffe79e45]"
-                        }`}
-                      >
-                        {option}
-                      </div>
-                    );
-                  })}
+                <div className="dropdown-wrapper absolute left-0 top-[75px] w-[350px] h-[250px] bg-white rounded-3xl z-30 shadow overflow-y-auto">
+                  {eventOptions.map((option, index) => (
+                    <div
+                      key={index}
+                      onClick={() => handleOptionClick(setEventType, option)}
+                      className={`cursor-pointer text-lg p-3 pl-10 pr-10 ml-5 mr-5 mt-2 rounded-full font-medium text-black ${
+                        eventType === option ? "bg-[#ffe69e]" : "hover:bg-[#ffe79e45]"
+                      }`}
+                    >
+                      {option}
+                    </div>
+                  ))}
                 </div>
               )}
             </div>
 
             <Separator_FilterBar />
 
+            {/* Service Type */}
             <div className="service p-3 pl-5 flex flex-col text-sm rounded-full w-full md:w-[200px] hover:bg-[#ffe69e4a] relative">
-              <label
-                className="font-semibold text-[16px] cursor-pointer"
-                onClick={() => {
-                  setactiveDropdown("service");
-                }}
-              >
+              <label className="font-semibold text-[16px] cursor-pointer" onClick={() => setActiveDropdown("service")}>
                 Service Type
               </label>
               <input
                 type="text"
-                className="font-bold text-[#CCAB4A] placeholder-[#CCAB4A] placeholder:font-medium outline-none bg-transparent pl-[1px] cursor-pointer w-full"
                 value={serviceType}
-                onChange={(e) => setServiceType(e.target.value)}
-                onClick={() => {
-                  setactiveDropdown("service");
-                }}
+                onClick={() => setActiveDropdown("service")}
                 placeholder="Select service"
                 readOnly
+                className="font-bold text-[#CCAB4A] placeholder-[#CCAB4A] outline-none bg-transparent cursor-pointer"
               />
-
               {activeDropdown === "service" && (
-                <div className="dropdown-wrapper absolute left-0 top-[75px] w-[350px] h-[250px] bg-white rounded-3xl z-30 shadow-[0_2px_10px_rgba(0,0,0,0.25)] overflow-y-auto">
-                  {serviceOptions.map((option, index) => {
-                    return (
-                      <div
-                        key={index}
-                        onClick={() => handleOptionClickService(option)}
-                        className={`cursor-pointer text-lg p-3 pl-10 pr-10 ml-5 mr-5 mt-2 rounded-full font-medium text-black ${
-                          serviceType === option
-                            ? "bg-[#ffe69e]"
-                            : "hover:bg-[#ffe79e45]"
-                        }`}
-                      >
-                        {option}
-                      </div>
-                    );
-                  })}
+                <div className="dropdown-wrapper absolute left-0 top-[75px] w-[350px] h-[250px] bg-white rounded-3xl z-30 shadow overflow-y-auto">
+                  {serviceOptions.map((option, index) => (
+                    <div
+                      key={index}
+                      onClick={() => handleOptionClick(setServiceType, option)}
+                      className={`cursor-pointer text-lg p-3 pl-10 pr-10 ml-5 mr-5 mt-2 rounded-full font-medium text-black ${
+                        serviceType === option ? "bg-[#ffe69e]" : "hover:bg-[#ffe79e45]"
+                      }`}
+                    >
+                      {option}
+                    </div>
+                  ))}
                 </div>
               )}
             </div>
 
             <Separator_FilterBar />
 
+            {/* Date */}
             <div className="date p-3 pl-5 flex flex-col text-sm rounded-full w-full md:w-[180px] hover:bg-[#ffe69e4a] relative">
-              <label
-                className="font-semibold text-[16px] cursor-pointer"
-                onClick={() => setactiveDropdown("date")}
-              >
+              <label className="font-semibold text-[16px] cursor-pointer" onClick={() => setActiveDropdown("date")}>
                 Date
               </label>
               <input
                 type="text"
-                className="font-bold text-[#CCAB4A] placeholder-[#CCAB4A] placeholder:font-medium outline-none bg-transparent cursor-pointer"
                 value={date}
-                onClick={() => setactiveDropdown("date")}
+                onClick={() => setActiveDropdown("date")}
                 placeholder="Add date"
                 readOnly
+                className="font-bold text-[#CCAB4A] placeholder-[#CCAB4A] outline-none bg-transparent cursor-pointer"
               />
-
               {activeDropdown === "date" && (
-                <div className="dropdown-wrapper absolute left-0 top-[75px] bg-white rounded-3xl z-30 shadow-[0_2px_10px_rgba(0,0,0,0.25)] p-5">
+                <div className="dropdown-wrapper absolute left-0 top-[75px] bg-white rounded-3xl z-30 shadow p-5">
                   <input
                     type="date"
                     className="text-[#CCAB4A] text-md font-semibold cursor-pointer"
                     onChange={(e) => {
                       setDate(e.target.value);
-                      setactiveDropdown(null);
+                      setActiveDropdown(null);
                     }}
                   />
                 </div>
@@ -227,86 +183,63 @@ const FilterBar = () => {
 
             <Separator_FilterBar />
 
+            {/* Location */}
             <div className="location p-3 pl-5 flex flex-col text-sm rounded-full w-full md:w-[200px] hover:bg-[#ffe69e4a] relative">
-              <label
-                className="font-semibold text-[16px] cursor-pointer"
-                onClick={() => setactiveDropdown("location")}
-              >
+              <label className="font-semibold text-[16px] cursor-pointer" onClick={() => setActiveDropdown("location")}>
                 Location
               </label>
               <input
                 type="text"
-                className="font-bold text-[#CCAB4A] placeholder-[#CCAB4A] placeholder:font-medium outline-none bg-transparent cursor-pointer"
                 value={locationType}
-                onChange={(e) => setLocationType(e.target.value)}
-                onClick={() => setactiveDropdown("location")}
+                onClick={() => setActiveDropdown("location")}
                 placeholder="Add location"
                 readOnly
+                className="font-bold text-[#CCAB4A] placeholder-[#CCAB4A] outline-none bg-transparent cursor-pointer"
               />
-
               {activeDropdown === "location" && (
-                <div className="dropdown-wrapper absolute left-0 top-[75px] w-[350px] h-[250px] bg-white rounded-3xl z-30 shadow-[0_2px_10px_rgba(0,0,0,0.25)] overflow-y-auto">
-                  {locationOptions.map((option, index) => {
-                    return (
-                      <div
-                        key={index}
-                        onClick={() => handleOptionClickLocation(option)}
-                        className={`cursor-pointer text-lg p-3 pl-10 pr-10 ml-5 mr-5 mt-2 rounded-full font-medium text-black ${
-                          locationType === option
-                            ? "bg-[#ffe69e]"
-                            : "hover:bg-[#ffe79e45]"
-                        }`}
-                      >
-                        {option}
-                      </div>
-                    );
-                  })}
+                <div className="dropdown-wrapper absolute left-0 top-[75px] w-[350px] h-[250px] bg-white rounded-3xl z-30 shadow overflow-y-auto">
+                  {locationOptions.map((option, index) => (
+                    <div
+                      key={index}
+                      onClick={() => handleOptionClick(setLocationType, option)}
+                      className={`cursor-pointer text-lg p-3 pl-10 pr-10 ml-5 mr-5 mt-2 rounded-full font-medium text-black ${
+                        locationType === option ? "bg-[#ffe69e]" : "hover:bg-[#ffe79e45]"
+                      }`}
+                    >
+                      {option}
+                    </div>
+                  ))}
                 </div>
               )}
             </div>
 
             <Separator_FilterBar />
 
+            {/* Guests */}
             <div className="guests p-3 pl-5 text-sm flex justify-between items-center rounded-full w-full md:w-[250px] hover:bg-[#ffe69e4a] relative">
-              {/* LEFT: GUEST LABEL */}
-              <div
-                className="guests_left flex flex-col cursor-pointer w-full"
-                onClick={() => setactiveDropdown("guests")}
-              >
+              <div className="guests_left flex flex-col cursor-pointer w-full" onClick={() => setActiveDropdown("guests")}>
                 <span className="font-semibold text-[16px]">Guests</span>
-                <span
-                  className={`${
-                    guestCount > 0 ? "font-bold" : "font-medium"
-                  } text-[#CCAB4A]`}
-                >
-                  {guestCount > 0
-                    ? `${guestCount} Guest${guestCount > 1 ? "s" : ""}`
-                    : "Number of guests"}
+                <span className={`${guestCount > 0 ? "font-bold" : "font-medium"} text-[#CCAB4A]`}>
+                  {guestCount > 0 ? `${guestCount} Guest${guestCount > 1 ? "s" : ""}` : "Number of guests"}
                 </span>
               </div>
 
-              {/* RIGHT: ARROW BUTTON — no longer inside guests_left area */}
               <button
                 type="button"
-                onClick={() => handleSearch()}
+                onClick={handleSearch}
                 className="arrowButton absolute right-2 w-[45px] h-[45px] bg-[#CCAB4A] rounded-full z-10 flex items-center justify-center"
               >
                 <EastIcon className="text-white" fontSize="large" />
               </button>
 
-              {/* GUEST COUNT DROPDOWN */}
               {activeDropdown === "guests" && (
-                <div className="dropdown-wrapper absolute right-0 top-[75px] bg-white rounded-3xl z-30 shadow-[0_2px_10px_rgba(0,0,0,0.25)] p-5 w-[220px]">
+                <div className="dropdown-wrapper absolute right-0 top-[75px] bg-white rounded-3xl z-30 shadow p-5 w-[220px]">
                   <div className="flex items-center justify-between">
-                    <span className="text-[#CCAB4A] font-semibold text-md">
-                      Guest count
-                    </span>
+                    <span className="text-[#CCAB4A] font-semibold text-md">Guest count</span>
                     <div className="flex items-center space-x-3">
                       <button
                         type="button"
-                        onClick={() =>
-                          setGuestCount((prev) => Math.max(prev - 1, 0))
-                        }
+                        onClick={() => setGuestCount((prev) => Math.max(prev - 1, 0))}
                         className="text-xl w-8 h-8 bg-[#ffe69e] rounded-full"
                       >
                         -
@@ -324,6 +257,7 @@ const FilterBar = () => {
                 </div>
               )}
             </div>
+
           </div>
         </div>
       </div>

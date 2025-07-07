@@ -113,3 +113,44 @@ export const completeVendorSignup = async (vendorData) => {
     throw error;
   }
 };
+
+// src/api/getVendors.js
+
+export const getVendors = async (filters = {}) => {
+  const params = new URLSearchParams();
+
+  if (filters.location) params.append('location', filters.location);
+  if (filters.serviceTypes) params.append('serviceTypes', filters.serviceTypes.join(','));
+  if (filters.minExperience) params.append('minExperience', filters.minExperience);
+  if (filters.sortBy) params.append('sortBy', filters.sortBy);
+  if (filters.sortOrder) params.append('sortOrder', filters.sortOrder);
+  if (filters.page) params.append('page', filters.page);
+  if (filters.limit) params.append('limit', filters.limit);
+  if (filters.serviceFilters) params.append('serviceFilters', JSON.stringify(filters.serviceFilters));
+  
+
+  try {
+    const response = await fetch(`${BASE_URL}/vendors?${params.toString()}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const contentType = response.headers.get("Content-Type");
+    if (!contentType || !contentType.includes("application/json")) {
+      const text = await response.text();
+      throw new Error(`Expected JSON, but got: ${text.substring(0, 100)}...`);
+    }
+
+    const result = await response.json();
+    if (!response.ok) {
+      throw new Error(result.message || "Failed to fetch vendors");
+    }
+
+    return result; // includes vendors array + pagination
+  } catch (error) {
+    console.error("Get Vendors Error:", error);
+    throw error;
+  }
+};

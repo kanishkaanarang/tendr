@@ -1,138 +1,164 @@
-import React, { useState, useEffect } from 'react'
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
-import { useNavigate } from 'react-router-dom';
-
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import StarRateRoundedIcon from '@mui/icons-material/StarRateRounded';
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import StarRateRoundedIcon from "@mui/icons-material/StarRateRounded";
 
 import DummyPhoto from "../assets/GrayDummyPhoto.jpg";
 
-
-
 const VendorList_ListingPage = ({
-    eventType: initialEventType,
-    serviceType: initialServiceType,
-    locationType: initialLocationType,
-    date: initialDate,
-    guestCount: initialGuestCount
+  eventType,
+  serviceType,
+  date,
+  locationType,
+  guestCount,
+  vendors = [],
+  paginationInfo = {},
+  currentPage = 1,
+  handleShowMore,
+  isLoading,
+  sortBy,
+  sortOrder,
+  setSortBy,
+  setSortOrder,
 }) => {
+  const navigate = useNavigate();
 
-    const navigate = useNavigate();
+  return (
+    <div className="flex flex-col h-full">
+      {/* Header */}
+      <div className="header flex justify-between">
+        <div className="leftside leading-7 ml-3">
+          <div className="text-sm font-semibold">Top picks for</div>
+          <div className="text-[25px] font-bold">
+            <span>{eventType}</span>, <span>{serviceType}</span>,{" "}
+            <span>{locationType}</span>, <span>{date}</span>,{" "}
+            <span>{guestCount} guests</span>
+          </div>
+        </div>
 
-    const [eventType, setEventType] = useState(initialEventType || "");
-    const [serviceType, setServiceType] = useState(initialServiceType || "");
-    const [locationType, setLocationType] = useState(initialLocationType || "");
-    const [date, setDate] = useState(initialDate || "");
-    const [guestCount, setGuestCount] = useState(initialGuestCount || 0);
+        <div className="rightside mt-1 flex gap-2 items-center">
+          <label className="text-sm font-semibold">Sort by:</label>
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            className="rounded-full border px-4 py-1 text-sm border-[#CCAB4A] bg-white shadow-md"
+          >
+            <option value="rankingScore">Best Match</option>
+            <option value="rating">Rating</option>
+            <option value="price">Price</option>
+            <option value="experience">Experience</option>
+          </select>
 
-    const vendors = [
-        { id: 1, name: 'Vendor 1', location: "Chennai", image: DummyPhoto, rating: 4.1, number_of_reviews: 49, price: "11,999" },
-        { id: 2, name: 'Vendor 2', location: "Mumbai", image: DummyPhoto, rating: 4.6, number_of_reviews: 13, price: "43,999" },
-        { id: 3, name: 'Vendor 3', location: "Bengaluru", image: DummyPhoto, rating: 3.9, number_of_reviews: 12, price: "5,599" },
-        { id: 4, name: 'Vendor 4', location: "Kochi", image: DummyPhoto, rating: 4.1, number_of_reviews: 34, price: "7,199" },
-        { id: 5, name: 'Vendor 5', location: "Mumbai", image: DummyPhoto, rating: 4.7, number_of_reviews: 67, price: "14,999" },
-        { id: 6, name: 'Vendor 6', location: "Delhi", image: DummyPhoto, rating: 4.4, number_of_reviews: 26, price: "17,999" },
-        { id: 7, name: 'Vendor 7', location: "Kochi", image: DummyPhoto, rating: 4.5, number_of_reviews: 32, price: "8,999" },
-        { id: 8, name: 'Vendor 8', location: "Bengaluru", image: DummyPhoto, rating: 4.0, number_of_reviews: 24, price: "12,999" },
-        { id: 9, name: 'Vendor 9', location: "Delhi", image: DummyPhoto, rating: 4.1, number_of_reviews: 24, price: "11,999" },
-        { id: 10, name: 'Vendor 10', location: "Kochi", image: DummyPhoto, rating: 4.6, number_of_reviews: 454, price: "19,999" },
-        { id: 11, name: 'Vendor 11', location: "Mumbai", image: DummyPhoto, rating: 4.9, number_of_reviews: 11, price: "17,999" },
-        { id: 12, name: 'Vendor 12', location: "Delhi", image: DummyPhoto, rating: 3.7, number_of_reviews: 4, price: "5,999" },
-        { id: 13, name: 'Vendor 13', location: "Bengaluru", image: DummyPhoto, rating: 3.9, number_of_reviews: 74, price: "8,999" },
-        { id: 14, name: 'Vendor 14', location: "Mumbai", image: DummyPhoto, rating: 4.3, number_of_reviews: 84, price: "11,999" }
-    ];
+          <select
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value)}
+            className="rounded-full border px-4 py-1 text-sm border-[#CCAB4A] bg-white shadow-md"
+          >
+            <option value="desc">High to Low</option>
+            <option value="asc">Low to High</option>
+          </select>
+        </div>
+      </div>
 
+      {/* Vendor Cards */}
+      <div className="vendorcards grid grid-cols-2 gap-y-[30px] gap-x-[30px] mt-5 w-fit mx-auto">
+        {vendors.length > 0
+          ? vendors.map((vendor) => (
+              <div
+                key={vendor.id}
+                onClick={() =>
+                  navigate("/VendorDetails", { state: { vendor } })
+                }
+                className="p-4 border-[1px] border-gray-200 hover:border-[#CCAB4A] rounded-[18px] shadow-md w-[520px] h-[260px] cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105 hover:-translate-y-1"
+              >
+                <div className="h-full flex justify-between">
+                  {/* Image */}
+                  <div className="h-full">
+                    <img
+                      src={vendor.image || DummyPhoto}
+                      alt={vendor.name}
+                      className="w-[210px] h-full rounded-[18px] object-cover"
+                    />
+                  </div>
 
-    return (
-        <>
-
-            <div className="flex flex-col h-full">
-
-                <div className="first">
-
-                    <div className="header flex justify-between">
-
-                        <div className="leftside leading-7 ml-3">
-                            <div className="smaller_text text-sm font-semibold">Top picks for</div>
-                            <div className="larger_text text-[25px] font-bold">
-                                <span className="event">{eventType}</span>
-                                <span>, </span>
-                                <span className="service">{serviceType}</span>
-                                <span>, </span>
-                                <span className="location">{locationType}</span>
-                                <span>, </span>
-                                <span className="date">{date}</span>
-                                <span>, </span>
-                                <span className="guest">{guestCount} guests</span>
-                            </div>
+                  {/* Right Text */}
+                  <div className="my-1 flex flex-col justify-between flex-1 pl-4">
+                    {/* Top Section */}
+                    <div className="space-y-4">
+                      <div>
+                        <div className="font-semibold text-2xl">
+                          {vendor.name}
                         </div>
-
-                        <div className="rightside mt-1">
-                            <button type="button" className='rounded-full shadow-md px-5 py-2 font-semibold flex border-[1px] border-[#CCAB4A] transition-colors duration-300'>
-                                <span>Sort by</span>
-                                <KeyboardArrowDownIcon />
-                            </button>
-                        </div>
-
-                    </div>
-
-                    <div className="vendorcards grid grid-cols-2 gap-y-[30px] gap-x-[30px] mt-5 w-fit mx-auto">
-                        {vendors.map((vendor) => (
-                            <div
-                                key={vendor.id}
-                                onClick={() => navigate("/VendorDetails")}
-                                className="p-4 border-[1px] border-gray-200 hover:border-[#CCAB4A] rounded-[18px] shadow-md w-[520px] h-[260px] cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105 hover:-translate-y-1"
-                            >
-                                <div className=" border-black h-full flex justify-between">
-
-                                    <div className="img h-full">
-                                        <img src={vendor.image} alt="" srcset="" className='w-[210px] h-full rounded-[18px]' />
-                                    </div>
-
-                                    <div className="right_text my-1 flex flex-col justify-between flex-1 pl-4">
-
-                                        <div className="uppertext space-y-4">
-                                            <div className="first">
-                                                <div className="vendor_name font-semibold text-2xl">{vendor.name}</div>
-                                                <div className="vendor_location">{vendor.location}</div>
-                                            </div>
-                                            <div className="vendor_expertise text-[#CCAB4A] text-sm">
-                                                <div className="first">On-Site Chef</div>
-                                                <div className="second">Vegan Option</div>
-                                                <div className="third">Customizable Menu</div>
-                                            </div>
-                                        </div>
-
-                                        <div className="lowertext flex justify-between items-end">
-                                            <div className="ratings flex items-center">
-                                                <StarRateRoundedIcon />
-                                                <div className="right flex gap-1 items-center">
-                                                    <div className="rating_text font-semibold text-lg">{vendor.rating}</div>
-                                                    <div className="number_of_reviews text-lg">{"("}{vendor.number_of_reviews}{")"}</div>
-                                                </div>
-                                            </div>
-                                            <div className="price mb-1.5">
-                                                <div className="top text-xs leading-5">Starts at</div>
-                                                <div className="bottom font-semibold text-2xl leading-5">{"₹"}{vendor.price}</div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
+                        <div className="text-gray-700">{vendor.location}</div>
+                      </div>
+                      <div className="text-[#CCAB4A] text-sm space-y-1">
+                        {(vendor.expertise?.length > 0
+                          ? vendor.expertise
+                          : [
+                              "On-Site Chef",
+                              "Vegan Option",
+                              "Customizable Menu",
+                            ]
+                        ).map((item, i) => (
+                          <div key={i}>{item}</div>
                         ))}
+                      </div>
                     </div>
 
+                    {/* Bottom Section */}
+                    <div className="flex justify-between items-end">
+                      {/* Ratings */}
+                      <div className="flex items-center">
+                        <StarRateRoundedIcon />
+                        <div className="flex gap-1 items-center">
+                          <div className="font-semibold text-lg">
+                            {vendor.rating ?? "-"}
+                          </div>
+                          <div className="text-lg text-gray-600">
+                            ({vendor.number_of_reviews ?? 0})
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Price */}
+                      <div className="mb-1.5 text-right">
+                        <div className="text-xs leading-5 text-gray-500">
+                          Starts at
+                        </div>
+                        <div className="font-semibold text-2xl leading-5">
+                          ₹{vendor.price ?? "-"}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
+              </div>
+            ))
+          : !isLoading && (
+              <div className="col-span-2 text-center text-gray-600 mt-10 text-lg">
+                No vendors found for selected filters.
+              </div>
+            )}
+      </div>
 
-                <div className="second show_more flex-1 flex items-center justify-center mt-7 mb-10">
-                    <button type="button" className='rounded-full shadow-md px-6 py-2 font-semibold border-[1px] border-[#CCAB4A] transition-colors duration-300'>Show More</button>
-                </div>
+      {/* Show More */}
+      {paginationInfo?.totalPages > currentPage && (
+        <div className="flex justify-center mt-7 mb-10">
+          <button
+            type="button"
+            onClick={handleShowMore}
+            disabled={isLoading}
+            className={`rounded-full shadow-md px-6 py-2 font-semibold border-[1px] border-[#CCAB4A] transition-colors duration-300 ${
+              isLoading ? "opacity-50 cursor-not-allowed" : ""
+            }`}
+          >
+            {isLoading ? "Loading..." : "Show More"}
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
 
-            </div>
-
-        </>
-    )
-}
-
-export default VendorList_ListingPage
+export default VendorList_ListingPage;
