@@ -2,10 +2,10 @@ const BASE_URL = "http://localhost:8080";
 
 export const signupVendorOtp = async (phoneNumber) => {
   try {
-    const response = await fetch(`${BASE_URL}/auth/vsignup/otp `, {
+    const response = await fetch(`${BASE_URL}/auth/vsignup/otp`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type":"application/json",
       },
       body: JSON.stringify({ phoneNumber }),
       credentials: "include",
