@@ -128,7 +128,7 @@ const VendorDetailsPage = () => {
         <div className="flex items-center justify-between py-7">
 
           {/* Title */}
-          <h1 className="text-3xl font-bold">Vendor Name - Luxe Experience</h1>
+          <h1 className="text-2xl md:text-3xl lg:text-4xl break-words">Vendor Name - Luxe Experience</h1>
 
           {/* Share and Save */}
           <div className="flex w-[180px] justify-between">
