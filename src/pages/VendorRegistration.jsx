@@ -1,9 +1,7 @@
-
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ServiceSpecificFields from "./ServiceSpecificFields";
 import { signupVendorOtp, verifyVendorOtp, completeVendorSignup } from "../apis";
-
 
 export default function VendorRegistration() {
   const navigate = useNavigate();
@@ -21,18 +19,19 @@ export default function VendorRegistration() {
     experience: "",
     eventsCompleted: "",
     concurrentEvents: "",
-    clientReference: "",
+    clientReferences: "",
     governmentId: "",
-
     accHolderName: "",
     bankName: "",
     accNumber: "",
     ifscCode: "",
     upiId: "",
-    clientReferences: "",
     aadhaarNumber: "",
     password: "",
     portfolioFiles: [],
+    service: "",
+    customService: "",
+    serviceFilters: {},
   });
 
   const [otpDigits, setOtpDigits] = useState(["", "", "", ""]);
@@ -84,16 +83,41 @@ export default function VendorRegistration() {
     fetchCities();
   }, []);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+  const capitalizeService = (service) => {
+    if (service === "others") return service;
+    else if (service === "dj") return "DJ";
+    else if (service === "caterer") return "Caterer";
+    else if (service === "decorator") return "Decorator";
+    else if (service === "photographer") return "Photographer";
+    // return service.charAt(0).toUpperCase() + service.slice(1).toLowerCase();
   };
 
-  const handleServiceChange = (e) => {
+  const lowercaseService = (service) => {
+    if (service === "others") return service;
+    return service.toLowerCase();
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value, files } = e.target;
+    if (name === "portfolioFiles") {
+      setFormData((prev) => ({ ...prev, [name]: Array.from(files) }));
+    } else if (name === "service") {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: capitalizeService(value),
+        customService: value === "others" ? prev.customService : "",
+        serviceFilters: [],
+      }));
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
+  };
+
+  const handleServiceFiltersChange = (filters) => {
     setFormData((prev) => ({
       ...prev,
-      serviceType: e.target.value,
-      servicesOffered: [],
+      serviceFilters: filters,
+      portfolioFiles: filters.photos || prev.portfolioFiles,
     }));
   };
 
@@ -121,10 +145,6 @@ export default function VendorRegistration() {
       otpInputRefs.current[3].focus();
     }
     e.preventDefault();
-  };
-
-  const handleServiceFiltersChange = (filters) => {
-    setFormData((prev) => ({ ...prev, serviceFilters: filters }));
   };
 
   const validateStep1 = () => {
@@ -156,9 +176,9 @@ export default function VendorRegistration() {
     if (formData.teamSize && (isNaN(formData.teamSize) || formData.teamSize < 1)) {
       newErrors.teamSize = "Team size must be a positive integer";
     }
-    if (!formData.accountHolder) newErrors.accountHolder = "Account holder name required";
+    if (!formData.accHolderName) newErrors.accHolderName = "Account holder name required";
     if (!formData.bankName) newErrors.bankName = "Bank name is required";
-    if (!formData.accountNumber) newErrors.accountNumber = "Account number is required";
+    if (!formData.accNumber) newErrors.accNumber = "Account number is required";
     if (!formData.ifscCode) newErrors.ifscCode = "IFSC code is required";
     if (formData.secondaryPhoneNumber && !/^\d{10}$/.test(formData.secondaryPhoneNumber)) {
       newErrors.secondaryPhoneNumber = "Secondary phone number must be 10 digits if provided";
@@ -166,8 +186,12 @@ export default function VendorRegistration() {
     if (formData.experience && (isNaN(formData.experience) || formData.experience < 0)) {
       newErrors.experience = "Years of experience must be a non-negative integer";
     }
-    if (formData.totalEvents && isNaN(formData.totalEvents)) newErrors.totalEvents = "Total events must be a number";
-    if (formData.concurrentEvents && isNaN(formData.concurrentEvents)) newErrors.concurrentEvents = "Concurrent events must be a number";
+    if (formData.eventsCompleted && isNaN(formData.eventsCompleted)) {
+      newErrors.eventsCompleted = "Total events must be a number";
+    }
+    if (formData.concurrentEvents && isNaN(formData.concurrentEvents)) {
+      newErrors.concurrentEvents = "Concurrent events must be a number";
+    }
     if (!formData.governmentId) newErrors.governmentId = "PAN number is required";
     if (!formData.aadhaarNumber || !/^\d{12}$/.test(formData.aadhaarNumber)) {
       newErrors.aadhaarNumber = "Aadhaar number must be 12 digits";
@@ -314,7 +338,7 @@ export default function VendorRegistration() {
           if (err.path === "address.street") apiErrors.address = err.msg;
           else if (err.path === "address.city" || err.path === "locations") apiErrors.location = err.msg;
           else if (err.path === "address.state") apiErrors.state = err.msg;
-          else if (err.path === "yearsofExperience") apiErrors.experience = err.msg;
+          else if (err.path === "yearsOfExperience") apiErrors.experience = err.msg;
           else if (err.path === "panNumber") apiErrors.governmentId = err.msg;
           else if (err.path === "serviceType") apiErrors.service = err.msg;
           else if (err.path) apiErrors[err.path] = err.msg;
@@ -433,7 +457,7 @@ export default function VendorRegistration() {
                 { name: "gstNumber", placeholder: "GST Number *" },
                 { name: "teamSize", placeholder: "Team Size *" },
                 { name: "experience", placeholder: "Years of Service" },
-                { name: "totalEvents", placeholder: "Total Events Completed" },
+                { name: "eventsCompleted", placeholder: "Total Events Completed" },
                 { name: "concurrentEvents", placeholder: "Concurrent Events You Can Handle" },
                 { name: "clientReferences", placeholder: "Past Client References" },
                 { name: "governmentId", placeholder: "PAN Number *" },
@@ -493,7 +517,7 @@ export default function VendorRegistration() {
                 <input
                   name="customService"
                   placeholder="Specify Your Service"
-                  value={formData.customService}
+                  value={formData.customService || ""}
                   onChange={handleInputChange}
                   className={inputClass + " w-full"}
                 />
@@ -502,7 +526,7 @@ export default function VendorRegistration() {
 
             {formData.service && (
               <ServiceSpecificFields
-                service={formData.service}
+                service={lowercaseService(formData.service)}
                 onChange={handleServiceFiltersChange}
                 initialFilters={formData.serviceFilters}
               />
@@ -512,9 +536,9 @@ export default function VendorRegistration() {
               <h3 className="text-xl font-bold text-[#D48060] mb-4">Bank Details</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 {[
-                  { name: "accountHolder", placeholder: "Account Holder Name *" },
+                  { name: "accHolderName", placeholder: "Account Holder Name *" },
                   { name: "bankName", placeholder: "Bank Name *" },
-                  { name: "accountNumber", placeholder: "Account Number *" },
+                  { name: "accNumber", placeholder: "Account Number *" },
                   { name: "ifscCode", placeholder: "IFSC Code *" },
                   { name: "upiId", placeholder: "UPI ID (Optional)" },
                 ].map(({ name, placeholder }, i) => (

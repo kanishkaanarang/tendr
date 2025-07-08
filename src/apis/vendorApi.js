@@ -64,35 +64,52 @@ export const verifyVendorOtp = async ({ phoneNumber, otp }) => {
 
 export const completeVendorSignup = async (vendorData) => {
   try {
-    const formData = new FormData();
-    formData.append("phoneNumber", vendorData.phoneNumber);
-    formData.append("secondaryPhoneNumber", vendorData.secondaryPhoneNumber || "");
-    formData.append("name", vendorData.name);
-    formData.append("gstNumber", vendorData.gstNumber);
-    formData.append("teamSize", vendorData.teamSize);
-    formData.append("locations", JSON.stringify([vendorData.location]));
-    formData.append("serviceType", vendorData.service === "others" ? vendorData.customService : vendorData.service);
-    formData.append(
-      "address",
-      JSON.stringify({
+    // Prepare the request body
+    const body = {
+      phoneNumber: vendorData.phoneNumber,
+      name: vendorData.name,
+      gstNumber: vendorData.gstNumber,
+      teamSize: Number(vendorData.teamSize),
+      locations: [vendorData.location],
+      serviceType: vendorData.service === "others" ? vendorData.customService : vendorData.service,
+      address: {
         street: vendorData.address,
         city: vendorData.location,
         state: vendorData.state,
-      })
-    );
-    formData.append("yearsofExperience", vendorData.experience || "0"); // Default to 0 if not provided
-    formData.append("panNumber", vendorData.governmentId);
-    formData.append("aadhaarNumber", vendorData.aadhaarNumber);
-    formData.append("password", vendorData.password);
-    if (vendorData.portfolioFiles) {
-      vendorData.portfolioFiles.forEach((file) => formData.append("portfolioFiles", file));
-    }
+      },
+      yearsOfExperience: Number(vendorData.experience || 0),
+      panNumber: vendorData.governmentId,
+      aadhaarNumber: vendorData.aadhaarNumber,
+      password: vendorData.password,
+    };
 
-    const response = await fetch(`${BASE_URL}/auth/vsignup`, {
-      method: "POST",
-      body: formData,
-      credentials: "include",
-    });
+    let response;
+    if (vendorData.portfolioFiles && vendorData.portfolioFiles.length > 0) {
+      // Use FormData if files are present
+      const formData = new FormData();
+      Object.entries(body).forEach(([key, value]) => {
+        if (key === "address" || key === "locations") {
+          formData.append(key, JSON.stringify(value));
+        } else {
+          formData.append(key, value);
+        }
+      });
+      vendorData.portfolioFiles.forEach((file) => formData.append("portfolioFiles", file));
+
+      response = await fetch(`${BASE_URL}/auth/vsignup`, {
+        method: "POST",
+        body: formData,
+        credentials: "include",
+      });
+    } else {
+      // Use JSON if no files
+      response = await fetch(`${BASE_URL}/auth/vsignup`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+        credentials: "include",
+      });
+    }
 
     const contentType = response.headers.get("Content-Type");
     if (!contentType || !contentType.includes("application/json")) {
@@ -102,10 +119,7 @@ export const completeVendorSignup = async (vendorData) => {
 
     const result = await response.json();
     if (!response.ok) {
-      if (result.errors) {
-        throw new Error(JSON.stringify(result.errors));
-      }
-      throw new Error(result.message || "Vendor signup failed");
+      throw new Error(result.errors ? JSON.stringify(result.errors) : result.message || "Vendor signup failed");
     }
     return result;
   } catch (error) {
