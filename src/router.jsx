@@ -6,7 +6,7 @@ import AuthPage from './pages/AuthPage';
 import VendorRegistration from './pages/VendorRegistration';
 import EventForm from './pages/EventForm';
 import NotFound from './pages/NotFound';
-import OtpPage from './pages/OtpVerification';
+import OtpPage from './pages/Otpverification.jsx';
 import ListingPage from './pages/ListingPage';
 import VendorDetails from './pages/VendorDetails';
 import ChatPage from './pages/ChatPage';
