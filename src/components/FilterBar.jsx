@@ -32,13 +32,13 @@ const FilterBar = () => {
     "Noida",
     "Greater Noida",
     "Gurugram",
-    "Ghaziabad",
+    "Ghaziabad"
   ];
   const serviceOptions = [
     "Decorator",
     "Entertainment",
     "Catering",
-    "Photographer",
+    "Photographer"
   ];
 
   const handleOptionClick = (setter, option) => {
