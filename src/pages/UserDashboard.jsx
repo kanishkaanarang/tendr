@@ -237,6 +237,12 @@ const UserDashboard = () => {
                 <p className="text-[#D48060]">{booking.service}</p>
                 <p className="text-[#D48060]">Status: {booking.status}</p>
                 <p className="text-[#D48060]">{booking.date}</p>
+                <button
+                  onClick={() => navigate(`/vendor/${booking.id}`, { state: { vendor: { id: booking.id, name: booking.vendorName } } })}
+                  className="mt-2 text-[#CCAB4A] font-semibold hover:underline"
+                >
+                  View Vendor Profile
+                </button>
               </div>
             ))}
           </div>

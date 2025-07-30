@@ -1,7 +1,9 @@
-// Formatted and responsive version of LandingPageNew
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import HeroSection_LandingPage from "../components/HeroSection_LandingPage";
+import LandingPage2 from "../assets/LandingPage2.jpg";
+import NotSure from "../assets/LandingPageNotSure.jpg";
+import VendorNetwork from "../assets/LandingPageVendorNetwork.jpg";
 import EastIcon from "@mui/icons-material/East";
 import BadgeIcon from "@mui/icons-material/Badge";
 import CreditScoreIcon from "@mui/icons-material/CreditScore";
@@ -13,49 +15,6 @@ import ClearIcon from "@mui/icons-material/Clear";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import FacebookIcon from "@mui/icons-material/Facebook";
-import LandingPage2 from "../assets/LandingPage2.jpg";
-import Catering from "../assets/LandingPageCatering.jpg";
-import Entertainment from "../assets/LandingPageEntertainment.jpg";
-import Decorator from "../assets/LandingPageDecorator.jpg";
-import Photographer from "../assets/LandingPagePhotographer.jpg";
-import NotSure from "../assets/LandingPageNotSure.jpg";
-import VendorNetwork from "../assets/LandingPageVendorNetwork.jpg";
-
-// ARRAY CONTAINING FAQ QUESTION AND ANSWERS
-const ques_ans = [
-  {
-    key: 1,
-    question: "How does this platform work?",
-    answer:
-      "We help you book everything you need for a house party or corporate event — from caterers and decorators to artists and venues. Just choose your service, chat with the vendor, and book in a few clicks.",
-  },
-  {
-    key: 2,
-    question: "Is your platform for individuals or companies?",
-    answer:
-      "Both! We serve house parties, birthdays, weekend get-togethers, and also cater to offices for team outings, festive events, and internal functions.",
-  },
-  {
-    key: 3,
-    question: "How do I book a service?",
-    answer:
-      "Simply click on a vendor or package, start a chat to finalize details, and pay 40% upfront to confirm. The rest can be paid closer to the event",
-  },
-  {
-    key: 4,
-    question: "What if I need help during the event?",
-    answer:
-      "Every booking comes with a dedicated team member from our side to assist you before and during the event. You're never alone!",
-  },
-];
-
-// ARRAY CONTAINING OBJECTS OF RECOMMENDED VENDORS IMAGES AND LABEL
-const recommended_arr = [
-  { src: Catering, label: "Catering" },
-  { src: Entertainment, label: "Entertainment" },
-  { src: Decorator, label: "Decorator" },
-  { src: Photographer, label: "Photographer" },
-];
 
 const LandingPageNew = () => {
   const navigate = useNavigate();
@@ -71,6 +30,52 @@ const LandingPageNew = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const recommended_arr = [
+    {
+      src: "/src/assets/LandingPageCatering.jpg",
+      label: "Catering",
+    },
+    {
+      src: "/src/assets/LandingPageDecorator.jpg",
+      label: "Decoration",
+    },
+    {
+      src: "/src/assets/LandingPageEntertainment.jpg",
+      label: "Entertainment",
+    },
+    {
+      src: "/src/assets/LandingPagePhotographer.jpg",
+      label: "Photography",
+    },
+  ];
+
+  const ques_ans = [
+    {
+      key: 1,
+      question: "How do I book a vendor?",
+      answer:
+        "Simply search for vendors based on your requirements, compare their profiles and prices, and book directly through our platform.",
+    },
+    {
+      key: 2,
+      question: "Are all vendors verified?",
+      answer:
+        "Yes, all vendors on our platform are thoroughly verified and rated by real customers to ensure quality service.",
+    },
+    {
+      key: 3,
+      question: "What if I'm not satisfied with the service?",
+      answer:
+        "We have a comprehensive refund policy and customer support team to ensure your satisfaction with every booking.",
+    },
+    {
+      key: 4,
+      question: "Can I customize my event requirements?",
+      answer:
+        "Absolutely! You can specify your exact requirements and vendors will provide customized quotes for your event.",
+    },
+  ];
+
   return (
     <>
       <div className="h-fit relative">
@@ -79,6 +84,7 @@ const LandingPageNew = () => {
 
         {/* SLOGAN BANNER */}
         <div
+          onClick={() => navigate("/plan-event/form")}
           className="slogan_banner group my-24 mx-4 md:mx-16 h-[300px] md:h-[422px] rounded-[40px] md:rounded-[80px] text-center bg-center bg-cover flex items-center justify-center cursor-pointer hover:scale-105 transition-transform duration-500"
           style={{
             backgroundImage: `url(${LandingPage2})`,
@@ -89,7 +95,7 @@ const LandingPageNew = () => {
             className="text-white font-bold text-2xl sm:text-4xl md:text-6xl lg:text-[120px] transition-transform group-hover:-translate-y-2 group-hover:scale-110"
             style={{ WebkitTextStroke: "1px #CCAB4A" }}
           >
-            “We Curate You Celebrate”
+            "We Curate You Celebrate"
           </div>
         </div>
 
@@ -102,6 +108,12 @@ const LandingPageNew = () => {
             {recommended_arr.map((item, index) => (
               <div
                 key={index}
+                onClick={() => navigate("/listings", { 
+                  state: { 
+                    eventType: item.label.toLowerCase(),
+                    serviceType: item.label.toLowerCase()
+                  } 
+                })}
                 className="relative rounded-3xl overflow-hidden cursor-pointer hover:scale-105 transition duration-500"
               >
                 <img
@@ -126,48 +138,48 @@ const LandingPageNew = () => {
             Why you'll love us!
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6">
-            <div className="verified group flex flex-col items-center h-[170px] justify-evenly cursor-pointer transition-transform duration-300 ease-in-out hover:-translate-y-1">
+            <div className="verified group flex flex-col items-center h-[170px] justify-evenly">
               <BadgeIcon
-                className="text-[#D48060] group-hover:text-white transition-colors duration-300"
+                className="text-[#D48060]"
                 sx={{ fontSize: 60 }}
               />
-              <span className="text-xl font-bold text-[#D48060] group-hover:text-white transition-colors duration-300">
+              <span className="text-xl font-bold text-[#D48060]">
                 Verified Vendors
               </span>
             </div>
-            <div className="secure group flex flex-col items-center h-[170px] justify-evenly cursor-pointer transition-transform duration-300 ease-in-out hover:-translate-y-1">
+            <div className="secure group flex flex-col items-center h-[170px] justify-evenly">
               <CreditScoreIcon
-                className="text-[#D48060] group-hover:text-white transition-colors duration-300"
+                className="text-[#D48060]"
                 sx={{ fontSize: 60 }}
               />
-              <span className="text-xl font-bold text-[#D48060] group-hover:text-white transition-colors duration-300">
+              <span className="text-xl font-bold text-[#D48060]">
                 Secure Payment
               </span>
             </div>
-            <div className="quality group flex flex-col items-center h-[170px] justify-evenly cursor-pointer transition-transform duration-300 ease-in-out hover:-translate-y-1">
+            <div className="quality group flex flex-col items-center h-[170px] justify-evenly">
               <VerifiedIcon
-                className="text-[#D48060] group-hover:text-white transition-colors duration-300"
+                className="text-[#D48060]"
                 sx={{ fontSize: 60 }}
               />
-              <span className="text-xl font-bold text-[#D48060] group-hover:text-white transition-colors duration-300">
+              <span className="text-xl font-bold text-[#D48060]">
                 Quality Assurance
               </span>
             </div>
-            <div className="assitance group flex flex-col items-center h-[170px] justify-evenly cursor-pointer transition-transform duration-300 ease-in-out hover:-translate-y-1">
+            <div className="assitance group flex flex-col items-center h-[170px] justify-evenly">
               <SupervisedUserCircleIcon
-                className="text-[#D48060] group-hover:text-white transition-colors duration-300"
+                className="text-[#D48060]"
                 sx={{ fontSize: 60 }}
               />
-              <span className="text-xl font-bold text-[#D48060] group-hover:text-white transition-colors duration-300">
+              <span className="text-xl font-bold text-[#D48060]">
                 Event Planning Assistance
               </span>
             </div>
-            <div className="discounts group flex flex-col items-center h-[170px] justify-evenly cursor-pointer transition-transform duration-300 ease-in-out hover:-translate-y-1">
+            <div className="discounts group flex flex-col items-center h-[170px] justify-evenly">
               <LocalOfferIcon
-                className="text-[#D48060] group-hover:text-white transition-colors duration-300"
+                className="text-[#D48060]"
                 sx={{ fontSize: 60 }}
               />
-              <span className="text-xl font-bold text-[#D48060] group-hover:text-white transition-colors duration-300">
+              <span className="text-xl font-bold text-[#D48060]">
                 Seasonal Discounts
               </span>
             </div>
@@ -190,6 +202,12 @@ const LandingPageNew = () => {
               plan, coordinating with vendors and making sure your entire event
               goes off without a hitch.
             </span>
+            <button
+              onClick={() => navigate("/plan-event/form")}
+              className="bg-[#D48060] text-white hover:bg-[#CCAB4A] rounded-2xl px-8 py-3 font-bold text-lg transition-colors duration-300 hover:scale-105"
+            >
+              Get Started
+            </button>
           </div>
         </div>
 
@@ -331,20 +349,36 @@ const LandingPageNew = () => {
             </div>
             {/* Right Section */}
             <div className="right mt-4 font-bold text-[24px] flex flex-col gap-2">
-              {[
-                "Support",
-                "Help Center",
-                "Vendor Support",
-                "Vendor",
-                "Get in touch",
-              ].map((text, index) => (
-                <div
-                  key={index}
-                  className="group cursor-pointer transition-colors duration-300 hover:text-white"
-                >
-                  {text}
-                </div>
-              ))}
+              <div
+                onClick={() => navigate("/plan-event/form")}
+                className="group cursor-pointer transition-colors duration-300 hover:text-white"
+              >
+                Support
+              </div>
+              <div
+                onClick={() => navigate("/plan-event/form")}
+                className="group cursor-pointer transition-colors duration-300 hover:text-white"
+              >
+                Help Center
+              </div>
+              <div
+                onClick={() => navigate("/vendor/register")}
+                className="group cursor-pointer transition-colors duration-300 hover:text-white"
+              >
+                Vendor Support
+              </div>
+              <div
+                onClick={() => navigate("/vendor/register")}
+                className="group cursor-pointer transition-colors duration-300 hover:text-white"
+              >
+                Vendor
+              </div>
+              <div
+                onClick={() => navigate("/plan-event/form")}
+                className="group cursor-pointer transition-colors duration-300 hover:text-white"
+              >
+                Get in touch
+              </div>
             </div>
           </div>
           {/* Big tendr text in center */}
