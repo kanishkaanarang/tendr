@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../redux/authSlice';
 
-import logo from "../assets/logo2.png";
+import logo from "../assets/logos/tendr-logo-secondary.png";
 import DashboardIcon from '@mui/icons-material/Dashboard'; // Icon for Dashboard
 import LogoutIcon from '@mui/icons-material/Logout'; // Icon for Logout
 
