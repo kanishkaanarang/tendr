@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { logout, fetchUserProfile } from '../redux/authSlice';
+import { logout, fetchUserProfile } from '../../redux/authSlice';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css'; // Default styles (we'll override)
 import logo from "../../assets/logos/tendr-logo-secondary.png";

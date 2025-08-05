@@ -77,7 +77,7 @@ export const verifyOtp = async ({phoneNumber, name, email, password, otp, verifi
 
 export const resendOtp = async ({phoneNumber, name, email, password}) => {
   try{
-    const response = await fetch(`${BASE_URL}/signup/otp`, {
+    const response = await fetch(`${BASE_URL}/auth/signup/otp`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

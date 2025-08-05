@@ -17,6 +17,7 @@ import VendorChat from './pages/vendor/Chat';
 import CorporateBooking from './pages/corporate/Booking';
 import CorporateSignup from "./pages/corporate/SignUp";
 import ErrorPage from './components/ErrorPage';
+import UserDashboard from './pages/customer/Dashboard';
 
 const router = createBrowserRouter([
   { 
@@ -96,6 +97,11 @@ const router = createBrowserRouter([
     element: <NotFound />,
     errorElement: <ErrorPage />
   },
+  {
+    path: '/dashboard',
+    element: <UserDashboard />,
+    errorElement: <ErrorPage />,
+  }
 ]);
 
 export default router;
