@@ -2,23 +2,24 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronRight, ChevronLeft, Users, IndianRupee, MapPin, Calendar, Music, Camera, Utensils, X, Plus, CheckCircle, Shield, Award, HeartHandshake, Gift } from 'lucide-react';
 import EastIcon from '@mui/icons-material/East';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  setFormData,
+  goToNextStep,
+  goToPreviousStep,
+  showVendorScreenAction,
+  backToFormAction,
+  addSelectedVendor,
+} from '../../redux/eventPlanningSlice.js';
 
 import MakeAGroup_Nav from '../../components/MakeAGroup_Nav';
 
 const EventPlanning = () => {
   const navigate = useNavigate();
-  const [currentStep, setCurrentStep] = useState(0);
-  const [showVendorScreen, setShowVendorScreen] = useState(false);
   const [activeModal, setActiveModal] = useState(null);
-  const [formData, setFormData] = useState({
-    eventName: '',
-    eventType: '',
-    guests: '',
-    budget: '',
-    location: '',
-    date: '',
-    additionalInfo: ''
-  });
+
+  const dispatch = useDispatch();
+  const { currentStep, formData, showVendorScreen } = useSelector((state) => state.eventPlanning);
 
   const questions = [
     {
@@ -106,25 +107,21 @@ const EventPlanning = () => {
   ];
 
   const handleInputChange = (field, value) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: value
-    }));
+    dispatch(setFormData({ field, value }));
   };
 
   const nextStep = () => {
     if (currentStep < questions.length - 1) {
-      setCurrentStep(currentStep + 1);
+      dispatch(goToNextStep());
     } else {
-      setShowVendorScreen(true);
+      dispatch(showVendorScreenAction());
     }
   };
 
   const prevStep = () => {
-    if (currentStep > 0) {
-      setCurrentStep(currentStep - 1);
-    }
+    dispatch(goToPreviousStep());
   };
+
 
   // To Open a Service Type dropdown
   const openModal = (vendorType) => {
@@ -224,7 +221,7 @@ const EventPlanning = () => {
             <div className="inline-block group transition duration-300 rounded-lg">
               <div className="transition duration-200 group-hover:bg-white group-hover:shadow-md px-4 py-2 rounded-3xl">
                 <button
-                  onClick={() => setShowVendorScreen(false)}
+                  onClick={() => dispatch(backToFormAction())}
                   className="text-gray-500 group-hover:text-gray-700 transition-colors duration-200"
                 >
                   ← Back to form
@@ -284,7 +281,10 @@ const EventPlanning = () => {
 
               {/* Btn Add Selected Vendors */}
               <button
-                onClick={closeModal}
+                onClick={() => {
+                  dispatch(addSelectedVendor(activeModal));
+                  closeModal();
+                }}
                 className="w-full mt-6 bg-gradient-to-r from-orange-500 to-pink-500 text-white py-3 rounded-xl hover:from-orange-600 hover:to-pink-600 transition-all duration-300 font-semibold shadow-lg"
               >
                 Add Selected Vendors

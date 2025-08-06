@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Home.css';
-import tendrLogo from '../../assets/logos/tendr-logo.jpg';
+import tendrLogo from '../../assets/logos/tendr-logo-secondary.png';
 
 const Home = () => {
   const navigate = useNavigate();

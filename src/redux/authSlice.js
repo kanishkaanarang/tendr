@@ -74,7 +74,7 @@ const authSlice = createSlice({
     error: null,
     verificationId: null,
     userData: null,
-    profile: null, // Add profile to state
+    profile: null, 
   },
   reducers: {
     clearError: (state) => {

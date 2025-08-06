@@ -4,14 +4,14 @@ import signupbackground from "../../assets/backgrounds/signup-bg.png";
 import logo from "../../assets/logos/tendr-logo-secondary.png";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
-import { signup, login, clearError } from '../../redux/authSlice';
+import { signup, login, clearError, fetchUserProfile } from '../../redux/authSlice';
 
 const Auth = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { loading, error, verificationId } = useSelector((state) => state.auth);
-  
+
   const isSignupPath = location.pathname === "/signup";
   const [isSignup, setIsSignup] = useState(isSignupPath);
   const [formData, setFormData] = useState({
@@ -85,9 +85,11 @@ const Auth = () => {
     };
     dispatch(login(credentials)).then((result) => {
       if (result.meta.requestStatus === "fulfilled") {
-        navigate("/");
+        dispatch(fetchUserProfile()); 
+        navigate("/"); // or navigate to dashboard
       }
     });
+
   };
 
   const togglePasswordVisibility = () => {
@@ -105,9 +107,8 @@ const Auth = () => {
 
       <div className="flex-grow flex items-center justify-center px-3 sm:px-4 pt-4 relative z-10">
         <div
-          className={`bg-[#F7F4EF] ${
-            isSignup ? "py-4 sm:py-6 px-4 sm:px-6" : "p-6 sm:p-8"
-          } rounded-2xl shadow-lg w-full max-w-sm`}
+          className={`bg-[#F7F4EF] ${isSignup ? "py-4 sm:py-6 px-4 sm:px-6" : "p-6 sm:p-8"
+            } rounded-2xl shadow-lg w-full max-w-sm`}
         >
           <div className="flex justify-center mb-3 sm:mb-4">
             <img
@@ -165,9 +166,8 @@ const Auth = () => {
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
-                    className={`w-full px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm border ${
-                      passwordError ? "border-red-500" : "border-yellow-400"
-                    } rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-500 pr-10`}
+                    className={`w-full px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm border ${passwordError ? "border-red-500" : "border-yellow-400"
+                      } rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-500 pr-10`}
                     disabled={loading}
                   />
                   <button
@@ -280,9 +280,8 @@ const Auth = () => {
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
-                    className={`w-full px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm border ${
-                      passwordError ? "border-red-500" : "border-yellow-400"
-                    } rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-500 pr-10`}
+                    className={`w-full px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm border ${passwordError ? "border-red-500" : "border-yellow-400"
+                      } rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-500 pr-10`}
                     disabled={loading}
                   />
                   <button
