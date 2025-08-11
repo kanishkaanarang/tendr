@@ -1,27 +1,28 @@
 // src/router.jsx
 import { createBrowserRouter } from 'react-router-dom';
 
-import LandingPageNew from './pages/LandingPageNew';
-import AuthPage from './pages/AuthPage';
-import VendorRegistration from './pages/VendorRegistration';
-import EventForm from './pages/EventForm';
-import NotFound from './pages/NotFound';
-import OtpPage from './pages/OtpVerification';
-import ListingPage from './pages/ListingPage';
-import VendorDetails from './pages/VendorDetails';
-import ChatPage from './pages/ChatPage';
-import VendorFlow from './pages/VendorFlow';
-import VendorDashboard from './pages/VendorDashboard';
-import VendorChatList from './pages/VendorChatList';
-import VendorChat from './pages/VendorChat';
-import CorporateBooking from './pages/CorporateBooking';
-import CorporateSignup from "./pages/CorporateSignUp";
+import Home from './pages/Home/Home';
+import Auth from './pages/customer/Auth';
+import VendorRegistration from './pages/vendor/Registration';
+import EventPlanning from './pages/customer/EventPlanning';
+import NotFound from './pages/shared/NotFound';
+import OtpPage from './pages/customer/OtpVerification';
+import VendorList from './pages/customer/VendorList';
+import VendorDetails from './pages/customer/VendorDetails';
+import Chat from './pages/customer/Chat';
+import VendorOnboarding from './pages/vendor/Onboarding';
+import VendorDashboard from './pages/vendor/Dashboard';
+import VendorChatList from './pages/vendor/ChatList';
+import VendorChat from './pages/vendor/Chat';
+import CorporateBooking from './pages/corporate/Booking';
+import CorporateSignup from "./pages/corporate/SignUp";
 import ErrorPage from './components/ErrorPage';
+import UserDashboard from './pages/customer/Dashboard';
 
 const router = createBrowserRouter([
   { 
     path: '/', 
-    element: <LandingPageNew />,
+    element: <Home />,
     errorElement: <ErrorPage />
   },
   { 
@@ -31,7 +32,7 @@ const router = createBrowserRouter([
   },
   { 
     path: '/chat', 
-    element: <ChatPage />,
+    element: <Chat />,
     errorElement: <ErrorPage />
   },
   { 
@@ -46,7 +47,7 @@ const router = createBrowserRouter([
   },
   { 
     path: '/listings', 
-    element: <ListingPage />,
+    element: <VendorList />,
     errorElement: <ErrorPage />
   },
   { 
@@ -56,12 +57,12 @@ const router = createBrowserRouter([
   },
   { 
     path: '/login', 
-    element: <AuthPage />,
+    element: <Auth />,
     errorElement: <ErrorPage />
   },
   { 
     path: '/signup', 
-    element: <AuthPage />,
+    element: <Auth />,
     errorElement: <ErrorPage />
   },
   { 
@@ -73,7 +74,7 @@ const router = createBrowserRouter([
     path: '/vendor',
     errorElement: <ErrorPage />,
     children: [
-      { path: 'register', element: <VendorFlow /> },
+      { path: 'register', element: <VendorOnboarding /> },
       { path: 'dashboard', element: <VendorDashboard /> },
       { path: 'chats', element: <VendorChatList /> },
       { path: 'chat', element: <VendorChat /> },
@@ -83,7 +84,7 @@ const router = createBrowserRouter([
     path: '/plan-event',
     errorElement: <ErrorPage />,
     children: [
-      { path: 'form', element: <EventForm /> },
+      { path: 'form', element: <EventPlanning /> },
     ],
   },
   { 
@@ -96,6 +97,11 @@ const router = createBrowserRouter([
     element: <NotFound />,
     errorElement: <ErrorPage />
   },
+  {
+    path: '/dashboard',
+    element: <UserDashboard />,
+    errorElement: <ErrorPage />,
+  }
 ]);
 
 export default router;

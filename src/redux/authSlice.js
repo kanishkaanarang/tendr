@@ -28,9 +28,9 @@ export const logout = createAsyncThunk('auth/logout', async (_, { rejectWithValu
   }
 });
 
-export const verifyOtpAction = createAsyncThunk('auth/verifyOtp', async ({ phoneNumber, name, email, otp, verificationId }, { rejectWithValue }) => {
+export const verifyOtpAction = createAsyncThunk('auth/verifyOtp', async ({ phoneNumber, name, email, otp, password, verificationId }, { rejectWithValue }) => {
   try {
-    const response = await verifyOtp({ phoneNumber, name, email, otp, verificationId });
+    const response = await verifyOtp({ phoneNumber, name, email, otp, password, verificationId });
     return response;
   } catch (error) {
     return rejectWithValue(error.message);
@@ -74,7 +74,7 @@ const authSlice = createSlice({
     error: null,
     verificationId: null,
     userData: null,
-    profile: null, // Add profile to state
+    profile: null, 
   },
   reducers: {
     clearError: (state) => {

@@ -1,6 +1,6 @@
 import React from 'react'
 
-import logo from "../assets/logo2.png";
+import logo from "../assets/logos/tendr-logo-secondary.png";
 
 const Dashboards_Nav = () => {
     return (

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import StarRateRoundedIcon from "@mui/icons-material/StarRateRounded";
 
-import DummyPhoto from "../assets/GrayDummyPhoto.jpg";
+import DummyPhoto from "../assets/ui/dummy-photo.jpg";
 
 const VendorList_ListingPage = ({
   eventType,
