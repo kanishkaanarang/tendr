@@ -18,11 +18,17 @@ import CorporateBooking from './pages/corporate/Booking';
 import CorporateSignup from "./pages/corporate/SignUp";
 import ErrorPage from './components/ErrorPage';
 import UserDashboard from './pages/customer/Dashboard';
+import AdminDashboard from './pages/admin/Dashboard';
 
 const router = createBrowserRouter([
   { 
     path: '/', 
     element: <Home />,
+    errorElement: <ErrorPage />
+  },
+  { 
+    path: '/AdminDashboard', 
+    element: <AdminDashboard />,
     errorElement: <ErrorPage />
   },
   { 

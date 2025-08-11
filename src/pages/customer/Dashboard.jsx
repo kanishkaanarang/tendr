@@ -6,7 +6,9 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css'; // Default styles (we'll override)
 import logo from "../../assets/logos/tendr-logo-secondary.png";
 import EventIcon from '@mui/icons-material/Event';
+import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import HistoryIcon from '@mui/icons-material/History';
+import MenuIcon from '@mui/icons-material/Menu';
 import BookIcon from '@mui/icons-material/Book';
 import PaymentIcon from '@mui/icons-material/Payment';
 import NotificationsIcon from '@mui/icons-material/Notifications';
@@ -56,6 +58,7 @@ const fetchGroupBookings = async () => {
 const UserDashboard = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const { user, profile, loading, error } = useSelector((state) => state.auth);
 
   const [events, setEvents] = useState([]);
@@ -124,35 +127,84 @@ const UserDashboard = () => {
   };
 
   return (
-    <div className="flex h-screen bg-[#F7F4EF]">
+    <div
+      className="grid h-screen bg-[#F7F4EF]"
+      style={{
+        gridTemplateColumns: sidebarOpen ? "16rem 1fr" : "3rem 1fr",
+        transition: "grid-template-columns 0.3s ease"
+      }}
+    >
       {/* Sidebar */}
-      <div className="w-64 bg-[#FFD3C3] p-6 flex flex-col justify-between rounded-r-[40px] shadow-lg">
+      <div
+        className="bg-[#FFD3C3] flex flex-col justify-between rounded-r-[40px] shadow-lg overflow-hidden transition-all duration-300 relative"
+        style={{
+          width: sidebarOpen ? "16rem" : "3rem",
+          padding: sidebarOpen ? "1.5rem" : "0.5rem"
+        }}
+      >
+
         <div>
-          <div className="mb-10">
-            <img src={logo} alt="Tendr Logo" className="h-16 cursor-pointer" onClick={() => navigate('/')} />
-          </div>
-          <nav className="flex flex-col gap-4">
-            <div className="flex items-center gap-3 text-[#D48060] font-bold text-lg cursor-pointer hover:bg-[#fbbfa7] p-3 rounded-xl transition-colors duration-300">
-              <EventIcon /> Events Calendar
+
+          {/* Logo */}
+          {sidebarOpen && (
+            <div className="mb-10">
+              <img
+                src={logo}
+                alt="Tendr Logo"
+                className="h-16 cursor-pointer"
+                onClick={() => navigate("/")}
+              />
             </div>
-            <div className="flex items-center gap-3 text-[#D48060] font-bold text-lg cursor-pointer hover:bg-[#fbbfa7] p-3 rounded-xl transition-colors duration-300">
-              <BookIcon /> Bookings
-            </div>
-            <div className="flex items-center gap-3 text-[#D48060] font-bold text-lg cursor-pointer hover:bg-[#fbbfa7] p-3 rounded-xl transition-colors duration-300">
-              <PaymentIcon /> Payments
-            </div>
-            <div className="flex items-center gap-3 text-[#D48060] font-bold text-lg cursor-pointer hover:bg-[#fbbfa7] p-3 rounded-xl transition-colors duration-300">
-              <NotificationsIcon /> Notifications
-            </div>
-            <div className="flex items-center gap-3 text-[#D48060] font-bold text-lg cursor-pointer hover:bg-[#fbbfa7] p-3 rounded-xl transition-colors duration-300">
-              <GroupIcon /> Group Bookings
-            </div>
-          </nav>
+          )}
+
+          {/* Nav Links */}
+          {sidebarOpen && (
+            <nav className="flex flex-col gap-4">
+              <div className="flex items-center gap-3 text-[#D48060] font-bold text-lg cursor-pointer hover:bg-[#fbbfa7] p-3 rounded-xl">
+                <EventIcon /> Events Calendar
+              </div>
+              <div className="flex items-center gap-3 text-[#D48060] font-bold text-lg cursor-pointer hover:bg-[#fbbfa7] p-3 rounded-xl">
+                <BookIcon /> Bookings
+              </div>
+              <div className="flex items-center gap-3 text-[#D48060] font-bold text-lg cursor-pointer hover:bg-[#fbbfa7] p-3 rounded-xl">
+                <PaymentIcon /> Payments
+              </div>
+              <div className="flex items-center gap-3 text-[#D48060] font-bold text-lg cursor-pointer hover:bg-[#fbbfa7] p-3 rounded-xl">
+                <NotificationsIcon /> Notifications
+              </div>
+              <div className="flex items-center gap-3 text-[#D48060] font-bold text-lg cursor-pointer hover:bg-[#fbbfa7] p-3 rounded-xl">
+                <GroupIcon /> Group Bookings
+              </div>
+
+              {/* Hide Sidebar Button */}
+              <div
+                className="flex items-center gap-2 mt-4 text-[#D48060] font-bold text-lg cursor-pointer hover:bg-[#fbbfa7] p-3 rounded-xl"
+                onClick={() => setSidebarOpen(false)}
+              >
+                <KeyboardArrowLeftIcon />
+                <span>Hide</span>
+              </div>
+            </nav>
+          )}
+
         </div>
+
+        {/* Hamburger button */}
+        {!sidebarOpen && (
+          <div className="absolute top-1/2 left-0 w-full flex justify-center -translate-y-1/2">
+            <button
+              onClick={() => setSidebarOpen(true)}
+              className="p-2 rounded-lg hover:bg-[#fbbfa7]"
+            >
+              <MenuIcon className="text-[#D48060]" />
+            </button>
+          </div>
+        )}
+
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 p-10 overflow-y-auto">
+      <div className="p-10 overflow-y-auto">
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-4xl font-extrabold text-[#D48060]">User Dashboard</h1>
@@ -341,6 +393,7 @@ const UserDashboard = () => {
           color: #A9746E !important;
         }
       `}</style>
+
     </div>
   );
 };

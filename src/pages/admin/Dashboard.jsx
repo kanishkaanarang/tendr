@@ -3,10 +3,11 @@ import { useNavigate } from "react-router-dom";
 
 import EastIcon from "@mui/icons-material/East";
 
-import Dashboards_Nav from "../components/Dashboards_Nav";
+import Dashboards_Nav from "../../components/Dashboards_Nav";
 
-import { LineChart_UserVendorGrowth_AdminDashboard, LineChart_BookingsPerMonth_AdminDashboard, Doughnut_BookingCategory_AdminDashboard, Doughnut_BookingCity_AdminDashboard, Doughnut_VendorCity_AdminDashboard, Doughnut_UserCity_AdminDashboard, LineChart_UserNew_AdminDashboard } from "../components/Charts_Dashboards";
-
+import { LineChart_UserVendorGrowth_AdminDashboard, LineChart_BookingsPerMonth_AdminDashboard, Doughnut_BookingCategory_AdminDashboard, Doughnut_BookingCity_AdminDashboard, Doughnut_VendorCity_AdminDashboard, Doughnut_UserCity_AdminDashboard, LineChart_UserNew_AdminDashboard } from "../../components/Charts_Dashboards";
+import MenuIcon from '@mui/icons-material/Menu';
+import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import { LayoutDashboard, IndianRupee, TicketSlash, ChartColumnDecreasing, UserRound, BriefcaseBusiness, BadgeIndianRupee, ArrowLeft, CalendarCheck2, CalendarClock, CalendarFold, CalendarX2, Camera, Music, SprayCan, HandPlatter, Store, Handshake, MonitorCheck, MonitorX, UserPlus } from 'lucide-react';
 
 const formatEarnings = (amount) => {
@@ -215,12 +216,9 @@ const sidebar_arr = [
   }
 ];
 
-
-
-
-
 const AdminDashboard = () => {
   const navigate = useNavigate();
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const [activeDropdown, setactiveDropdown] = useState("dashboard")
 
   return (
@@ -232,47 +230,109 @@ const AdminDashboard = () => {
         <Dashboards_Nav />
       </div>
 
-      {/* Main content below navbar, takes remaining height */}
+      {/* Main content below navbar */}
       <div className="mainbody w-full flex flex-1">
 
-        <div className="left w-[30%] xs:w-[25%] bg-[#fff4d4] h-full flex flex-col items-center py-8">
+        <div
+          className="h-full flex"
+          style={{
+            width: sidebarOpen ? "30%" : "4rem",
+            transition: "width 0.3s ease",
+          }}
+        >
 
-          {/* Sidebar options */}
-          <div className="options flex flex-col items-center w-full">
-            <div className="flex flex-col gap-3 w-[220px] items-center">
-              {sidebar_arr.map((item) => {
-                const key = item.key.toLowerCase();
-                const isActive = activeDropdown === key;
+          {/* Sidebar */}
+          <div
+            className="bg-[#fff4d4] h-full flex flex-col items-center py-8 relative"
+            style={{
+              width: sidebarOpen ? "100%" : "4rem",
+              padding: sidebarOpen ? "2rem 0.5rem" : "1rem 0.25rem",
+              transition: "all 0.3s ease",
+            }}
+          >
 
-                return (
-                  <button
-                    key={item.key}
-                    type="button"
-                    onClick={() => setactiveDropdown(key)}
-                    className={`group cursor-pointer rounded-[16px] pl-2 sm:pl-4 pr-2 flex items-center justify-between font-bold w-[80px] sm:w-[100px] md:w-[140px] lg:w-[180px] xl:w-[250px] h-[40px] transform transition-transform duration-500 ease-in-out hover:scale-105 hover:-translate-y-1 active:scale-95 ${isActive ? "bg-[#CCAB4A] text-white" : "bg-white text-[#CCAB4A] hover:bg-[#CCAB4A] hover:text-white"}`}
-                  >
-                    <span className="pb-[2px] text-base hidden lg:block">{item.label}</span>
-                    <span className="pb-[2px] text-base block lg:hidden">{item.icon}</span>
-                    <span className={`arrowButton w-[30px] h-[30px] rounded-[13px] flex items-center justify-center transition duration-500 ${isActive ? "bg-white text-[#CCAB4A]" : "bg-[#CCAB4A] text-white group-hover:bg-white group-hover:text-[#CCAB4A]"}`}>
-                      <EastIcon fontSize="medium" />
-                    </span>
-                  </button>
-                );
-              })}
+            {/* Sidebar Options */}
+            {sidebarOpen && (
+              <div className="options flex flex-col items-center w-full">
+                <div className="flex flex-col gap-3 w-[220px] items-center">
+                  {sidebar_arr.map((item) => {
+                    const key = item.key.toLowerCase();
+                    const isActive = activeDropdown === key;
 
-            </div>
-          </div>
+                    return (
+                      <button
+                        key={item.key}
+                        type="button"
+                        onClick={() => setactiveDropdown(key)}
+                        className={`group cursor-pointer rounded-[16px] pl-2 sm:pl-4 pr-2 flex items-center justify-between font-bold w-[80px] sm:w-[100px] md:w-[140px] lg:w-[180px] xl:w-[250px] h-[40px] transform transition-transform duration-500 ease-in-out hover:scale-105 hover:-translate-y-1 active:scale-95 ${isActive
+                            ? "bg-[#CCAB4A] text-white"
+                            : "bg-white text-[#CCAB4A] hover:bg-[#CCAB4A] hover:text-white"
+                          }`}
+                      >
+                        <span className="pb-[2px] text-base hidden lg:block">
+                          {item.label}
+                        </span>
+                        <span className="pb-[2px] text-base block lg:hidden">
+                          {item.icon}
+                        </span>
+                        <span
+                          className={`arrowButton w-[30px] h-[30px] rounded-[13px] flex items-center justify-center transition duration-500 ${isActive
+                              ? "bg-white text-[#CCAB4A]"
+                              : "bg-[#CCAB4A] text-white group-hover:bg-white group-hover:text-[#CCAB4A]"
+                            }`}
+                        >
+                          <EastIcon fontSize="medium" />
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
 
-          {/* Back Button at bottom */}
-          <div className="back_btn mt-20">
-            <button
-              type="button"
-              onClick={() => navigate("/")}
-              className=" w-[50px] sm:w-[120px] xl:w-[200px] flex justify-center items-center gap-2 sm:pr-4 py-2 text-black bg-white hover:shadow-md transition-all duration-300 rounded-full"
-            >
-              <ArrowLeft className="w-5 h-5" />
-              <span className="text-base font-semibold hidden sm:block">Go Back</span>
-            </button>
+            {/* Bottom Buttons */}
+            {sidebarOpen ? (
+
+              <div className="mt-auto flex flex-col gap-2 w-full items-center">
+
+                {/* Go Back */}
+                <button
+                  type="button"
+                  onClick={() => navigate("/")}
+                  className="w-[50px] sm:w-[120px] xl:w-[200px] flex justify-center items-center gap-2 sm:pr-4 py-2 text-black bg-white hover:shadow-md transition-all duration-300 rounded-full"
+                >
+                  <span className="text-base font-semibold hidden sm:block">
+                    Go Back
+                  </span>
+                </button>
+
+                {/* Hide */}
+                <button
+                  type="button"
+                  onClick={() => setSidebarOpen(false)}
+                  className="w-[50px] sm:w-[120px] xl:w-[200px] flex justify-center items-center gap-2 sm:pr-4 py-2 text-black bg-white hover:shadow-md transition-all duration-300 rounded-full"
+                >
+                  <KeyboardArrowLeftIcon />
+                  <span className="text-base font-semibold hidden sm:block">
+                    Hide
+                  </span>
+                </button>
+
+              </div>
+
+            ) : (
+
+              // Collapsed Hamburger
+              <div className="absolute top-1/2 left-0 w-full flex justify-center -translate-y-1/2">
+                <button
+                  onClick={() => setSidebarOpen(true)}
+                  className="p-2 rounded-lg hover:bg-[#ffdc73]"
+                >
+                  <MenuIcon className="text-[#CCAB4A]" />
+                </button>
+              </div>
+
+            )}
           </div>
 
         </div>
