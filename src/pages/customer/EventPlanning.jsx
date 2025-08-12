@@ -13,6 +13,7 @@ import {
 } from '../../redux/eventPlanningSlice.js';
 
 import MakeAGroup_Nav from '../../components/MakeAGroup_Nav';
+import EventFormSummary from '../../components/EventFormSummary.jsx';
 
 const EventPlanning = () => {
   const navigate = useNavigate();
@@ -229,7 +230,7 @@ const EventPlanning = () => {
               </div>
             </div>
           </div>
-
+            <EventFormSummary />
 
 
         </div>

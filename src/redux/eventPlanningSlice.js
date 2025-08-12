@@ -55,3 +55,9 @@ export const {
 } = eventPlanningSlice.actions;
 
 export default eventPlanningSlice.reducer;
+
+export const selectEventPlanning = (state) => state.eventPlanning;
+export const selectFormData = (state) => state.eventPlanning.formData;
+export const selectCurrentStep = (state) => state.eventPlanning.currentStep;
+export const selectShowVendors = (state) => state.eventPlanning.showVendorScreen;
+export const selectSelectedVendors = (state) => state.eventPlanning.selectedVendors;
