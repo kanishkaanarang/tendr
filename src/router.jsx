@@ -37,7 +37,7 @@ const router = createBrowserRouter([
   { 
     path: '/corporate-login', 
     element: <CorporateLogin />,
-    // errorElement: <ErrorPage />
+    errorElement: <ErrorPage />
   },
   { 
     path: '/corporate-signup', 
