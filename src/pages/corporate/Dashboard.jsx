@@ -28,7 +28,7 @@ import {
   FiMenu,
   FiX
 } from 'react-icons/fi';
-import EventCreationModal from '../components/EventCreationModal';
+import EventCreationModal from '../../components/EventCreationModal';
 
 const CorporateDashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');
