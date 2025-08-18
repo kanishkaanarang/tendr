@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  FiCalendar, 
-  FiUsers, 
-  FiDollarSign, 
-  FiStar, 
-  FiCheck, 
-  FiPlus, 
-  FiSearch, 
+import {
+  FiCalendar,
+  FiUsers,
+  FiDollarSign,
+  FiStar,
+  FiCheck,
+  FiPlus,
+  FiSearch,
   FiFilter,
   FiClock,
   FiMapPin,
@@ -28,7 +28,7 @@ import {
   FiMenu,
   FiX
 } from 'react-icons/fi';
-import EventCreationModal from '../components/EventCreationModal';
+import EventCreationModal from '../../components/EventCreationModal';
 
 const CorporateDashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -187,7 +187,7 @@ const CorporateDashboard = () => {
             <FiCalendar className="w-6 h-6 sm:w-8 sm:h-8 text-orange-500" />
           </div>
         </div>
-        
+
         <div className="bg-white p-3 sm:p-6 rounded-2xl shadow-md">
           <div className="flex items-center justify-between">
             <div>
@@ -199,7 +199,7 @@ const CorporateDashboard = () => {
             <FiUsers className="w-6 h-6 sm:w-8 sm:h-8 text-blue-500" />
           </div>
         </div>
-        
+
         <div className="bg-white p-3 sm:p-6 rounded-2xl shadow-md">
           <div className="flex items-center justify-between">
             <div>
@@ -211,7 +211,7 @@ const CorporateDashboard = () => {
             <FiDollarSign className="w-6 h-6 sm:w-8 sm:h-8 text-green-500" />
           </div>
         </div>
-        
+
         <div className="bg-white p-3 sm:p-6 rounded-2xl shadow-md">
           <div className="flex items-center justify-between">
             <div>
@@ -229,7 +229,7 @@ const CorporateDashboard = () => {
       <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6">
         <div className="flex items-center justify-between mb-4 sm:mb-6">
           <h3 className="text-lg sm:text-xl font-bold text-gray-800">Recent Events</h3>
-          <button 
+          <button
             onClick={() => setShowEventModal(true)}
             className="flex items-center gap-1 sm:gap-2 bg-orange-500 text-white px-3 sm:px-4 py-2 rounded-xl hover:bg-orange-600 transition-colors text-xs sm:text-sm"
           >
@@ -238,7 +238,7 @@ const CorporateDashboard = () => {
             <span className="sm:hidden">New</span>
           </button>
         </div>
-        
+
         <div className="space-y-3 sm:space-y-4">
           {mockEvents.slice(0, 3).map((event) => (
             <div key={event.id} className="border border-gray-200 rounded-xl p-3 sm:p-4 hover:shadow-md transition-shadow">
@@ -266,7 +266,7 @@ const CorporateDashboard = () => {
                   </div>
                 </div>
                 <div className="flex items-center gap-1 sm:gap-2 ml-2">
-                  <button 
+                  <button
                     onClick={() => console.log('Viewing event:', event)}
                     className="p-1 sm:p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                   >
@@ -288,7 +288,7 @@ const CorporateDashboard = () => {
     <div className="space-y-4 sm:space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <h3 className="text-lg sm:text-xl font-bold text-gray-800">All Events</h3>
-        <button 
+        <button
           onClick={() => setShowEventModal(true)}
           className="flex items-center gap-1 sm:gap-2 bg-orange-500 text-white px-3 sm:px-4 py-2 rounded-xl hover:bg-orange-600 transition-colors text-xs sm:text-sm"
         >
@@ -296,7 +296,7 @@ const CorporateDashboard = () => {
           Create New Event
         </button>
       </div>
-      
+
       <div className="grid gap-4 sm:gap-6">
         {mockEvents.map((event) => (
           <div key={event.id} className="bg-white rounded-2xl shadow-md p-4 sm:p-6">
@@ -309,7 +309,7 @@ const CorporateDashboard = () => {
                   </span>
                 </div>
                 <p className="text-sm text-gray-600 mb-3">{event.type} • {event.location}</p>
-                
+
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 mb-3 sm:mb-4">
                   <div className="flex items-center gap-1 sm:gap-2">
                     <FiCalendar className="w-3 h-3 sm:w-4 sm:h-4 text-gray-500" />
@@ -328,7 +328,7 @@ const CorporateDashboard = () => {
                     <span className="text-xs sm:text-sm text-gray-700">{event.vendors.length} vendors</span>
                   </div>
                 </div>
-                
+
                 {event.vendors.length > 0 && (
                   <div className="mb-3 sm:mb-4">
                     <h5 className="font-semibold text-gray-800 mb-2 text-sm sm:text-base">Vendors:</h5>
@@ -337,16 +337,15 @@ const CorporateDashboard = () => {
                         <div key={vendor.id} className="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded-lg">
                           {getVendorIcon(vendor.category)}
                           <span className="text-xs sm:text-sm text-gray-700 truncate max-w-20 sm:max-w-none">{vendor.name}</span>
-                          <span className={`w-2 h-2 rounded-full ${
-                            vendor.status === 'confirmed' ? 'bg-green-500' : 
-                            vendor.status === 'pending' ? 'bg-yellow-500' : 'bg-gray-500'
-                          }`}></span>
+                          <span className={`w-2 h-2 rounded-full ${vendor.status === 'confirmed' ? 'bg-green-500' :
+                              vendor.status === 'pending' ? 'bg-yellow-500' : 'bg-gray-500'
+                            }`}></span>
                         </div>
                       ))}
                     </div>
                   </div>
                 )}
-                
+
                 {event.addons.length > 0 && (
                   <div>
                     <h5 className="font-semibold text-gray-800 mb-2 text-sm sm:text-base">Add-ons:</h5>
@@ -360,7 +359,7 @@ const CorporateDashboard = () => {
                   </div>
                 )}
               </div>
-              
+
               <div className="flex items-center gap-1 sm:gap-2 mt-3 sm:mt-0 sm:ml-4">
                 <button className="p-1 sm:p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
                   <FiEye className="w-3 h-3 sm:w-4 sm:h-4" />
@@ -398,7 +397,7 @@ const CorporateDashboard = () => {
           </button>
         </div>
       </div>
-      
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         {mockVendors.map((vendor) => (
           <div key={vendor.id} className="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
@@ -415,9 +414,9 @@ const CorporateDashboard = () => {
                   <span className="text-xs sm:text-sm text-gray-600">{vendor.rating}</span>
                 </div>
               </div>
-              
+
               <p className="text-gray-600 text-xs sm:text-sm mb-3 line-clamp-2">{vendor.description}</p>
-              
+
               <div className="flex flex-wrap gap-1 sm:gap-2 mb-3 sm:mb-4">
                 {vendor.specialties.map((specialty, index) => (
                   <span
@@ -428,19 +427,18 @@ const CorporateDashboard = () => {
                   </span>
                 ))}
               </div>
-              
+
               <div className="flex items-center justify-between mb-3">
                 <div>
                   <span className="text-lg sm:text-xl font-bold text-orange-600">₹{vendor.price}</span>
                   <span className="text-gray-600 text-xs sm:text-sm ml-1">{vendor.priceUnit}</span>
                 </div>
-                <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                  vendor.availability === 'Available' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
-                }`}>
+                <span className={`px-2 py-1 rounded-full text-xs font-medium ${vendor.availability === 'Available' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                  }`}>
                   {vendor.availability}
                 </span>
               </div>
-              
+
               <div className="flex items-center gap-2">
                 <button className="flex-1 bg-orange-500 text-white py-2 rounded-xl hover:bg-orange-600 transition-colors text-xs sm:text-sm">
                   Book Now
@@ -460,7 +458,7 @@ const CorporateDashboard = () => {
     <div className="space-y-4 sm:space-y-6">
       <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6">
         <h3 className="text-lg sm:text-xl font-bold text-gray-800 mb-4 sm:mb-6">Current Subscription</h3>
-        
+
         {corporateData && (
           <div className="space-y-3 sm:space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between p-3 sm:p-4 bg-gradient-to-r from-orange-100 to-pink-100 rounded-xl">
@@ -475,7 +473,7 @@ const CorporateDashboard = () => {
                 <p className="text-xs sm:text-sm text-gray-600">Next billing: Dec 2024</p>
               </div>
             </div>
-            
+
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <div className="p-3 sm:p-4 border border-gray-200 rounded-xl">
                 <h5 className="font-semibold text-gray-800 mb-2 text-sm sm:text-base">Company Details</h5>
@@ -486,7 +484,7 @@ const CorporateDashboard = () => {
                   <p><strong>Team Size:</strong> {corporateData.teamSize}</p>
                 </div>
               </div>
-              
+
               <div className="p-3 sm:p-4 border border-gray-200 rounded-xl">
                 <h5 className="font-semibold text-gray-800 mb-2 text-sm sm:text-base">Contact Person</h5>
                 <div className="space-y-1 text-xs sm:text-sm text-gray-600">
@@ -497,7 +495,7 @@ const CorporateDashboard = () => {
                 </div>
               </div>
             </div>
-            
+
             {corporateData.coupon && (
               <div className="p-3 sm:p-4 bg-green-100 rounded-xl">
                 <h5 className="font-semibold text-green-800 mb-2 text-sm sm:text-base">Special Discount Code</h5>
@@ -512,10 +510,14 @@ const CorporateDashboard = () => {
   );
 
   return (
+
     <div className="min-h-screen bg-gray-50">
+
       {/* Header */}
       <div className="bg-white shadow-sm px-3 sm:px-6 py-3 sm:py-4">
+
         <div className="max-w-7xl mx-auto flex justify-between items-center">
+
           <div className="flex items-center space-x-2">
             <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-r from-orange-400 to-pink-400 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-xs sm:text-sm">T</span>
@@ -523,6 +525,7 @@ const CorporateDashboard = () => {
             <span className="text-xl sm:text-2xl font-bold text-gray-800">tendr</span>
             <span className="text-xs sm:text-sm text-gray-500 hidden sm:inline">Corporate</span>
           </div>
+
           <div className="flex items-center space-x-2 sm:space-x-4">
             <button className="p-1 sm:p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors">
               <FiBell className="w-4 h-5 sm:w-5 sm:h-5" />
@@ -533,17 +536,20 @@ const CorporateDashboard = () => {
             <button className="p-1 sm:p-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
               <FiLogOut className="w-4 h-5 sm:w-5 sm:h-5" />
             </button>
-            <button 
+            <button
               onClick={() => setShowMobileMenu(!showMobileMenu)}
               className="lg:hidden p-1 sm:p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors"
             >
               {showMobileMenu ? <FiX className="w-5 h-5" /> : <FiMenu className="w-5 h-5" />}
             </button>
           </div>
+
         </div>
+
       </div>
 
       <div className="max-w-7xl mx-auto px-3 sm:px-6 py-4 sm:py-8">
+
         {/* Welcome Section */}
         <div className="mb-4 sm:mb-8">
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-1 sm:mb-2">
@@ -569,11 +575,10 @@ const CorporateDashboard = () => {
                   setActiveTab(tab.id);
                   setShowMobileMenu(false);
                 }}
-                className={`flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 rounded-xl transition-colors text-xs sm:text-sm ${
-                  activeTab === tab.id
+                className={`flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 rounded-xl transition-colors text-xs sm:text-sm ${activeTab === tab.id
                     ? 'bg-orange-500 text-white'
                     : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100'
-                }`}
+                  }`}
               >
                 <tab.icon className="w-3 h-3 sm:w-4 sm:h-4" />
                 {tab.label}
@@ -598,6 +603,7 @@ const CorporateDashboard = () => {
         onSubmit={handleEventSubmit}
         corporateData={corporateData}
       />
+
     </div>
   );
 };

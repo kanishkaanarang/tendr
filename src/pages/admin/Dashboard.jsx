@@ -341,7 +341,7 @@ const AdminDashboard = () => {
           <div className="right-dashboard w-[70%] xs:w-[85%] bg-[#FDFAF0] border-l-2 border-[#CCAB4A] px-10">
 
             {/* Heading */}
-            <div className="heading font-semibold text-[32px] xs:text-4xl sm:text-5xl my-4">
+            <div className="heading font-semibold text-[32px] xs:text-4xl sm:text-5xl my-4 text-[#d08f4e]">
               Dashboard
             </div>
 
@@ -406,7 +406,7 @@ const AdminDashboard = () => {
           <div className="right-dashboard w-[70%] xs:w-[85%] bg-[#FDFAF0] border-l-2 border-[#CCAB4A] px-10">
 
             {/* Heading */}
-            <div className="heading font-semibold text-[32px] xs:text-4xl sm:text-5xl my-4">
+            <div className="heading font-semibold text-[32px] xs:text-4xl sm:text-5xl my-4 text-[#d08f4e]">
               Bookings
             </div>
 
@@ -472,7 +472,7 @@ const AdminDashboard = () => {
           <div className="right-dashboard w-[70%] xs:w-[85%] bg-[#FDFAF0] border-l-2 border-[#CCAB4A] px-10">
 
             {/* Heading */}
-            <div className="heading font-semibold text-[32px] xs:text-4xl sm:text-5xl my-4">
+            <div className="heading font-semibold text-[32px] xs:text-4xl sm:text-5xl my-4 text-[#d08f4e]">
               Payments
             </div>
 
@@ -538,7 +538,7 @@ const AdminDashboard = () => {
           <div className="right-dashboard w-[70%] xs:w-[85%] bg-[#FDFAF0] border-l-2 border-[#CCAB4A] px-10">
 
             {/* Heading */}
-            <div className="heading font-semibold text-[32px] xs:text-4xl sm:text-5xl my-4">
+            <div className="heading font-semibold text-[32px] xs:text-4xl sm:text-5xl my-4 text-[#d08f4e]">
               Vendors
             </div>
 
@@ -676,7 +676,7 @@ const AdminDashboard = () => {
           <div className="right-dashboard w-[70%] xs:w-[85%] bg-[#FDFAF0] border-l-2 border-[#CCAB4A] px-10">
 
             {/* Heading */}
-            <div className="heading font-semibold text-[32px] xs:text-4xl sm:text-5xl my-4">
+            <div className="heading font-semibold text-[32px] xs:text-4xl sm:text-5xl my-4 text-[#d08f4e]">
               Users
             </div>
 
