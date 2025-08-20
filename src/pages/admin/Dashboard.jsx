@@ -832,6 +832,7 @@ const AdminDashboard = () => {
 
                   <>
 
+                    {/* Header */}
                     <div className="p-4 border-b border-[#F1E1A8] flex items-center justify-between">
 
                       {/* User */}
@@ -854,12 +855,27 @@ const AdminDashboard = () => {
 
                     </div>
 
-                    <div className="flex-1 p-4 overflow-y-auto text-gray-600">
-
-                      <p className="text-center text-gray-400 italic">
-                        Messages between {selectedChat.name} and {selectedChat.vendor} will appear here
+                    {/* Messages */}
+                    <div className="flex-1 p-4 overflow-y-auto text-gray-600 flex flex-col space-y-3">
+                      <p className="self-start bg-gray-100 px-3 py-2 rounded-lg w-fit">
+                        Hello, this is a sample message from {selectedChat.name}.
                       </p>
 
+                      <p className="self-end bg-[#d08f4e] text-white px-3 py-2 rounded-lg w-fit">
+                        Hi {selectedChat.name}, this is a vendor reply.
+                      </p>
+                    </div>
+
+                    {/* Input Box */}
+                    <div className="p-3 border-t border-[#F1E1A8] flex gap-2">
+                      <input
+                        type="text"
+                        placeholder="Type a message..."
+                        className="flex-1 px-4 py-2 rounded-full border border-[#CCAB4A] focus:outline-none"
+                      />
+                      <button className="px-4 py-2 bg-[#CCAB4A] text-white rounded-full font-semibold hover:opacity-90 transition">
+                        Send
+                      </button>
                     </div>
 
                   </>
