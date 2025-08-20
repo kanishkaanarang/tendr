@@ -9,9 +9,8 @@ import EventPlanning from './pages/customer/EventPlanning';
 import Home from './pages/Home/Home';
 import NotFound from './pages/shared/NotFound';
 import ErrorPage from './components/ErrorPage';
-import CorporateLogin from "./pages/corporate/Login";
-import CorporateSignUp from "./pages/corporate/SignUp";
-import NotFound from './pages/shared/NotFound';
+import CorporateLogin from "./pages/corporate/Login.jsx";
+import CorporateSignup from "./pages/corporate/SignUp.jsx";
 import OtpPage from './pages/customer/OtpVerification';
 import VendorList from './pages/customer/VendorList';
 import VendorDetails from './pages/customer/VendorDetails';
@@ -21,12 +20,14 @@ import VendorDashboard from './pages/vendor/Dashboard';
 import VendorChatList from './pages/vendor/ChatList';
 import VendorChat from './pages/vendor/Chat';
 import CorporateBooking from './pages/corporate/Booking';
-// import CorporateSignup from "./pages/corporate/SignUp";
-// import ErrorPage from './components/ErrorPage';
 import UserDashboard from './pages/customer/Dashboard';
-import ErrorPage from './components/ErrorPage';
-import CorporateLogin from "./pages/corporate/Login";
-import CorporateSignUp from "./pages/corporate/SignUp";
+
+import RefundPolicy from './pages/info/RefundPolicy';
+import CancellationPolicy from './pages/info/CancellationPolicy';
+import ContactUs from './pages/info/ContactUs.jsx';
+
+
+
 
 const router = createBrowserRouter([
   { 
@@ -41,15 +42,16 @@ const router = createBrowserRouter([
   },
   { 
     path: '/corporate-signup', 
-    element: <CorporateSignUp />,
+    element: <CorporateSignup- />,
     errorElement: <ErrorPage />
  },
   { 
     path: '*', 
     element: <NotFound />,
     errorElement: <ErrorPage />
-  }
- path: '/VendorRegistration', 
+  },
+  {
+    path: '/VendorRegistration', 
     element: <VendorRegistration />,
     errorElement: <ErrorPage />
   },
@@ -124,7 +126,28 @@ const router = createBrowserRouter([
     path: '/dashboard',
     element: <UserDashboard />,
     errorElement: <ErrorPage />,
-  }
+  },
+  {
+  path: '/contact-us',
+  element: <ContactUs />,
+  errorElement: <ErrorPage />,
+},
+{
+  path: '/refund-policy',
+  element: <RefundPolicy />,
+  errorElement: <ErrorPage />,
+},
+{
+  path: '/cancellation-policy',
+  element: <CancellationPolicy />,
+  errorElement: <ErrorPage />,
+},
+{
+  path: '/event-planning',
+  element: <EventPlanning />,
+  errorElement: <ErrorPage />,
+},
+
 ]);
 
 

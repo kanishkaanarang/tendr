@@ -1,0 +1,56 @@
+/* Whole page */
+body {
+  margin: 0;
+  padding: 0;
+  background: #2e1b0f; /* deep coffee brown */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Contact container */
+.contact-container {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #2e1b0f; /* same as body */
+  min-height: 100vh;
+}
+
+/* Title */
+.contact-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #f1d7a5; /* golden beige */
+  margin-bottom: 1.5rem;
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+/* Card */
+.contact-card {
+  background: #3b2414; /* slightly lighter brown for contrast */
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+  max-width: 600px;
+  width: 100%;
+}
+
+/* Text */
+.contact-card p {
+  margin: 0.8rem 0;
+  font-size: 1.1rem;
+  color: #e0cda3; /* elegant beige */
+}
+
+/* Bold labels */
+.contact-card strong {
+  color: #f6e5c6; /* warm cream */
+}
+
+/* Availability note */
+.availability {
+  margin-top: 1rem;
+  font-style: italic;
+  color: #d8c3a5; /* muted beige */
+}
