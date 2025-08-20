@@ -121,34 +121,39 @@ const Home = () => {
   ];
 
   const footerSections = [
-    {
-      title: 'Services',
-      links: [
-        { text: 'Corporate Events', href: '#' },
-        { text: 'Weddings', href: '#' },
-        { text: 'Private Parties', href: '#' },
-        { text: 'Virtual Events', href: '#' },
-        { text: 'Catering', href: '#' }
-      ]
-    },
-    {
-      title: 'Platform',
-      links: [
-        { text: 'Event Planning', href: '#' }
-      ]
-    },
-    {
-      title: 'Company',
-      links: [
-        { text: 'About Us', href: '#' },
-        { text: 'Careers', href: '#' }
-      ]
-    },
-    {
-      title: 'Support',
-      links: []
-    }
-  ];
+  {
+    title: 'Services',
+    links: [
+      { text: 'Corporate Events', href: '#' },
+      { text: 'Weddings', href: '#' },
+      { text: 'Private Parties', href: '#' },
+      { text: 'Virtual Events', href: '#' },
+      { text: 'Catering', href: '#' }
+    ]
+  },
+  {
+    title: 'Platform',
+    links: [
+      { text: 'Event Planning', href: '/event-planning' }
+    ]
+  },
+  {
+    title: 'Company',
+    links: [
+      { text: 'About Us', href: '#' },
+      { text: 'Careers', href: '#' }
+    ]
+  },
+  {
+    title: 'Support',
+    links: [
+      { text: 'Contact Us', href: '/contact-us' },
+      { text: 'Refund Policy', href: '/refund-policy' },
+      { text: 'Cancellation Policy', href: '/cancellation-policy' }
+    ]
+  }
+];
+
 
   const socialMedia = [
     { icon: '📘', label: 'Facebook', href: '#' },
@@ -163,11 +168,11 @@ const Home = () => {
       <nav className={`nav-container ${scrolled ? 'scrolled' : ''}`}>
         <div className="nav">
           <a href="#" className="logo" onClick={handleLogoClick}>
-            <img src={tendrLogo} alt="Tendr - We Curate You Celebrate" className="logo-img" />
+            <img src={tendrLogo} alt="tendr - We Curate You Celebrate" className="logo-img" />
           </a>
           <div className="nav-buttons">
             <a 
-              href="https://wa.me/1234567890" 
+              href="https://wa.me/9211668427" 
               className="contact-icon whatsapp-icon" 
               target="_blank" 
               rel="noopener noreferrer"
@@ -283,7 +288,7 @@ const Home = () => {
       <section className="partner-section">
         <div className="partner-content">
           <h2>Become a Partner</h2>
-          <p>3 easy steps to join the Tendr!</p>
+          <p>3 easy steps to join the tendr!</p>
           <a href="#start" className="partner-btn" onClick={handlePartnerClick}>
             Start Here
           </a>
@@ -293,43 +298,76 @@ const Home = () => {
 
       {/* Footer */}
       <footer className="footer">
-        <div className="footer-container">
-          <div className="footer-content">
-            {footerSections.map((section, index) => (
-              <div key={index} className="footer-section">
-                <h4>{section.title}</h4>
-                <ul>
-                  {section.links.map((link, linkIndex) => (
-                    <li key={linkIndex}>
-                      <a href={link.href}>
-                        {link.text}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-          
-          {/* Social Media */}
-          <div className="social-media">
-            {socialMedia.map((social, index) => (
-              <a 
-                key={index}
-                href={social.href} 
-                className="social-icon" 
-                aria-label={social.label}
-              >
-                {social.icon}
-              </a>
-            ))}
-          </div>
-          
-          <div className="footer-bottom">
-            <p>&copy; 2025 Tendr. All rights reserved. | Privacy Policy | Terms of Service</p>
-          </div>
-        </div>
-      </footer>
+  <div className="footer-container">
+
+    {/* Left Column */}
+    <div className="footer-brand">
+      <h1>TENDR</h1>
+      <p>Empowering your celebrations with curated planning and unforgettable experiences.</p>
+      <br />
+      <p><strong>Email:</strong> <a href="mailto:contacttendr@gmail.com">contacttendr@gmail.com</a></p>
+      <p><strong>Phone:</strong> +91-9211668427</p>
+      <p><strong>Address:</strong> DELHI NCR</p>
+      <button className="back-to-top">↑ Back to Top</button>
+    </div>
+
+    {/* Services */}
+    <div className="footer-col">
+      <h3>Services</h3>
+      <ul>
+        <li><a href="#">Corporate Events</a></li>
+        <li><a href="#">Photography</a></li>
+        <li><a href="#">Private Parties</a></li>
+        <li><a href="#">Decoration</a></li>
+        <li><a href="#">Catering</a></li>
+        <li><a href="#">DJ</a></li>
+      </ul>
+    </div>
+
+    {/* Platform */}
+    <div className="footer-col">
+      <h3>Platform</h3>
+      <ul>
+        <li><a href="#">Event Planning</a></li>
+      </ul>
+    </div>
+
+    {/* Company */}
+    <div className="footer-col">
+      <h3>Company</h3>
+      <ul>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Careers</a></li>
+      </ul>
+    </div>
+
+    {/* Support */}
+    
+  <div className="footer-col">
+  <h3>Support</h3>
+  <ul>
+    <li><a href="/contact-us">Contact Us</a></li>
+    <li><a href="/refund-policy">Refund Policy</a></li>
+    <li><a href="/cancellation-policy">Cancellation Policy</a></li>
+  </ul>
+</div>
+</div>
+
+
+  {/* Social Media */}
+  <div className="footer-social">
+    <a href="#"><i className="icon">📘</i></a>
+    <a href="#"><i className="icon">📸</i></a>
+    <a href="#"><i className="icon">🐦</i></a>
+    <a href="#"><i className="icon">🎥</i></a>
+  </div>
+
+  {/* Bottom */}
+  <div className="footer-bottom">
+    <p>© 2025 tendr. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+  </div>
+</footer>
+
     </div>
   );
 };
