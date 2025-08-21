@@ -1,6 +1,15 @@
 import React from "react";
 
-const PrimaryFilters_ListingPage = ({ filters, onFilterChange }) => {
+const PrimaryFilters_ListingPage = ({ filters = {}, onFilterChange = () => {} }) => {
+  const {
+    eventType = "",
+    date = "",
+    guestCount = "",
+    minBudget = "",
+    maxBudget = "",
+    sortBy = "rankingScore",
+  } = filters;
+
   return (
     <div className="primary-filters space-y-4 sm:space-y-6">
       {/* Event Type */}
@@ -9,7 +18,7 @@ const PrimaryFilters_ListingPage = ({ filters, onFilterChange }) => {
           Event Type
         </label>
         <select
-          value={filters.eventType || ""}
+          value={eventType}
           onChange={(e) => onFilterChange("eventType", e.target.value)}
           className="w-full px-3 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#CCAB4A] focus:border-[#CCAB4A] text-sm sm:text-base"
         >
@@ -33,7 +42,7 @@ const PrimaryFilters_ListingPage = ({ filters, onFilterChange }) => {
         </label>
         <input
           type="date"
-          value={filters.date || ""}
+          value={date}
           onChange={(e) => onFilterChange("date", e.target.value)}
           className="w-full px-3 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#CCAB4A] focus:border-[#CCAB4A] text-sm sm:text-base"
         />
@@ -47,7 +56,7 @@ const PrimaryFilters_ListingPage = ({ filters, onFilterChange }) => {
         <input
           type="number"
           min="1"
-          value={filters.guestCount || ""}
+          value={guestCount ?? ""}  // preserves 0 if ever needed
           onChange={(e) => onFilterChange("guestCount", e.target.value)}
           placeholder="Enter guest count"
           className="w-full px-3 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#CCAB4A] focus:border-[#CCAB4A] text-sm sm:text-base"
@@ -63,7 +72,7 @@ const PrimaryFilters_ListingPage = ({ filters, onFilterChange }) => {
           <input
             type="number"
             min="0"
-            value={filters.minBudget || ""}
+            value={minBudget ?? ""}  // ✅ use ?? to keep 0
             onChange={(e) => onFilterChange("minBudget", e.target.value)}
             placeholder="Min"
             className="px-3 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#CCAB4A] focus:border-[#CCAB4A] text-sm sm:text-base"
@@ -71,7 +80,7 @@ const PrimaryFilters_ListingPage = ({ filters, onFilterChange }) => {
           <input
             type="number"
             min="0"
-            value={filters.maxBudget || ""}
+            value={maxBudget ?? ""}  // ✅ use ?? to keep 0
             onChange={(e) => onFilterChange("maxBudget", e.target.value)}
             placeholder="Max"
             className="px-3 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#CCAB4A] focus:border-[#CCAB4A] text-sm sm:text-base"
@@ -85,7 +94,7 @@ const PrimaryFilters_ListingPage = ({ filters, onFilterChange }) => {
           Sort By
         </label>
         <select
-          value={filters.sortBy || "rankingScore"}
+          value={sortBy}
           onChange={(e) => onFilterChange("sortBy", e.target.value)}
           className="w-full px-3 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#CCAB4A] focus:border-[#CCAB4A] text-sm sm:text-base"
         >
