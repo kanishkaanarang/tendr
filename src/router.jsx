@@ -14,6 +14,7 @@ import VendorList from './pages/customer/VendorList';
 import VendorDetails from './pages/customer/VendorDetails';
 import Chat from './pages/customer/Chat';
 
+import AdminDashboard from './pages/admin/Dashboard';
 import VendorOnboarding from './pages/vendor/Onboarding';
 import VendorDashboard from './pages/vendor/Dashboard';
 import VendorChatList from './pages/vendor/ChatList';
