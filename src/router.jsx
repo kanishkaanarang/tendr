@@ -7,10 +7,8 @@ import VendorRegistration from './pages/vendor/Registration';
 import EventPlanning from './pages/customer/EventPlanning';
 import NotFound from './pages/shared/NotFound';
 import ErrorPage from './components/ErrorPage';
-
-import CorporateLogin from "./pages/corporate/Login";
-import CorporateSignUp from "./pages/corporate/SignUp";
-
+import CorporateLogin from "./pages/corporate/Login.jsx";
+import CorporateSignup from "./pages/corporate/SignUp.jsx";
 import OtpPage from './pages/customer/OtpVerification';
 import VendorList from './pages/customer/VendorList';
 import VendorDetails from './pages/customer/VendorDetails';
@@ -23,7 +21,13 @@ import VendorChat from './pages/vendor/Chat';
 
 import CorporateBooking from './pages/corporate/Booking';
 import UserDashboard from './pages/customer/Dashboard';
-import AdminDashboard from './pages/admin/Dashboard';
+
+import RefundPolicy from './pages/info/RefundPolicy';
+import CancellationPolicy from './pages/info/CancellationPolicy';
+import ContactUs from './pages/info/ContactUs.jsx';
+
+
+
 
 const router = createBrowserRouter([
   {
@@ -113,6 +117,27 @@ const router = createBrowserRouter([
     element: <NotFound />,
     errorElement: <ErrorPage />,
   },
+  {
+  path: '/contact-us',
+  element: <ContactUs />,
+  errorElement: <ErrorPage />,
+},
+{
+  path: '/refund-policy',
+  element: <RefundPolicy />,
+  errorElement: <ErrorPage />,
+},
+{
+  path: '/cancellation-policy',
+  element: <CancellationPolicy />,
+  errorElement: <ErrorPage />,
+},
+{
+  path: '/event-planning',
+  element: <EventPlanning />,
+  errorElement: <ErrorPage />,
+},
+
 ]);
 
 export default router;

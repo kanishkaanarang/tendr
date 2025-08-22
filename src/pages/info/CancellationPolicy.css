@@ -1,0 +1,77 @@
+/* Make the whole page background match */
+body {
+  margin: 0;
+  padding: 0;
+  background: #2e1b0f; /* deep coffee brown */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Policy Section */
+.policy-container {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #2e1b0f; /* same as body */
+  min-height: 100vh;   /* full viewport height */
+}
+
+/* Title */
+.policy-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: #f1d7a5; /* soft golden beige */
+  letter-spacing: 1px;
+}
+
+/* Card */
+.policy-card {
+  background: #2e1b0f; /* slightly lighter brown for contrast */
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+  max-width: 800px;
+  width: 100%;
+}
+
+/* Headings inside card */
+.policy-card h2 {
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #f6e5c6; /* warm cream */
+}
+
+/* List styling */
+.policy-list {
+  list-style: none;
+  padding-left: 1rem;
+  margin: 0.5rem 0 1rem 0;
+}
+
+.policy-list li {
+  margin: 0.75rem 0;
+  padding-left: 1.5rem;
+  position: relative;
+  color: #e0cda3; /* subtle beige text */
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.policy-list li::before {
+  content: "✔";
+  color: #f0a500; /* warm gold accent */
+  font-weight: bold;
+  position: absolute;
+  left: 0;
+}
+
+/* Paragraphs */
+.policy-card p {
+  color: #d8c3a5; /* soft muted beige */
+  font-size: 1rem;
+  line-height: 1.7;
+}

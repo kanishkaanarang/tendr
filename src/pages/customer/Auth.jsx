@@ -118,7 +118,7 @@ const Auth = () => {
             />
           </div>
 
-          <h2 className="text-xl sm:text-2xl font-bold text-center mb-3 sm:mb-4 sm:mb-6 text-gray-800">
+          <h2 className="text-xl sm:text-2xl font-bold text-center mb-3 sm:mb-4 text-gray-800">
             {isSignup ? "Welcome to tendr!" : "Sign in to tendr!"}
           </h2>
 
