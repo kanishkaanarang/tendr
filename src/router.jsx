@@ -1,12 +1,10 @@
 // src/router.jsx
 import { createBrowserRouter } from 'react-router-dom';
 
+import Home from './pages/Home/Home';
 import Auth from './pages/customer/Auth';
 import VendorRegistration from './pages/vendor/Registration';
 import EventPlanning from './pages/customer/EventPlanning';
-// import { createBrowserRouter } from 'react-router-dom';
-
-import Home from './pages/Home/Home';
 import NotFound from './pages/shared/NotFound';
 import ErrorPage from './components/ErrorPage';
 import CorporateLogin from "./pages/corporate/Login.jsx";
@@ -15,10 +13,12 @@ import OtpPage from './pages/customer/OtpVerification';
 import VendorList from './pages/customer/VendorList';
 import VendorDetails from './pages/customer/VendorDetails';
 import Chat from './pages/customer/Chat';
+
 import VendorOnboarding from './pages/vendor/Onboarding';
 import VendorDashboard from './pages/vendor/Dashboard';
 import VendorChatList from './pages/vendor/ChatList';
 import VendorChat from './pages/vendor/Chat';
+
 import CorporateBooking from './pages/corporate/Booking';
 import UserDashboard from './pages/customer/Dashboard';
 
@@ -30,70 +30,65 @@ import ContactUs from './pages/info/ContactUs.jsx';
 
 
 const router = createBrowserRouter([
-  { 
-    path: '/', 
+  {
+    path: '/',
     element: <Home />,
-    errorElement: <ErrorPage />
-  },
-  { 
-    path: '/corporate-login', 
-    element: <CorporateLogin />,
-    errorElement: <ErrorPage />
-  },
-  { 
-    path: '/corporate-signup', 
-    element: <CorporateSignup- />,
-    errorElement: <ErrorPage />
- },
-  { 
-    path: '*', 
-    element: <NotFound />,
-    errorElement: <ErrorPage />
+    errorElement: <ErrorPage />,
   },
   {
-    path: '/VendorRegistration', 
+    path: '/AdminDashboard',
+    element: <AdminDashboard />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: '/UserDashboard',
+    element: <UserDashboard />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: '/corporate-login',
+    element: <CorporateLogin />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: '/corporate-signup',
+    element: <CorporateSignUp />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: '/VendorRegistration',
     element: <VendorRegistration />,
-    errorElement: <ErrorPage />
+    errorElement: <ErrorPage />,
   },
-  { 
-    path: '/chat', 
+  {
+    path: '/chat',
     element: <Chat />,
-    errorElement: <ErrorPage />
+    errorElement: <ErrorPage />,
   },
-  { 
-    path: '/VendorDetails', 
+  {
+    path: '/vendor/:id',
     element: <VendorDetails />,
-    errorElement: <ErrorPage />
+    errorElement: <ErrorPage />,
   },
-  { 
-    path: '/vendor/:id', 
-    element: <VendorDetails />,
-    errorElement: <ErrorPage />
-  },
-  { 
-    path: '/listings', 
+  {
+    path: '/listings',
     element: <VendorList />,
-    errorElement: <ErrorPage />
+    errorElement: <ErrorPage />,
   },
-  { 
-    path: '/corporate-signup', 
-    element: <CorporateSignup />,
-    errorElement: <ErrorPage />
-  },
-  { 
-    path: '/login', 
+  {
+    path: '/login',
     element: <Auth />,
-    errorElement: <ErrorPage />
+    errorElement: <ErrorPage />,
   },
-  { 
-    path: '/signup', 
+  {
+    path: '/signup',
     element: <Auth />,
-    errorElement: <ErrorPage />
+    errorElement: <ErrorPage />,
   },
-  { 
-    path: '/CorporateBooking', 
+  {
+    path: '/CorporateBooking',
     element: <CorporateBooking />,
-    errorElement: <ErrorPage />
+    errorElement: <ErrorPage />,
   },
   {
     path: '/vendor',
@@ -112,19 +107,14 @@ const router = createBrowserRouter([
       { path: 'form', element: <EventPlanning /> },
     ],
   },
-  { 
-    path: '/otp', 
+  {
+    path: '/otp',
     element: <OtpPage />,
-    errorElement: <ErrorPage />
-  },
-  { 
-    path: '*', 
-    element: <NotFound />,
-    errorElement: <ErrorPage />
+    errorElement: <ErrorPage />,
   },
   {
-    path: '/dashboard',
-    element: <UserDashboard />,
+    path: '*',
+    element: <NotFound />,
     errorElement: <ErrorPage />,
   },
   {
@@ -149,6 +139,5 @@ const router = createBrowserRouter([
 },
 
 ]);
-
 
 export default router;
