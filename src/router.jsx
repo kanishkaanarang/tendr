@@ -9,6 +9,7 @@ import NotFound from './pages/shared/NotFound';
 import ErrorPage from './components/ErrorPage';
 import CorporateLogin from "./pages/corporate/Login.jsx";
 import CorporateSignup from "./pages/corporate/SignUp.jsx";
+
 import OtpPage from './pages/customer/OtpVerification';
 import VendorList from './pages/customer/VendorList';
 import VendorDetails from './pages/customer/VendorDetails';
@@ -53,7 +54,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/corporate-signup',
-    element: <CorporateSignUp />,
+    element: <CorporateSignup />,
     errorElement: <ErrorPage />,
   },
   {
