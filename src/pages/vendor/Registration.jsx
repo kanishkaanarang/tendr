@@ -51,7 +51,7 @@ export default function VendorRegistration() {
       setCitiesError("");
       try {
         console.log("Fetching supported cities...");
-        const response = await fetch("http://localhost:8080/cities", {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/cities`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
