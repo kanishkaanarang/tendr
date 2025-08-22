@@ -68,12 +68,24 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
+    // legacy static route, keep for compatibility
+    path: '/VendorDetails',
+    element: <VendorDetails />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    // preferred dynamic route
     path: '/vendor/:id',
     element: <VendorDetails />,
     errorElement: <ErrorPage />,
   },
   {
     path: '/listings',
+    element: <VendorList />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: '/listings/:vendorType',
     element: <VendorList />,
     errorElement: <ErrorPage />,
   },
@@ -105,9 +117,7 @@ const router = createBrowserRouter([
   {
     path: '/plan-event',
     errorElement: <ErrorPage />,
-    children: [
-      { path: 'form', element: <EventPlanning /> },
-    ],
+    children: [{ path: 'form', element: <EventPlanning /> }],
   },
   {
     path: '/otp',
