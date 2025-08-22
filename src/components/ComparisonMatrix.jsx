@@ -1,13 +1,16 @@
 // src/components/ComparisonMatrix.jsx
 import React from "react";
 
-const Row = ({ label, a, b }) => (
-  <tr className="border-b">
-    <th className="text-left font-medium py-3 pr-4 text-gray-600">{label}</th>
-    <td className="py-3 pr-4">{a ?? "—"}</td>
-    <td className="py-3">{b ?? "—"}</td>
-  </tr>
-);
+const Row = ({ label, a, b }) => {
+  if (!a && !b) return null; // <-- hide row if both are null/empty
+  return (
+    <tr className="border-b">
+      <th className="text-left font-medium py-3 pr-4 text-gray-600">{label}</th>
+      <td className="py-3 pr-4">{a ?? "—"}</td>
+      <td className="py-3">{b ?? "—"}</td>
+    </tr>
+  );
+};
 
 const fmtINR = (p) =>
   p == null || p === "" ? null : `₹${Number(p).toLocaleString("en-IN")}`;
@@ -17,10 +20,10 @@ const join = (v, sep = ", ") =>
 
 /* ---------- helpers mapped to YOUR schema ---------- */
 const getLocation = (v) => {
-  if (v?.location) return v.location;                     // simple string if present
-  if (Array.isArray(v?.locations) && v.locations.length)  // array of cities
+  if (v?.location) return v.location;
+  if (Array.isArray(v?.locations) && v.locations.length)
     return join(v.locations);
-  const { street, city, state } = v?.address || {};       // nested address
+  const { street, city, state } = v?.address || {};
   const parts = [street, city, state].filter(Boolean);
   return parts.length ? parts.join(", ") : null;
 };
@@ -51,6 +54,10 @@ const getPortfolioCount = (v) =>
   Array.isArray(v?.portfolioPhotos) ? v.portfolioPhotos.length : null;
 const getResponseTime = (v) => v?.responseTime ?? v?.avgResponseTime ?? null;
 const getName = (v) => v?.name ?? v?.businessName ?? "Vendor";
+
+const getTeamSize = (v) => v?.teamSize ?? null;
+const getEvents = (v) => v?.totalEventsCompleted ?? null;
+const getExperience = (v) => v?.yearsOfExperience ?? null;
 /* --------------------------------------------------- */
 
 const ComparisonMatrix = ({ vendors = [] }) => {
@@ -69,6 +76,9 @@ const ComparisonMatrix = ({ vendors = [] }) => {
     coverage: getCoverage(A),
     portfolioCount: getPortfolioCount(A),
     responseTime: getResponseTime(A),
+    teamSize: getTeamSize(A),
+    events: getEvents(A),
+    experience: getExperience(A),
   };
 
   const vb = {
@@ -84,6 +94,9 @@ const ComparisonMatrix = ({ vendors = [] }) => {
     coverage: getCoverage(B),
     portfolioCount: getPortfolioCount(B),
     responseTime: getResponseTime(B),
+    teamSize: getTeamSize(B),
+    events: getEvents(B),
+    experience: getExperience(B),
   };
 
   return (
@@ -108,6 +121,9 @@ const ComparisonMatrix = ({ vendors = [] }) => {
           <Row label="Venue Coverage" a={va.coverage} b={vb.coverage} />
           <Row label="Portfolio Photos" a={va.portfolioCount} b={vb.portfolioCount} />
           <Row label="Typical Response Time" a={va.responseTime} b={vb.responseTime} />
+          <Row label="Team Size" a={va.teamSize} b={vb.teamSize} />
+          <Row label="Total Events Covered" a={va.events} b={vb.events} />
+          <Row label="Years of Experience" a={va.experience} b={vb.experience} />
         </tbody>
       </table>
 

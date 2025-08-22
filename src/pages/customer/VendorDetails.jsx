@@ -99,8 +99,6 @@ const VendorDetailsPage = () => {
   const maxConcurrentEvents = vendor?.maxConcurrentEvents ?? null;
 
   const isPhoneVerified = !!vendor?.phoneVerified;
-  const gstNumber = vendor?.gstNumber || null;
-  const panNumber = vendor?.panNumber || null;
 
   const filtersData = {
     guest: 100,
@@ -313,16 +311,7 @@ const VendorDetailsPage = () => {
                   <CheckCircle2 className="w-3 h-3" /> Phone verified
                 </span>
               )}
-              {gstNumber && (
-                <span className="inline-flex items-center gap-1 text-xs font-medium px-3 py-1 rounded-full border border-indigo-500 text-indigo-700 bg-indigo-50">
-                  GST: {gstNumber}
-                </span>
-              )}
-              {panNumber && (
-                <span className="inline-flex items-center gap-1 text-xs font-medium px-3 py-1 rounded-full border border-purple-500 text-purple-700 bg-purple-50">
-                  PAN: {panNumber}
-                </span>
-              )}
+              
               {maxConcurrentEvents != null && (
                 <span className="inline-flex items-center gap-1 text-xs font-medium px-3 py-1 rounded-full border border-amber-500 text-amber-700 bg-amber-50">
                   <Users className="w-3 h-3" /> {maxConcurrentEvents} events concurrently
@@ -345,7 +334,7 @@ const VendorDetailsPage = () => {
 
             {/* Contact & Service Areas */}
             <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="rounded-2xl border border-[#CCAB4A] p-4">
+              {/* <div className="rounded-2xl border border-[#CCAB4A] p-4">
                 <div className="font-semibold text-lg mb-2 flex items-center gap-2">
                   <Phone className="w-4 h-4" /> Contact
                 </div>
@@ -359,7 +348,7 @@ const VendorDetailsPage = () => {
                     }`
                     : "—"}
                 </div>
-              </div>
+              </div> */}
 
               <div className="rounded-2xl border border-[#CCAB4A] p-4">
                 <div className="font-semibold text-lg mb-2">Service Areas</div>
