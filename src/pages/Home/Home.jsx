@@ -37,7 +37,7 @@ const Home = () => {
   };
 
   const handleBookingClick = () => {
-    navigate('/plan-event/form');
+    navigate('/booking');
   };
 
   const handlePartnerClick = () => {
@@ -121,38 +121,38 @@ const Home = () => {
   ];
 
   const footerSections = [
-  {
-    title: 'Services',
-    links: [
-      { text: 'Corporate Events', href: '#' },
-      { text: 'Weddings', href: '#' },
-      { text: 'Private Parties', href: '#' },
-      { text: 'Virtual Events', href: '#' },
-      { text: 'Catering', href: '#' }
-    ]
-  },
-  {
-    title: 'Platform',
-    links: [
-      { text: 'Event Planning', href: '/event-planning' }
-    ]
-  },
-  {
-    title: 'Company',
-    links: [
-      { text: 'About Us', href: '#' },
-      { text: 'Careers', href: '#' }
-    ]
-  },
-  {
-    title: 'Support',
-    links: [
-      { text: 'Contact Us', href: '/contact-us' },
-      { text: 'Refund Policy', href: '/refund-policy' },
-      { text: 'Cancellation Policy', href: '/cancellation-policy' }
-    ]
-  }
-];
+    {
+      title: 'Services',
+      links: [
+        { text: 'Corporate Events', href: '#' },
+        { text: 'Weddings', href: '#' },
+        { text: 'Private Parties', href: '#' },
+        { text: 'Virtual Events', href: '#' },
+        { text: 'Catering', href: '#' }
+      ]
+    },
+    {
+      title: 'Platform',
+      links: [
+        { text: 'Event Planning', href: '/event-planning' }
+      ]
+    },
+    {
+      title: 'Company',
+      links: [
+        { text: 'About Us', href: '#' },
+        { text: 'Careers', href: '#' }
+      ]
+    },
+    {
+      title: 'Support',
+      links: [
+        { text: 'Contact Us', href: '/contact-us' },
+        { text: 'Refund Policy', href: '/refund-policy' },
+        { text: 'Cancellation Policy', href: '/cancellation-policy' }
+      ]
+    }
+  ];
 
 
   const socialMedia = [
@@ -171,10 +171,10 @@ const Home = () => {
             <img src={tendrLogo} alt="tendr - We Curate You Celebrate" className="logo-img" />
           </a>
           <div className="nav-buttons">
-            <a 
-              href="https://wa.me/9211668427" 
-              className="contact-icon whatsapp-icon" 
-              target="_blank" 
+            <a
+              href="https://wa.me/9211668427"
+              className="contact-icon whatsapp-icon"
+              target="_blank"
               rel="noopener noreferrer"
               onClick={handleWhatsAppClick}
             >
@@ -196,9 +196,14 @@ const Home = () => {
           <div className="hero-content">
             <h1>Experience Event Planning</h1>
             <p className="hero-subtitle">We Curate You Celebrate</p>
-            <a href="/plan-event/form" className="cta-button" onClick={handleBookingClick}>
+            <a
+              // href="/booking"
+              className="cta-button"
+              onClick={handleBookingClick}
+            >
               Booking
             </a>
+
           </div>
         </div>
       </section>
@@ -210,8 +215,8 @@ const Home = () => {
           <div className="services-grid">
             {services.map((service) => (
               <div key={service.id} className="service-card">
-                <div 
-                  className="service-image" 
+                <div
+                  className="service-image"
                   style={{ backgroundImage: `url('${service.image}')` }}
                 ></div>
                 <h3>{service.title}</h3>
@@ -229,8 +234,8 @@ const Home = () => {
               <span className="corporate-badge">Professional Services</span>
               <h2 className="corporate-title">Corporate Event Planning</h2>
               <p className="corporate-description">
-                Elevate your business events with our comprehensive corporate planning services. 
-                From executive meetings to large-scale conferences, we handle every detail with 
+                Elevate your business events with our comprehensive corporate planning services.
+                From executive meetings to large-scale conferences, we handle every detail with
                 professional excellence.
               </p>
               <div className="corporate-features">
@@ -249,10 +254,10 @@ const Home = () => {
               </a>
             </div>
             <div className="corporate-image">
-              <div 
-                className="corporate-img" 
-                style={{ 
-                  backgroundImage: `url('https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600&h=500&fit=crop')` 
+              <div
+                className="corporate-img"
+                style={{
+                  backgroundImage: `url('https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600&h=500&fit=crop')`
                 }}
               ></div>
             </div>
@@ -270,8 +275,8 @@ const Home = () => {
           <div className="events-grid">
             {events.map((event) => (
               <div key={event.id} className="event-card">
-                <div 
-                  className="event-image" 
+                <div
+                  className="event-image"
                   style={{ backgroundImage: `url('${event.image}')` }}
                 >
                   <div className="event-overlay">
@@ -298,75 +303,75 @@ const Home = () => {
 
       {/* Footer */}
       <footer className="footer">
-  <div className="footer-container">
+        <div className="footer-container">
 
-    {/* Left Column */}
-    <div className="footer-brand">
-      <h1>TENDR</h1>
-      <p>Empowering your celebrations with curated planning and unforgettable experiences.</p>
-      <br />
-      <p><strong>Email:</strong> <a href="mailto:contacttendr@gmail.com">contacttendr@gmail.com</a></p>
-      <p><strong>Phone:</strong> +91-9211668427</p>
-      <p><strong>Address:</strong> DELHI NCR</p>
-      <button className="back-to-top">↑ Back to Top</button>
-    </div>
+          {/* Left Column */}
+          <div className="footer-brand">
+            <h1>TENDR</h1>
+            <p>Empowering your celebrations with curated planning and unforgettable experiences.</p>
+            <br />
+            <p><strong>Email:</strong> <a href="mailto:contacttendr@gmail.com">contacttendr@gmail.com</a></p>
+            <p><strong>Phone:</strong> +91-9211668427</p>
+            <p><strong>Address:</strong> DELHI NCR</p>
+            <button className="back-to-top">↑ Back to Top</button>
+          </div>
 
-    {/* Services */}
-    <div className="footer-col">
-      <h3>Services</h3>
-      <ul>
-        <li><a href="#">Corporate Events</a></li>
-        <li><a href="#">Photography</a></li>
-        <li><a href="#">Private Parties</a></li>
-        <li><a href="#">Decoration</a></li>
-        <li><a href="#">Catering</a></li>
-        <li><a href="#">DJ</a></li>
-      </ul>
-    </div>
+          {/* Services */}
+          <div className="footer-col">
+            <h3>Services</h3>
+            <ul>
+              <li><a href="#">Corporate Events</a></li>
+              <li><a href="#">Photography</a></li>
+              <li><a href="#">Private Parties</a></li>
+              <li><a href="#">Decoration</a></li>
+              <li><a href="#">Catering</a></li>
+              <li><a href="#">DJ</a></li>
+            </ul>
+          </div>
 
-    {/* Platform */}
-    <div className="footer-col">
-      <h3>Platform</h3>
-      <ul>
-        <li><a href="#">Event Planning</a></li>
-      </ul>
-    </div>
+          {/* Platform */}
+          <div className="footer-col">
+            <h3>Platform</h3>
+            <ul>
+              <li><a href="#">Event Planning</a></li>
+            </ul>
+          </div>
 
-    {/* Company */}
-    <div className="footer-col">
-      <h3>Company</h3>
-      <ul>
-        <li><a href="#">About Us</a></li>
-        <li><a href="#">Careers</a></li>
-      </ul>
-    </div>
+          {/* Company */}
+          <div className="footer-col">
+            <h3>Company</h3>
+            <ul>
+              <li><a href="#">About Us</a></li>
+              <li><a href="#">Careers</a></li>
+            </ul>
+          </div>
 
-    {/* Support */}
-    
-  <div className="footer-col">
-  <h3>Support</h3>
-  <ul>
-    <li><a href="/contact-us">Contact Us</a></li>
-    <li><a href="/refund-policy">Refund Policy</a></li>
-    <li><a href="/cancellation-policy">Cancellation Policy</a></li>
-  </ul>
-</div>
-</div>
+          {/* Support */}
+
+          <div className="footer-col">
+            <h3>Support</h3>
+            <ul>
+              <li><a href="/contact-us">Contact Us</a></li>
+              <li><a href="/refund-policy">Refund Policy</a></li>
+              <li><a href="/cancellation-policy">Cancellation Policy</a></li>
+            </ul>
+          </div>
+        </div>
 
 
-  {/* Social Media */}
-  <div className="footer-social">
-    <a href="#"><i className="icon">📘</i></a>
-    <a href="#"><i className="icon">📸</i></a>
-    <a href="#"><i className="icon">🐦</i></a>
-    <a href="#"><i className="icon">🎥</i></a>
-  </div>
+        {/* Social Media */}
+        <div className="footer-social">
+          <a href="#"><i className="icon">📘</i></a>
+          <a href="#"><i className="icon">📸</i></a>
+          <a href="#"><i className="icon">🐦</i></a>
+          <a href="#"><i className="icon">🎥</i></a>
+        </div>
 
-  {/* Bottom */}
-  <div className="footer-bottom">
-    <p>© 2025 tendr. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
-  </div>
-</footer>
+        {/* Bottom */}
+        <div className="footer-bottom">
+          <p>© 2025 tendr. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+        </div>
+      </footer>
 
     </div>
   );

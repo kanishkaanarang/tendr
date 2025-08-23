@@ -28,6 +28,9 @@ import RefundPolicy from './pages/info/RefundPolicy';
 import CancellationPolicy from './pages/info/CancellationPolicy';
 import ContactUs from './pages/info/ContactUs.jsx';
 
+import ChooseBooking from "./pages/customer/ChooseBooking";
+import AltBookingFlow from "./pages/customer/AltBookingFlow";
+
 
 
 
@@ -120,6 +123,17 @@ const router = createBrowserRouter([
     children: [{ path: 'form', element: <EventPlanning /> }],
   },
   {
+    path: '/booking',
+    element: <ChooseBooking />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: '/booking/alt',
+    element: <AltBookingFlow />,
+    errorElement: <ErrorPage />,
+  },
+
+  {
     path: '/otp',
     element: <OtpPage />,
     errorElement: <ErrorPage />,
@@ -130,25 +144,25 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
-  path: '/contact-us',
-  element: <ContactUs />,
-  errorElement: <ErrorPage />,
-},
-{
-  path: '/refund-policy',
-  element: <RefundPolicy />,
-  errorElement: <ErrorPage />,
-},
-{
-  path: '/cancellation-policy',
-  element: <CancellationPolicy />,
-  errorElement: <ErrorPage />,
-},
-{
-  path: '/event-planning',
-  element: <EventPlanning />,
-  errorElement: <ErrorPage />,
-},
+    path: '/contact-us',
+    element: <ContactUs />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: '/refund-policy',
+    element: <RefundPolicy />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: '/cancellation-policy',
+    element: <CancellationPolicy />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: '/event-planning',
+    element: <EventPlanning />,
+    errorElement: <ErrorPage />,
+  },
 
 ]);
 
