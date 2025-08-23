@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Home.css';
 import tendrLogo from '../../assets/logos/tendr-logo-secondary.png';
+import PlatformFlow from "../../components/PlatformFlow";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -259,6 +260,7 @@ const Home = () => {
           </div>
         </div>
       </section>
+      <PlatformFlow />
 
       {/* Events Gallery */}
       <section className="events-section" id="events">
