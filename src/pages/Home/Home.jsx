@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Home.css';
 import tendrLogo from '../../assets/logos/tendr-logo-secondary.png';
+import PlatformFlow from "../../components/PlatformFlow";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -33,13 +34,13 @@ const Home = () => {
   };
 
   const handleSignUpClick = () => {
-    navigate('/signup');
   };
 
   const handleBookingClick = () => {
     navigate('/booking');
   };
 
+  const handlePartnerClick = () => {
   const handlePartnerClick = () => {
     navigate('/vendor/register');
   };
@@ -117,7 +118,6 @@ const Home = () => {
       icon: '🏆',
       title: 'Award Ceremonies',
       description: 'Recognition events and galas'
-    }
   ];
 
   const footerSections = [
@@ -156,6 +156,7 @@ const Home = () => {
 
 
   const socialMedia = [
+  const socialMedia = [
     { icon: '📘', label: 'Facebook', href: '#' },
     { icon: '📷', label: 'Instagram', href: '#' },
     { icon: '🐦', label: 'Twitter', href: '#' },
@@ -167,7 +168,6 @@ const Home = () => {
       {/* Navigation */}
       <nav className={`nav-container ${scrolled ? 'scrolled' : ''}`}>
         <div className="nav">
-          <a href="#" className="logo" onClick={handleLogoClick}>
             <img src={tendrLogo} alt="tendr - We Curate You Celebrate" className="logo-img" />
           </a>
           <div className="nav-buttons">
@@ -177,6 +177,7 @@ const Home = () => {
               target="_blank"
               rel="noopener noreferrer"
               onClick={handleWhatsAppClick}
+            >
             >
               💬
             </a>
@@ -192,7 +193,6 @@ const Home = () => {
 
       {/* Hero Section */}
       <section className="hero">
-        <div className="hero-container">
           <div className="hero-content">
             <h1>Experience Event Planning</h1>
             <p className="hero-subtitle">We Curate You Celebrate</p>
@@ -207,11 +207,11 @@ const Home = () => {
           </div>
         </div>
       </section>
+      </section>
 
       {/* Services Section */}
       <section className="services-section" id="services">
         <div className="services-container">
-          <h2 className="section-title">Explore Services</h2>
           <div className="services-grid">
             {services.map((service) => (
               <div key={service.id} className="service-card">
@@ -219,6 +219,7 @@ const Home = () => {
                   className="service-image"
                   style={{ backgroundImage: `url('${service.image}')` }}
                 ></div>
+                <h3>{service.title}</h3>
                 <h3>{service.title}</h3>
               </div>
             ))}
@@ -230,7 +231,6 @@ const Home = () => {
       <section className="corporate-booking-section">
         <div className="corporate-container">
           <div className="corporate-content">
-            <div className="corporate-text">
               <span className="corporate-badge">Professional Services</span>
               <h2 className="corporate-title">Corporate Event Planning</h2>
               <p className="corporate-description">
@@ -238,6 +238,7 @@ const Home = () => {
                 From executive meetings to large-scale conferences, we handle every detail with
                 professional excellence.
               </p>
+              <div className="corporate-features">
               <div className="corporate-features">
                 {features.map((feature) => (
                   <div key={feature.id} className="feature-item">
@@ -250,7 +251,6 @@ const Home = () => {
                 ))}
               </div>
               <a href="#corporate-contact" className="corporate-btn" onClick={handleCorporateClick}>
-                Book Corporate Events
               </a>
             </div>
             <div className="corporate-image">
@@ -261,23 +261,25 @@ const Home = () => {
                 }}
               ></div>
             </div>
+            </div>
           </div>
         </div>
       </section>
+      <PlatformFlow />
 
       {/* Events Gallery */}
       <section className="events-section" id="events">
         <div className="events-container">
           <div className="events-header">
             <p className="events-subtitle">A tour of events we have executed.</p>
-            <h2 className="events-title">A Glimpse Into Our Events</h2>
-          </div>
           <div className="events-grid">
             {events.map((event) => (
               <div key={event.id} className="event-card">
                 <div
                   className="event-image"
                   style={{ backgroundImage: `url('${event.image}')` }}
+                >
+                  <div className="event-overlay">
                 >
                   <div className="event-overlay">
                     <h3>{event.title}</h3>
@@ -298,8 +300,6 @@ const Home = () => {
             Start Here
           </a>
           <div className="partner-visual"></div>
-        </div>
-      </section>
 
       {/* Footer */}
       <footer className="footer">
@@ -373,6 +373,8 @@ const Home = () => {
         </div>
       </footer>
 
+    </div>
+  );
     </div>
   );
 };
