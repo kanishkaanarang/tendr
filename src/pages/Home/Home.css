@@ -76,7 +76,7 @@ body {
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
-.whatsapp-icon {
+/* .whatsapp-icon {
     background: linear-gradient(145deg, #10b981, #059669);
     color: white;
 }
@@ -84,6 +84,34 @@ body {
 .whatsapp-icon:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+} */
+
+.whatsapp-icon {
+  background: #25d366;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  cursor: pointer;
+  margin-right: 12px;
+  padding: 0;
+  transition: box-shadow 0.2s;
+}
+
+.whatsapp-icon:hover {
+  background: linear-gradient(145deg, #DEB887, #F4A460);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(205, 133, 63, 0.4);
+}
+
+.whatsapp-logo {
+  width: 22px;
+  height: 22px;
+  display: block;
 }
 
 .sign-in {

@@ -26,7 +26,7 @@ const Home = () => {
   };
 
   const handleWhatsAppClick = () => {
-    console.log('WhatsApp button clicked');
+    window.open('https://wa.me/9211668427', '_blank');
   };
 
   const handleSignInClick = () => {
@@ -34,13 +34,13 @@ const Home = () => {
   };
 
   const handleSignUpClick = () => {
+    navigate('/signup');
   };
 
   const handleBookingClick = () => {
     navigate('/booking');
   };
 
-  const handlePartnerClick = () => {
   const handlePartnerClick = () => {
     navigate('/vendor/register');
   };
@@ -118,49 +118,7 @@ const Home = () => {
       icon: '🏆',
       title: 'Award Ceremonies',
       description: 'Recognition events and galas'
-  ];
-
-  const footerSections = [
-    {
-      title: 'Services',
-      links: [
-        { text: 'Corporate Events', href: '#' },
-        { text: 'Weddings', href: '#' },
-        { text: 'Private Parties', href: '#' },
-        { text: 'Virtual Events', href: '#' },
-        { text: 'Catering', href: '#' }
-      ]
-    },
-    {
-      title: 'Platform',
-      links: [
-        { text: 'Event Planning', href: '/event-planning' }
-      ]
-    },
-    {
-      title: 'Company',
-      links: [
-        { text: 'About Us', href: '#' },
-        { text: 'Careers', href: '#' }
-      ]
-    },
-    {
-      title: 'Support',
-      links: [
-        { text: 'Contact Us', href: '/contact-us' },
-        { text: 'Refund Policy', href: '/refund-policy' },
-        { text: 'Cancellation Policy', href: '/cancellation-policy' }
-      ]
     }
-  ];
-
-
-  const socialMedia = [
-  const socialMedia = [
-    { icon: '📘', label: 'Facebook', href: '#' },
-    { icon: '📷', label: 'Instagram', href: '#' },
-    { icon: '🐦', label: 'Twitter', href: '#' },
-    { icon: '💼', label: 'LinkedIn', href: '#' }
   ];
 
   return (
@@ -168,45 +126,38 @@ const Home = () => {
       {/* Navigation */}
       <nav className={`nav-container ${scrolled ? 'scrolled' : ''}`}>
         <div className="nav">
-            <img src={tendrLogo} alt="tendr - We Curate You Celebrate" className="logo-img" />
-          </a>
+          <img src={tendrLogo} alt="tendr - We Curate You Celebrate" className="logo-img" onClick={handleLogoClick} />
           <div className="nav-buttons">
-            <a
-              href="https://wa.me/9211668427"
+            <button
               className="contact-icon whatsapp-icon"
-              target="_blank"
-              rel="noopener noreferrer"
               onClick={handleWhatsAppClick}
+              aria-label="WhatsApp"
             >
-            >
-              💬
-            </a>
-            <a href="/login" className="sign-in" onClick={handleSignInClick}>
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
+                alt="WhatsApp"
+                className="whatsapp-logo"
+              />
+            </button>
+            <button className="sign-in" onClick={handleSignInClick}>
               Sign in
-            </a>
-            <a href="/signup" className="sign-up" onClick={handleSignUpClick}>
+            </button>
+            <button className="sign-up" onClick={handleSignUpClick}>
               Sign Up
-            </a>
+            </button>
           </div>
         </div>
       </nav>
 
       {/* Hero Section */}
       <section className="hero">
-          <div className="hero-content">
-            <h1>Experience Event Planning</h1>
-            <p className="hero-subtitle">We Curate You Celebrate</p>
-            <a
-              // href="/booking"
-              className="cta-button"
-              onClick={handleBookingClick}
-            >
-              Booking
-            </a>
-
-          </div>
+        <div className="hero-content">
+          <h1>Experience Event Planning</h1>
+          <p className="hero-subtitle">We Curate You Celebrate</p>
+          <button className="cta-button" onClick={handleBookingClick}>
+            Booking
+          </button>
         </div>
-      </section>
       </section>
 
       {/* Services Section */}
@@ -220,7 +171,6 @@ const Home = () => {
                   style={{ backgroundImage: `url('${service.image}')` }}
                 ></div>
                 <h3>{service.title}</h3>
-                <h3>{service.title}</h3>
               </div>
             ))}
           </div>
@@ -231,28 +181,27 @@ const Home = () => {
       <section className="corporate-booking-section">
         <div className="corporate-container">
           <div className="corporate-content">
-              <span className="corporate-badge">Professional Services</span>
-              <h2 className="corporate-title">Corporate Event Planning</h2>
-              <p className="corporate-description">
-                Elevate your business events with our comprehensive corporate planning services.
-                From executive meetings to large-scale conferences, we handle every detail with
-                professional excellence.
-              </p>
-              <div className="corporate-features">
-              <div className="corporate-features">
-                {features.map((feature) => (
-                  <div key={feature.id} className="feature-item">
-                    <div className="feature-icon">{feature.icon}</div>
-                    <div className="feature-text">
-                      <h4>{feature.title}</h4>
-                      <p>{feature.description}</p>
-                    </div>
+            <span className="corporate-badge">Professional Services</span>
+            <h2 className="corporate-title">Corporate Event Planning</h2>
+            <p className="corporate-description">
+              Elevate your business events with our comprehensive corporate planning services.
+              From executive meetings to large-scale conferences, we handle every detail with
+              professional excellence.
+            </p>
+            <div className="corporate-features">
+              {features.map((feature) => (
+                <div key={feature.id} className="feature-item">
+                  <div className="feature-icon">{feature.icon}</div>
+                  <div className="feature-text">
+                    <h4>{feature.title}</h4>
+                    <p>{feature.description}</p>
                   </div>
-                ))}
-              </div>
-              <a href="#corporate-contact" className="corporate-btn" onClick={handleCorporateClick}>
-              </a>
+                </div>
+              ))}
             </div>
+            <button className="corporate-btn" onClick={handleCorporateClick}>
+              Corporate Signup
+            </button>
             <div className="corporate-image">
               <div
                 className="corporate-img"
@@ -260,7 +209,6 @@ const Home = () => {
                   backgroundImage: `url('https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600&h=500&fit=crop')`
                 }}
               ></div>
-            </div>
             </div>
           </div>
         </div>
@@ -272,14 +220,13 @@ const Home = () => {
         <div className="events-container">
           <div className="events-header">
             <p className="events-subtitle">A tour of events we have executed.</p>
+          </div>
           <div className="events-grid">
             {events.map((event) => (
               <div key={event.id} className="event-card">
                 <div
                   className="event-image"
                   style={{ backgroundImage: `url('${event.image}')` }}
-                >
-                  <div className="event-overlay">
                 >
                   <div className="event-overlay">
                     <h3>{event.title}</h3>
@@ -296,15 +243,16 @@ const Home = () => {
         <div className="partner-content">
           <h2>Become a Partner</h2>
           <p>3 easy steps to join the tendr!</p>
-          <a href="#start" className="partner-btn" onClick={handlePartnerClick}>
+          <button className="partner-btn" onClick={handlePartnerClick}>
             Start Here
-          </a>
+          </button>
           <div className="partner-visual"></div>
+        </div>
+      </section>
 
       {/* Footer */}
       <footer className="footer">
         <div className="footer-container">
-
           {/* Left Column */}
           <div className="footer-brand">
             <h1>TENDR</h1>
@@ -313,7 +261,7 @@ const Home = () => {
             <p><strong>Email:</strong> <a href="mailto:contacttendr@gmail.com">contacttendr@gmail.com</a></p>
             <p><strong>Phone:</strong> +91-9211668427</p>
             <p><strong>Address:</strong> DELHI NCR</p>
-            <button className="back-to-top">↑ Back to Top</button>
+            <button className="back-to-top" onClick={handleLogoClick}>↑ Back to Top</button>
           </div>
 
           {/* Services */}
@@ -347,7 +295,6 @@ const Home = () => {
           </div>
 
           {/* Support */}
-
           <div className="footer-col">
             <h3>Support</h3>
             <ul>
@@ -357,7 +304,6 @@ const Home = () => {
             </ul>
           </div>
         </div>
-
 
         {/* Social Media */}
         <div className="footer-social">
@@ -372,9 +318,6 @@ const Home = () => {
           <p>© 2025 tendr. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
         </div>
       </footer>
-
-    </div>
-  );
     </div>
   );
 };
