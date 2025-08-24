@@ -9,11 +9,13 @@ import NotFound from './pages/shared/NotFound';
 import ErrorPage from './components/ErrorPage';
 import CorporateLogin from "./pages/corporate/Login.jsx";
 import CorporateSignup from "./pages/corporate/SignUp.jsx";
+
 import OtpPage from './pages/customer/OtpVerification';
 import VendorList from './pages/customer/VendorList';
 import VendorDetails from './pages/customer/VendorDetails';
 import Chat from './pages/customer/Chat';
 
+import AdminDashboard from './pages/admin/Dashboard';
 import VendorOnboarding from './pages/vendor/Onboarding';
 import VendorDashboard from './pages/vendor/Dashboard';
 import VendorChatList from './pages/vendor/ChatList';
@@ -25,6 +27,9 @@ import UserDashboard from './pages/customer/Dashboard';
 import RefundPolicy from './pages/info/RefundPolicy';
 import CancellationPolicy from './pages/info/CancellationPolicy';
 import ContactUs from './pages/info/ContactUs.jsx';
+
+import ChooseBooking from "./pages/customer/ChooseBooking";
+import AltBookingFlow from "./pages/customer/AltBookingFlow";
 
 
 
@@ -52,7 +57,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/corporate-signup',
-    element: <CorporateSignUp />,
+    element: <CorporateSignup />,
     errorElement: <ErrorPage />,
   },
   {
@@ -66,12 +71,24 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
+    // legacy static route, keep for compatibility
+    path: '/VendorDetails',
+    element: <VendorDetails />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    // preferred dynamic route
     path: '/vendor/:id',
     element: <VendorDetails />,
     errorElement: <ErrorPage />,
   },
   {
     path: '/listings',
+    element: <VendorList />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: '/listings/:vendorType',
     element: <VendorList />,
     errorElement: <ErrorPage />,
   },
@@ -103,10 +120,19 @@ const router = createBrowserRouter([
   {
     path: '/plan-event',
     errorElement: <ErrorPage />,
-    children: [
-      { path: 'form', element: <EventPlanning /> },
-    ],
+    children: [{ path: 'form', element: <EventPlanning /> }],
   },
+  {
+    path: '/booking',
+    element: <ChooseBooking />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: '/booking/alt',
+    element: <AltBookingFlow />,
+    errorElement: <ErrorPage />,
+  },
+
   {
     path: '/otp',
     element: <OtpPage />,
@@ -118,25 +144,25 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
-  path: '/contact-us',
-  element: <ContactUs />,
-  errorElement: <ErrorPage />,
-},
-{
-  path: '/refund-policy',
-  element: <RefundPolicy />,
-  errorElement: <ErrorPage />,
-},
-{
-  path: '/cancellation-policy',
-  element: <CancellationPolicy />,
-  errorElement: <ErrorPage />,
-},
-{
-  path: '/event-planning',
-  element: <EventPlanning />,
-  errorElement: <ErrorPage />,
-},
+    path: '/contact-us',
+    element: <ContactUs />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: '/refund-policy',
+    element: <RefundPolicy />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: '/cancellation-policy',
+    element: <CancellationPolicy />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: '/event-planning',
+    element: <EventPlanning />,
+    errorElement: <ErrorPage />,
+  },
 
 ]);
 

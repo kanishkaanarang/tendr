@@ -140,7 +140,7 @@ export const getVendors = async (filters = {}) => {
   if (filters.sortOrder) params.append('sortOrder', filters.sortOrder);
   if (filters.page) params.append('page', filters.page);
   if (filters.limit) params.append('limit', filters.limit);
-  if (filters.serviceFilters) params.append('serviceFilters', JSON.stringify(filters.serviceFilters));
+  // if (filters.serviceFilters) params.append('serviceFilters', JSON.stringify(filters.serviceFilters));
   
 
   try {

@@ -1,14 +1,49 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-const SecondaryFilters_ListingPage = ({ filters, onFilterChange }) => {
-  const handleCheckboxChange = (filterType, value) => {
-    const currentValues = filters[filterType] || [];
-    const newValues = currentValues.includes(value)
-      ? currentValues.filter(v => v !== value)
-      : [...currentValues, value];
-    
-    onFilterChange(filterType, newValues);
+const SecondaryFilters_ListingPage = ({ filters, onFilterChange, onFiltersChange }) => {
+  // If filters + onFilterChange are provided => controlled mode
+  const isControlled = filters !== undefined && typeof onFilterChange === "function";
+
+  // Local state for uncontrolled mode; mirrors your filter shape
+  const [localFilters, setLocalFilters] = useState({
+    cuisineTypes: [],
+    dietaryPreferences: [],
+    serviceFeatures: [],
+    minRating: undefined,
+  });
+
+  // Current state source (controlled vs uncontrolled)
+  const state = isControlled ? filters : localFilters;
+
+  // Helper: update a key with a value
+  const update = (key, value) => {
+    if (isControlled) {
+      onFilterChange?.(key, value);
+    } else {
+      setLocalFilters((prev) => {
+        const next = { ...prev, [key]: value };
+        onFiltersChange?.(next);
+        return next;
+      });
+    }
   };
+
+  // Checkbox handler (kept same logic, but uses current state safely)
+  const handleCheckboxChange = (filterType, value) => {
+    const currentValues = Array.isArray(state?.[filterType]) ? state[filterType] : [];
+    const newValues = currentValues.includes(value)
+      ? currentValues.filter((v) => v !== value)
+      : [...currentValues, value];
+    update(filterType, newValues);
+  };
+
+  // Ensure we notify parent at least once in uncontrolled mode
+  useEffect(() => {
+    if (!isControlled) {
+      onFiltersChange?.(localFilters);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // run once
 
   return (
     <div className="secondary-filters space-y-4 sm:space-y-6">
@@ -20,7 +55,7 @@ const SecondaryFilters_ListingPage = ({ filters, onFilterChange }) => {
             <label key={cuisine} className="flex items-center space-x-2 cursor-pointer">
               <input
                 type="checkbox"
-                checked={(filters.cuisineTypes || []).includes(cuisine)}
+                checked={(state?.cuisineTypes ?? []).includes(cuisine)}
                 onChange={() => handleCheckboxChange("cuisineTypes", cuisine)}
                 className="w-4 h-4 sm:w-5 sm:h-5 text-[#CCAB4A] border-gray-300 rounded focus:ring-[#CCAB4A]"
               />
@@ -38,7 +73,7 @@ const SecondaryFilters_ListingPage = ({ filters, onFilterChange }) => {
             <label key={diet} className="flex items-center space-x-2 cursor-pointer">
               <input
                 type="checkbox"
-                checked={(filters.dietaryPreferences || []).includes(diet)}
+                checked={(state?.dietaryPreferences ?? []).includes(diet)}
                 onChange={() => handleCheckboxChange("dietaryPreferences", diet)}
                 className="w-4 h-4 sm:w-5 sm:h-5 text-[#CCAB4A] border-gray-300 rounded focus:ring-[#CCAB4A]"
               />
@@ -56,7 +91,7 @@ const SecondaryFilters_ListingPage = ({ filters, onFilterChange }) => {
             <label key={feature} className="flex items-center space-x-2 cursor-pointer">
               <input
                 type="checkbox"
-                checked={(filters.serviceFeatures || []).includes(feature)}
+                checked={(state?.serviceFeatures ?? []).includes(feature)}
                 onChange={() => handleCheckboxChange("serviceFeatures", feature)}
                 className="w-4 h-4 sm:w-5 sm:h-5 text-[#CCAB4A] border-gray-300 rounded focus:ring-[#CCAB4A]"
               />
@@ -75,8 +110,8 @@ const SecondaryFilters_ListingPage = ({ filters, onFilterChange }) => {
               <input
                 type="radio"
                 name="minRating"
-                checked={filters.minRating === rating}
-                onChange={() => onFilterChange("minRating", rating)}
+                checked={(state?.minRating ?? null) === rating}
+                onChange={() => update("minRating", rating)}
                 className="w-4 h-4 sm:w-5 sm:h-5 text-[#CCAB4A] border-gray-300 focus:ring-[#CCAB4A]"
               />
               <span className="text-sm sm:text-base text-gray-700">{rating}+</span>
