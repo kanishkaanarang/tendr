@@ -7,10 +7,8 @@ import ChatIcon from '@mui/icons-material/Chat';
 import EventIcon from '@mui/icons-material/Event';
 import BookIcon from '@mui/icons-material/Book';
 import PaymentIcon from '@mui/icons-material/Payment';
-import NotificationsIcon from '@mui/icons-material/Notifications';
 import PersonIcon from '@mui/icons-material/Person';
 import LogoutIcon from '@mui/icons-material/Logout';
-import DashboardIcon from '@mui/icons-material/Dashboard';
 import StarIcon from '@mui/icons-material/Star';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 
@@ -159,7 +157,7 @@ const VendorDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-pink-50 to-rose-100">
+    <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-amber-50 to-yellow-100">
       {/* Header */}
       <div className="bg-white shadow-sm px-6 py-4">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
@@ -175,14 +173,14 @@ const VendorDashboard = () => {
           <div className="flex items-center space-x-4">
             <button
               onClick={() => navigate("/")}
-              className="px-4 py-2 text-orange-600 border border-orange-600 rounded-full hover:bg-orange-50 transition-colors"
+              className="px-4 py-2 text-yellow-700 border border-yellow-600 rounded-full hover:bg-yellow-50 transition-colors"
             >
               View Site
             </button>
             <div className="relative">
               <div
                 onClick={() => setIsModalOpen(!isModalOpen)}
-                className="w-10 h-10 bg-orange-500 text-white rounded-full flex items-center justify-center text-xl font-bold shadow-md cursor-pointer transition-transform duration-300 ease-in-out hover:scale-105 active:scale-95"
+                className="w-10 h-10 bg-yellow-600 text-white rounded-full flex items-center justify-center text-xl font-bold shadow-md cursor-pointer transition-transform duration-300 ease-in-out hover:scale-105 active:scale-95"
               >
                 {userInitial}
               </div>
@@ -190,14 +188,14 @@ const VendorDashboard = () => {
                 <div className="absolute top-12 right-0 w-48 bg-white rounded-xl shadow-lg py-2 z-50">
                   <div
                     onClick={() => navigate("/vendor/profile")}
-                    className="flex items-center gap-2 px-4 py-2 text-gray-700 font-semibold hover:bg-orange-50 cursor-pointer"
+                    className="flex items-center gap-2 px-4 py-2 text-gray-700 font-semibold hover:bg-yellow-50 cursor-pointer"
                   >
                     <PersonIcon fontSize="small" />
                     <span>Profile</span>
                   </div>
                   <div
                     onClick={handleLogout}
-                    className="flex items-center gap-2 px-4 py-2 text-gray-700 font-semibold hover:bg-orange-50 cursor-pointer"
+                    className="flex items-center gap-2 px-4 py-2 text-gray-700 font-semibold hover:bg-yellow-50 cursor-pointer"
                   >
                     <LogoutIcon fontSize="small" />
                     <span>Logout</span>
@@ -219,7 +217,7 @@ const VendorDashboard = () => {
                 <p className="text-gray-600 text-sm">Total Bookings</p>
                 <p className="text-3xl font-bold text-gray-800">{stats.totalBookings}</p>
               </div>
-              <BookIcon className="text-orange-500 text-3xl" />
+              <BookIcon className="text-yellow-600 text-3xl" />
             </div>
           </div>
           
@@ -229,7 +227,7 @@ const VendorDashboard = () => {
                 <p className="text-gray-600 text-sm">Total Earnings</p>
                 <p className="text-3xl font-bold text-gray-800">₹{stats.totalEarnings?.toLocaleString()}</p>
               </div>
-              <PaymentIcon className="text-green-500 text-3xl" />
+              <PaymentIcon className="text-green-600 text-3xl" />
             </div>
           </div>
           
@@ -239,7 +237,7 @@ const VendorDashboard = () => {
                 <p className="text-gray-600 text-sm">Average Rating</p>
                 <div className="flex items-center">
                   <p className="text-3xl font-bold text-gray-800">{stats.averageRating}</p>
-                  <StarIcon className="text-yellow-400 text-2xl ml-1" />
+                  <StarIcon className="text-yellow-500 text-2xl ml-1" />
                 </div>
               </div>
               <TrendingUpIcon className="text-blue-500 text-3xl" />
@@ -264,7 +262,7 @@ const VendorDashboard = () => {
               <h2 className="text-2xl font-bold text-gray-800">Recent Chats</h2>
               <button
                 onClick={() => navigate("/vendor/chats")}
-                className="text-orange-600 hover:text-orange-700 font-semibold"
+                className="text-yellow-700 hover:text-yellow-800 font-semibold"
               >
                 View All
               </button>
@@ -275,7 +273,7 @@ const VendorDashboard = () => {
                 <div
                   key={chat.id}
                   onClick={() => handleChatClick(chat)}
-                  className="flex items-center space-x-4 p-4 rounded-xl hover:bg-gray-50 cursor-pointer transition-colors"
+                  className="flex items-center space-x-4 p-4 rounded-xl hover:bg-yellow-50 cursor-pointer transition-colors"
                 >
                   <div className="relative">
                     <img
@@ -297,7 +295,7 @@ const VendorDashboard = () => {
                     </div>
                     <p className="text-sm text-gray-600 truncate">{chat.lastMessage}</p>
                     <div className="flex items-center space-x-2 mt-1">
-                      <span className="text-xs bg-orange-100 text-orange-800 px-2 py-1 rounded-full">
+                      <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">
                         {chat.eventType}
                       </span>
                       <span className="text-xs text-gray-500">
@@ -321,7 +319,7 @@ const VendorDashboard = () => {
               <h2 className="text-2xl font-bold text-gray-800">Recent Bookings</h2>
               <button
                 onClick={() => navigate("/vendor/bookings")}
-                className="text-orange-600 hover:text-orange-700 font-semibold"
+                className="text-yellow-700 hover:text-yellow-800 font-semibold"
               >
                 View All
               </button>
@@ -369,9 +367,9 @@ const VendorDashboard = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <button
               onClick={() => navigate("/vendor/chats")}
-              className="flex items-center space-x-3 p-4 border border-gray-200 rounded-xl hover:bg-orange-50 transition-colors"
+              className="flex items-center space-x-3 p-4 border border-gray-200 rounded-xl hover:bg-yellow-50 transition-colors"
             >
-              <ChatIcon className="text-orange-500 text-2xl" />
+              <ChatIcon className="text-yellow-600 text-2xl" />
               <div className="text-left">
                 <h3 className="font-semibold text-gray-800">View All Chats</h3>
                 <p className="text-sm text-gray-600">Manage customer conversations</p>
@@ -380,9 +378,9 @@ const VendorDashboard = () => {
             
             <button
               onClick={() => navigate("/vendor/bookings")}
-              className="flex items-center space-x-3 p-4 border border-gray-200 rounded-xl hover:bg-orange-50 transition-colors"
+              className="flex items-center space-x-3 p-4 border border-gray-200 rounded-xl hover:bg-yellow-50 transition-colors"
             >
-              <BookIcon className="text-orange-500 text-2xl" />
+              <BookIcon className="text-yellow-600 text-2xl" />
               <div className="text-left">
                 <h3 className="font-semibold text-gray-800">View Bookings</h3>
                 <p className="text-sm text-gray-600">Check all your bookings</p>
@@ -391,9 +389,9 @@ const VendorDashboard = () => {
             
             <button
               onClick={() => navigate("/vendor/profile")}
-              className="flex items-center space-x-3 p-4 border border-gray-200 rounded-xl hover:bg-orange-50 transition-colors"
+              className="flex items-center space-x-3 p-4 border border-gray-200 rounded-xl hover:bg-yellow-50 transition-colors"
             >
-              <PersonIcon className="text-orange-500 text-2xl" />
+              <PersonIcon className="text-yellow-600 text-2xl" />
               <div className="text-left">
                 <h3 className="font-semibold text-gray-800">Edit Profile</h3>
                 <p className="text-sm text-gray-600">Update your information</p>
@@ -406,4 +404,4 @@ const VendorDashboard = () => {
   );
 };
 
-export default VendorDashboard; 
+export default VendorDashboard;

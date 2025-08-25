@@ -24,7 +24,7 @@ import {
   FiGift,
   FiCamera,
   FiMusic,
-  FiUtensils,
+  // FiUtensils,
   FiMenu,
   FiX
 } from 'react-icons/fi';
