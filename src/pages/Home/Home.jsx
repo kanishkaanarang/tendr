@@ -126,29 +126,29 @@ const Home = () => {
       {/* Navigation */}
       <nav className={`nav-container ${scrolled ? 'scrolled' : ''}`}>
         <div className="nav">
-          <img src={tendrLogo} alt="tendr - We Curate You Celebrate" className="logo-img" onClick={handleLogoClick} />
+          <a href="#" className="logo" onClick={handleLogoClick}>
+            <img src={tendrLogo} alt="Tendr - We Curate You Celebrate" className="logo-img" />
+          </a>
           <div className="nav-buttons">
-            <button
-              className="contact-icon whatsapp-icon"
+            <a 
+              href="https://wa.me/1234567890" 
+              className="contact-icon whatsapp-icon" 
+              target="_blank" 
+              rel="noopener noreferrer"
               onClick={handleWhatsAppClick}
-              aria-label="WhatsApp"
             >
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
-                alt="WhatsApp"
-                className="whatsapp-logo"
-              />
-            </button>
-            <button className="sign-in" onClick={handleSignInClick}>
+              💬
+            </a>
+            <a href="/login" className="sign-in" onClick={handleSignInClick}>
               Sign in
-            </button>
-            <button className="sign-up" onClick={handleSignUpClick}>
+            </a>
+            <a href="/signup" className="sign-up" onClick={handleSignUpClick}>
               Sign Up
-            </button>
+            </a>
           </div>
         </div>
       </nav>
-
+      
       {/* Hero Section */}
       <section className="hero">
         <div className="hero-content">
@@ -199,9 +199,9 @@ const Home = () => {
                 </div>
               ))}
             </div>
-            <button className="corporate-btn" onClick={handleCorporateClick}>
-              Corporate Signup
-            </button>
+            <a href="#corporate-contact" className="corporate-btn" onClick={handleCorporateClick}>
+                Book Corporate Events
+              </a>
             <div className="corporate-image">
               <div
                 className="corporate-img"
@@ -220,6 +220,7 @@ const Home = () => {
         <div className="events-container">
           <div className="events-header">
             <p className="events-subtitle">A tour of events we have executed.</p>
+            <h2 className="events-title">A Glimpse Into Our Events</h2>
           </div>
           <div className="events-grid">
             {events.map((event) => (
