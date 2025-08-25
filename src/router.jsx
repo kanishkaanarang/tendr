@@ -31,7 +31,7 @@ import ContactUs from './pages/info/ContactUs.jsx';
 import ChooseBooking from "./pages/customer/ChooseBooking";
 import AltBookingFlow from "./pages/customer/AltBookingFlow";
 
-import CorporateDashboard from './pages/corporate/Dashboard.jsx';
+// import CorporateDashboard from './pages/corporate/Dashboard.jsx';
 
 
 
@@ -46,11 +46,11 @@ const router = createBrowserRouter([
     element: <AdminDashboard />,
     errorElement: <ErrorPage />,
   },
-  {
-    path: '/CorporateDashboard',
-    element: <CorporateDashboard />,
-    errorElement: <ErrorPage />,
-  },
+  // {
+  //   path: '/CorporateDashboard',
+  //   element: <CorporateDashboard />,
+  //   errorElement: <ErrorPage />,
+  // },
   {
     path: '/UserDashboard',
     element: <UserDashboard />,
