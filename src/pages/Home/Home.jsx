@@ -181,40 +181,41 @@ const Home = () => {
       <section className="corporate-booking-section">
         <div className="corporate-container">
           <div className="corporate-content">
-            <span className="corporate-badge">Professional Services</span>
-            <h2 className="corporate-title">Corporate Event Planning</h2>
-            <p className="corporate-description">
-              Elevate your business events with our comprehensive corporate planning services.
-              From executive meetings to large-scale conferences, we handle every detail with
-              professional excellence.
-            </p>
-            <div className="corporate-features">
-              {features.map((feature) => (
-                <div key={feature.id} className="feature-item">
-                  <div className="feature-icon">{feature.icon}</div>
-                  <div className="feature-text">
-                    <h4>{feature.title}</h4>
-                    <p>{feature.description}</p>
+            <div className="corporate-text">
+              <span className="corporate-badge">Professional Services</span>
+              <h2 className="corporate-title">Corporate Event Planning</h2>
+              <p className="corporate-description">
+                Elevate your business events with our comprehensive corporate planning services. 
+                From executive meetings to large-scale conferences, we handle every detail with 
+                professional excellence.
+              </p>
+              <div className="corporate-features">
+                {features.map((feature) => (
+                  <div key={feature.id} className="feature-item">
+                    <div className="feature-icon">{feature.icon}</div>
+                    <div className="feature-text">
+                      <h4>{feature.title}</h4>
+                      <p>{feature.description}</p>
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
-            <a href="#corporate-contact" className="corporate-btn" onClick={handleCorporateClick}>
+                ))}
+              </div>
+              <a href="#corporate-contact" className="corporate-btn" onClick={handleCorporateClick}>
                 Book Corporate Events
               </a>
+            </div>
             <div className="corporate-image">
-              <div
-                className="corporate-img"
-                style={{
-                  backgroundImage: `url('https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600&h=500&fit=crop')`
+              <div 
+                className="corporate-img" 
+                style={{ 
+                  backgroundImage: `url('https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600&h=500&fit=crop')` 
                 }}
               ></div>
             </div>
           </div>
         </div>
       </section>
-      <PlatformFlow />
-
+      
       {/* Events Gallery */}
       <section className="events-section" id="events">
         <div className="events-container">
