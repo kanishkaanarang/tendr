@@ -3,6 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import './Home.css';
 import tendrLogo from '../../assets/logos/tendr-logo-secondary.png';
 import PlatformFlow from "../../components/PlatformFlow";
+import { FaFacebookF, FaInstagram, FaLinkedinIn } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6"; // for the new X logo
+
 
 const Home = () => {
   const navigate = useNavigate();
@@ -304,7 +307,7 @@ const Home = () => {
 
     {/* Left Column */}
     <div className="footer-brand">
-      <h1>TENDR</h1>
+      <h1>tendr</h1>
       <p>Empowering your celebrations with curated planning and unforgettable experiences.</p>
       <br />
       <p><strong>Email:</strong> <a href="mailto:contacttendr@gmail.com">contacttendr@gmail.com</a></p>
@@ -358,11 +361,20 @@ const Home = () => {
 
   {/* Social Media */}
   <div className="footer-social">
-    <a href="#"><i className="icon">📘</i></a>
-    <a href="#"><i className="icon">📸</i></a>
-    <a href="#"><i className="icon">🐦</i></a>
-    <a href="#"><i className="icon">🎥</i></a>
-  </div>
+  <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+    <FaFacebookF className="icon" />
+  </a>
+  <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+    <FaInstagram className="icon" />
+  </a>
+  <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
+    <FaXTwitter className="icon" />
+  </a>
+  <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
+    <FaLinkedinIn className="icon" />
+  </a>
+</div>
+
 
   {/* Bottom */}
   <div className="footer-bottom">
