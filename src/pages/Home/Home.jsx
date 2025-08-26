@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Home.css';
 import tendrLogo from '../../assets/logos/tendr-logo-secondary.png';
-import PlatformFlow from "../../components/PlatformFlow";
 import { FaFacebookF, FaInstagram, FaLinkedinIn } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6"; // for the new X logo
 
@@ -263,7 +262,6 @@ const Home = () => {
           </div>
         </div>
       </section>
-      <PlatformFlow />
 
       {/* Events Gallery */}
       <section className="events-section" id="events">
@@ -307,7 +305,7 @@ const Home = () => {
 
     {/* Left Column */}
     <div className="footer-brand">
-      <h1>tendr</h1>
+      <h1>TENDR</h1>
       <p>Empowering your celebrations with curated planning and unforgettable experiences.</p>
       <br />
       <p><strong>Email:</strong> <a href="mailto:contacttendr@gmail.com">contacttendr@gmail.com</a></p>
