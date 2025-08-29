@@ -4,7 +4,7 @@ import signupbackground from "../../assets/backgrounds/signup-bg.png";
 import logo from "../../assets/logos/tendr-logo-secondary.png";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
-import {clearError} from '../../redux/authSlice';
+import { clearError } from '../../redux/authSlice';
 
 const Auth = () => {
   const location = useLocation();
@@ -29,6 +29,7 @@ const Auth = () => {
   useEffect(() => {
     setIsSignup(location.pathname === "/signup");
     dispatch(clearError());
+    setLocalError("");
   }, [location.pathname, dispatch]);
 
   useEffect(() => {
@@ -42,6 +43,7 @@ const Auth = () => {
     navigate(isSignup ? "/login" : "/signup");
     setPasswordError("");
     setShowPassword(false);
+    setLocalError("");
   };
 
   const handleChange = (e) => {
@@ -66,21 +68,25 @@ const Auth = () => {
       setPasswordError("Password must be at least 8 characters long");
       return;
     }
+
     setLocalLoading(true);
     setLocalError("");
 
     try {
       // Simulate API delay
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
-    const userData = {
-      name: formData.name,
-      email: formData.email,
-      password: formData.password,
-      phoneNumber: formData.phoneNumber,
-      location: formData.location,
-    };
-   const mockVerificationId = `mock_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+      // Store user data in localStorage for mock flow
+      const userData = {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        phoneNumber: formData.phoneNumber,
+        location: formData.location,
+      };
+
+      // Generate mock verification ID
+      const mockVerificationId = `mock_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
       
       // Store in localStorage for OTP verification
       localStorage.setItem("mockUserData", JSON.stringify(userData));
@@ -101,7 +107,8 @@ const Auth = () => {
       setLocalLoading(false);
     }
   };
-const handleLoginSubmit = async (e) => {
+
+  const handleLoginSubmit = async (e) => {
     e.preventDefault();
     if (formData.password.length < 8) {
       setPasswordError("Password must be at least 8 characters long");
@@ -138,7 +145,7 @@ const handleLoginSubmit = async (e) => {
       setLocalLoading(false);
     }
   };
-  
+
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -165,13 +172,13 @@ const handleLoginSubmit = async (e) => {
             />
           </div>
 
-          <h2 className="text-xl sm:text-2xl font-bold text-center mb-3 sm:mb-4 text-gray-800">
+          <h2 className="text-xl sm:text-2xl font-bold text-center mb-3 sm:mb-4 sm:mb-6 text-gray-800">
             {isSignup ? "Welcome to tendr!" : "Sign in to tendr!"}
           </h2>
 
-          {error && (
+          {(error || localError) && (
             <div className="text-red-500 text-xs sm:text-sm text-center mb-3 sm:mb-4">
-              {error}
+              {localError || error}
             </div>
           )}
 
@@ -187,7 +194,7 @@ const handleLoginSubmit = async (e) => {
                   value={formData.name}
                   onChange={handleChange}
                   className="w-full px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm border border-yellow-400 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                  disabled={loading}
+                  disabled={loading || localLoading}
                 />
               </div>
               <div>
@@ -200,7 +207,7 @@ const handleLoginSubmit = async (e) => {
                   value={formData.email}
                   onChange={handleChange}
                   className="w-full px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm border border-yellow-400 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                  disabled={loading}
+                  disabled={loading || localLoading}
                 />
               </div>
               <div>
@@ -215,14 +222,14 @@ const handleLoginSubmit = async (e) => {
                     onChange={handleChange}
                     className={`w-full px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm border ${passwordError ? "border-red-500" : "border-yellow-400"
                       } rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-500 pr-10`}
-                    disabled={loading}
+                    disabled={loading || localLoading}
                   />
                   <button
                     type="button"
                     onClick={togglePasswordVisibility}
                     className="absolute inset-y-0 right-0 flex items-center pr-2 sm:pr-3 text-gray-600 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-yellow-500 active:outline-none rounded-r-xl transition-colors duration-200"
                     aria-label={showPassword ? "Hide password" : "Show password"}
-                    disabled={loading}
+                    disabled={loading || localLoading}
                   >
                     <svg
                       className="h-4 w-4 sm:h-5 sm:w-5"
@@ -271,7 +278,7 @@ const handleLoginSubmit = async (e) => {
                   value={formData.phoneNumber}
                   onChange={handleChange}
                   className="w-full px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm border border-yellow-400 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                  disabled={loading}
+                  disabled={loading || localLoading}
                 />
               </div>
               <div>
@@ -283,7 +290,7 @@ const handleLoginSubmit = async (e) => {
                   value={formData.location}
                   onChange={handleChange}
                   className="w-full px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm border border-yellow-400 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                  disabled={loading}
+                  disabled={loading || localLoading}
                 >
                   <option value="">Select a location</option>
                   <option value="delhi">Delhi</option>
@@ -296,9 +303,9 @@ const handleLoginSubmit = async (e) => {
                   type="submit"
                   className="text-white text-xs sm:text-sm font-semibold rounded-xl w-24 sm:w-28 h-8 sm:h-9 m-1"
                   style={{ backgroundColor: "#CCAB4A" }}
-                  disabled={loading || passwordError}
+                  disabled={loading || localLoading || passwordError}
                 >
-                  {loading ? "Signing Up..." : "Sign Up"}
+                  {loading || localLoading ? "Signing Up..." : "Sign Up"}
                 </button>
               </div>
             </form>
@@ -314,7 +321,7 @@ const handleLoginSubmit = async (e) => {
                   value={formData.phoneNumber}
                   onChange={handleChange}
                   className="w-full px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm border border-yellow-400 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                  disabled={loading}
+                  disabled={loading || localLoading}
                 />
               </div>
               <div>
@@ -329,14 +336,14 @@ const handleLoginSubmit = async (e) => {
                     onChange={handleChange}
                     className={`w-full px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm border ${passwordError ? "border-red-500" : "border-yellow-400"
                       } rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-500 pr-10`}
-                    disabled={loading}
+                    disabled={loading || localLoading}
                   />
                   <button
                     type="button"
                     onClick={togglePasswordVisibility}
                     className="absolute inset-y-0 right-0 flex items-center pr-2 sm:pr-3 text-gray-600 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-yellow-500 active:outline-none rounded-r-xl transition-colors duration-200"
                     aria-label={showPassword ? "Hide password" : "Show password"}
-                    disabled={loading}
+                    disabled={loading || localLoading}
                   >
                     <svg
                       className="h-4 w-4 sm:h-5 sm:w-5"
@@ -383,9 +390,9 @@ const handleLoginSubmit = async (e) => {
                   type="submit"
                   className="text-white text-xs sm:text-sm font-semibold rounded-xl w-28 sm:w-32 h-8 sm:h-10"
                   style={{ backgroundColor: "#CCAB4A" }}
-                  disabled={loading || passwordError}
+                  disabled={loading || localLoading || passwordError}
                 >
-                  {loading ? "Signing In..." : "Sign In"}
+                  {loading || localLoading ? "Signing In..." : "Sign In"}
                 </button>
               </div>
             </form>
