@@ -13,6 +13,8 @@ const OTPPage = () => {
   const [timeLeft, setTimeLeft] = useState(60);
   const [canResend, setCanResend] = useState(false);
   const [localError, setLocalError] = useState("");
+  const [corporateMode, setCorporateMode] = useState(false);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { verificationId, userData, loading, error } = useSelector(
@@ -71,17 +73,21 @@ const OTPPage = () => {
       }
     }
   };
-
-  const handleVerify = async (e) => {
+const handleVerify = async (e) => {
     e.preventDefault();
     const finalOtp = otp.join("");
     if (finalOtp.length !== 4) {
-      dispatch({
-        type: "auth/verifyOtp/rejected",
-        payload: "Please enter a 4-digit OTP",
-      });
+      if (corporateMode) {
+        setLocalError("Please enter a 4-digit OTP");
+      } else {
+        dispatch({
+          type: "auth/verifyOtp/rejected",
+          payload: "Please enter a 4-digit OTP",
+        });
+      }
       return;
     }
+  
  if (corporateMode) {
       const expected = localStorage.getItem("corporateOtp");
       if (finalOtp === expected) {
