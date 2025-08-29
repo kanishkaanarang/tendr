@@ -4,7 +4,7 @@ import signupbackground from "../../assets/backgrounds/signup-bg.png";
 import logo from "../../assets/logos/tendr-logo-secondary.png";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
-import { signup, login, clearError, fetchUserProfile } from '../../redux/authSlice';
+import {clearError} from '../../redux/authSlice';
 
 const Auth = () => {
   const location = useLocation();
@@ -14,6 +14,8 @@ const Auth = () => {
 
   const isSignupPath = location.pathname === "/signup";
   const [isSignup, setIsSignup] = useState(isSignupPath);
+  const [localLoading, setLocalLoading] = useState(false);
+  const [localError, setLocalError] = useState("");
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -64,34 +66,79 @@ const Auth = () => {
       setPasswordError("Password must be at least 8 characters long");
       return;
     }
+    setLocalLoading(true);
+    setLocalError("");
+
+    try {
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
     const userData = {
       name: formData.name,
       email: formData.email,
       password: formData.password,
       phoneNumber: formData.phoneNumber,
+      location: formData.location,
     };
-    dispatch(signup(userData));
-  };
+   const mockVerificationId = `mock_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      
+      // Store in localStorage for OTP verification
+      localStorage.setItem("mockUserData", JSON.stringify(userData));
+      localStorage.setItem("mockVerificationId", mockVerificationId);
+      
+      // Generate mock OTP
+      const mockOtp = String(Math.floor(1000 + Math.random() * 9000));
+      localStorage.setItem("mockOtp", mockOtp);
+      
+      console.info("Mock OTP (dev):", mockOtp);
+      console.info("Mock Verification ID:", mockVerificationId);
 
-  const handleLoginSubmit = async (e) => {
+      // Navigate to OTP page
+      navigate("/otp");
+    } catch {
+      setLocalError("Signup failed. Please try again.");
+    } finally {
+      setLocalLoading(false);
+    }
+  };
+const handleLoginSubmit = async (e) => {
     e.preventDefault();
     if (formData.password.length < 8) {
       setPasswordError("Password must be at least 8 characters long");
       return;
     }
-    const credentials = {
-      phoneNumber: formData.phoneNumber,
-      password: formData.password,
-    };
-    dispatch(login(credentials)).then((result) => {
-      if (result.meta.requestStatus === "fulfilled") {
-        dispatch(fetchUserProfile()); 
-        navigate("/"); // or navigate to dashboard
+
+    setLocalLoading(true);
+    setLocalError("");
+
+    try {
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      // Check if user exists in localStorage (mock authentication)
+      const mockUserData = localStorage.getItem("mockUserData");
+      if (mockUserData) {
+        const user = JSON.parse(mockUserData);
+        if (user.phoneNumber === formData.phoneNumber && user.password === formData.password) {
+          // Mock successful login
+          localStorage.setItem("mockLogin", JSON.stringify({
+            user,
+            loginTime: new Date().toISOString()
+          }));
+          navigate("/dashboard");
+        } else {
+          setLocalError("Invalid phone number or password");
+        }
+      } else {
+        setLocalError("No account found. Please sign up first.");
       }
-    });
-
+    } catch {
+      setLocalError("Login failed. Please try again.");
+    } finally {
+      setLocalLoading(false);
+    }
   };
-
+  
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
