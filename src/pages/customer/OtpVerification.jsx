@@ -12,6 +12,7 @@ const OTPPage = () => {
   const [otp, setOtp] = useState(["", "", "", ""]);
   const [timeLeft, setTimeLeft] = useState(60);
   const [canResend, setCanResend] = useState(false);
+  const [localError, setLocalError] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { verificationId, userData, loading, error } = useSelector(
@@ -20,7 +21,6 @@ const OTPPage = () => {
 
   useEffect(() => {
     const corporateData = localStorage.getItem("corporatePlan");
-
     const isCorporateUser = !!corporateData;
     const isNormalUser = verificationId && userData?.phoneNumber;
 
@@ -28,6 +28,18 @@ const OTPPage = () => {
       navigate("/signup"); // redirecting to signup if not registered
     }
   }, [verificationId, userData, navigate]);
+  
+ useEffect(() => {
+    if (corporateMode) {
+      const existing = localStorage.getItem("corporateOtp");
+      if (!existing) {
+        const generated = String(Math.floor(1000 + Math.random() * 9000));
+        localStorage.setItem("corporateOtp", generated);
+        // For development convenience, log the OTP
+        console.info("Corporate OTP (dev):", generated);
+      }
+    }
+  }, [corporateMode]);
 
   useEffect(() => {
     if (timeLeft > 0) {
@@ -70,7 +82,20 @@ const OTPPage = () => {
       });
       return;
     }
-
+ if (corporateMode) {
+      const expected = localStorage.getItem("corporateOtp");
+      if (finalOtp === expected) {
+        // Mark corporate as verified and redirect to corporate dashboard
+        localStorage.removeItem("corporateOtp");
+        localStorage.setItem(
+          "corporateLogin",
+          JSON.stringify({ loginTime: new Date().toISOString() })
+        );
+        navigate("/corporate/dashboard");
+      } else {
+        setLocalError("Invalid OTP. Please try again.");
+      }
+    } else {
     dispatch(
       verifyOtpAction({
         phoneNumber: userData.phoneNumber,
@@ -90,12 +115,20 @@ const OTPPage = () => {
   const handleResend = () => {
     setTimeLeft(60);
     setCanResend(false);
-    dispatch(clearError());
-    dispatch(resendOtpAction()).then((result) => {
-      if (result.meta.requestStatus === "fulfilled") {
-        setOtp(["", "", "", ""]); // Clear OTP inputs
-      }
-    });
+    setLocalError("");
+    if (corporateMode) {
+      const generated = String(Math.floor(1000 + Math.random() * 9000));
+      localStorage.setItem("corporateOtp", generated);
+      console.info("Corporate OTP (dev):", generated);
+      setOtp(["", "", "", ""]);
+    } else {
+      dispatch(clearError());
+      dispatch(resendOtpAction()).then((result) => {
+        if (result.meta.requestStatus === "fulfilled") {
+          setOtp(["", "", "", ""]); // Clear OTP inputs
+        }
+      });
+    }
   };
 
   return (
