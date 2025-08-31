@@ -6,13 +6,13 @@ import VendorRegistration from "./pages/vendor/Registration";
 import EventPlanningForm from "./pages/customer/EventPlanning.jsx"; // ✅ use the new form
 import NotFound from "./pages/shared/NotFound";
 import ErrorPage from "./components/ErrorPage";
-import CorporateLogin from "./pages/corporate/Login.jsx";
+import CorporateLogin from "./pages/corporate/Login";
 import CorporateSignup from "./pages/corporate/SignUp.jsx";
 
-import OtpPage from "./pages/customer/OtpVerification";
-import VendorList from "./pages/customer/VendorList";
-import VendorDetails from "./pages/customer/VendorDetails";
-import Chat from "./pages/customer/Chat";
+import OtpPage from './pages/customer/OtpVerification';
+import VendorList from './pages/customer/VendorList';
+import VendorDetails from './pages/customer/VendorDetails';
+import Chat from './pages/customer/Chat';
 
 import AdminDashboard from "./pages/admin/Dashboard";
 import VendorOnboarding from "./pages/vendor/Onboarding";
@@ -22,6 +22,7 @@ import VendorChat from "./pages/vendor/Chat";
 
 import CorporateBooking from "./pages/corporate/Booking";
 import UserDashboard from "./pages/customer/Dashboard";
+import OtpVerification from "./pages/customer/OtpVerification";
 
 import RefundPolicy from "./pages/info/RefundPolicy";
 import CancellationPolicy from "./pages/info/CancellationPolicy";
@@ -39,6 +40,21 @@ const router = createBrowserRouter([
     element: <Home />, 
     errorElement: <ErrorPage /> 
   },
+  
+{ 
+    path: '/corporate', 
+    element: <CorporateBooking />,
+    errorElement: <ErrorPage />
+  },
+  
+  { 
+    path: '/corporate/booking', 
+    element: <CorporateBooking />,
+    errorElement: <ErrorPage />
+  },
+  
+  {
+    path: '/AdminDashboard',
   { 
     path: "/AdminDashboard", 
     element: <AdminDashboard />,
@@ -49,6 +65,20 @@ const router = createBrowserRouter([
     element: <CorporateDashboard />, 
     errorElement: <ErrorPage /> 
   },
+  {
+    path: '/otp',
+    element: <OtpVerification />,
+    errorElement: <ErrorPage />
+  },
+  { 
+    path: '*', 
+    element: <NotFound />,
+    errorElement: <ErrorPage />
+  },
+  {
+    path: '/UserDashboard',
+    element: <UserDashboard />,
+    errorElement: <ErrorPage />,
   { 
     path: "/UserDashboard", 
     element: <UserDashboard />, 
@@ -72,22 +102,27 @@ const router = createBrowserRouter([
     element: <VendorRegistration />, 
     errorElement: <ErrorPage /> 
   },
-
   { 
-    path: "/chat", 
-    element: <Chat />, 
-    errorElement: <ErrorPage /> 
+    path: '/plan-event/form', 
+    element: <EventPlanning />, 
+    errorElement: <ErrorPage />
   },
-
-  { 
-    path: "/VendorDetails", 
-    element: <VendorDetails />, 
-    errorElement: <ErrorPage /> 
-  }, 
-
-  { path: "/vendor/:id", 
-    element: <VendorDetails />, 
-    errorElement: <ErrorPage /> 
+  {
+    path: '/chat',
+    element: <Chat />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    // legacy static route, keep for compatibility
+    path: '/VendorDetails',
+    element: <VendorDetails />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    // preferred dynamic route
+    path: '/vendor/:id',
+    element: <VendorDetails />,
+    errorElement: <ErrorPage />,
   },
 
   { 
@@ -113,15 +148,13 @@ const router = createBrowserRouter([
     element: <Auth />, 
     errorElement: <ErrorPage /> 
   },
-
-  { 
-    path: "/CorporateBooking", 
-    element: <CorporateBooking />, 
-    errorElement: <ErrorPage /> 
-  },
-
   {
-    path: "/vendor",
+    path: '/CorporateBooking',
+    element: <CorporateBooking />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: '/vendor',
     errorElement: <ErrorPage />,
     children: [
       { path: "register", element: <VendorOnboarding /> },
