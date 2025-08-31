@@ -1,4 +1,3 @@
-// src/router.jsx
 import { createBrowserRouter } from "react-router-dom";
 
 import Home from "./pages/Home/Home";
@@ -29,88 +28,39 @@ import CancellationPolicy from "./pages/info/CancellationPolicy";
 import ContactUs from "./pages/info/ContactUs.jsx";
 
 import ChooseBooking from "./pages/customer/ChooseBooking";
-// import AltBookingFlow from "./pages/customer/AltBookingFlow"; // ❌ no longer needed if using bookingType flag
-
 import CorporateDashboard from "./pages/corporate/Dashboard.jsx";
 
+// only chat list for customers (no Conversation/ActiveChat components)
+import CustomerChatList from "./pages/customer/Chats";
+
 const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Home />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/AdminDashboard",
-    element: <AdminDashboard />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/CorporateDashboard",
-    element: <CorporateDashboard />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/UserDashboard",
-    element: <UserDashboard />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/corporate-login",
-    element: <CorporateLogin />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/corporate-signup",
-    element: <CorporateSignup />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/VendorRegistration",
-    element: <VendorRegistration />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/chat",
-    element: <Chat />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    // legacy static route, keep for compatibility
-    path: "/VendorDetails",
-    element: <VendorDetails />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    // preferred dynamic route
-    path: "/vendor/:id",
-    element: <VendorDetails />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/listings",
-    element: <VendorList />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/listings/:vendorType",
-    element: <VendorList />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/login",
-    element: <Auth />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/signup",
-    element: <Auth />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/CorporateBooking",
-    element: <CorporateBooking />,
-    errorElement: <ErrorPage />,
-  },
+  { path: "/", element: <Home />, errorElement: <ErrorPage /> },
+  { path: "/AdminDashboard", element: <AdminDashboard />, errorElement: <ErrorPage /> },
+  { path: "/CorporateDashboard", element: <CorporateDashboard />, errorElement: <ErrorPage /> },
+  { path: "/UserDashboard", element: <UserDashboard />, errorElement: <ErrorPage /> },
+
+  { path: "/corporate-login", element: <CorporateLogin />, errorElement: <ErrorPage /> },
+  { path: "/corporate-signup", element: <CorporateSignup />, errorElement: <ErrorPage /> },
+
+  { path: "/VendorRegistration", element: <VendorRegistration />, errorElement: <ErrorPage /> },
+
+  // Your conversation view
+  { path: "/chat", element: <Chat />, errorElement: <ErrorPage /> },
+
+  // Vendor details
+  { path: "/VendorDetails", element: <VendorDetails />, errorElement: <ErrorPage /> }, // legacy
+  { path: "/vendor/:id", element: <VendorDetails />, errorElement: <ErrorPage /> },
+
+  // Listings
+  { path: "/listings", element: <VendorList />, errorElement: <ErrorPage /> },
+  { path: "/listings/:vendorType", element: <VendorList />, errorElement: <ErrorPage /> },
+
+  // Auth
+  { path: "/login", element: <Auth />, errorElement: <ErrorPage /> },
+  { path: "/signup", element: <Auth />, errorElement: <ErrorPage /> },
+
+  // Corporate
+  { path: "/CorporateBooking", element: <CorporateBooking />, errorElement: <ErrorPage /> },
   {
     path: "/vendor",
     errorElement: <ErrorPage />,
@@ -122,50 +72,25 @@ const router = createBrowserRouter([
     ],
   },
 
-  // ✅ New booking entry
-  {
-    path: "/booking",
-    element: <ChooseBooking />,
-    errorElement: <ErrorPage />,
-  },
+  // Customer chat list (you-do-it)
+  { path: "/chats", element: <CustomerChatList />, errorElement: <ErrorPage /> },
 
-  // ✅ Single form route (reads ?bookingType=you-do-it|let-us-do-it)
-  {
-    path: "/plan-event",
-    errorElement: <ErrorPage />,
-    children: [{ path: "form", element: <EventPlanningForm /> }],
-  },
+  // Booking entry
+  { path: "/booking", element: <ChooseBooking />, errorElement: <ErrorPage /> },
 
-  // ℹ️ Keep info pages
-  {
-    path: "/contact-us",
-    element: <ContactUs />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/refund-policy",
-    element: <RefundPolicy />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/cancellation-policy",
-    element: <CancellationPolicy />,
-    errorElement: <ErrorPage />,
-  },
+  // Single form route (reads ?bookingType=you-do-it|let-us-do-it)
+  { path: "/plan-event/form", element: <EventPlanningForm />, errorElement: <ErrorPage /> },
 
-  // ❌ Remove duplicate path to the old component; if you still need it, point it to EventPlanningForm
-  {
-    path: "/event-planning",
-    element: <EventPlanningForm />,
-    errorElement: <ErrorPage />,
-  },
+  // Info pages
+  { path: "/contact-us", element: <ContactUs />, errorElement: <ErrorPage /> },
+  { path: "/refund-policy", element: <RefundPolicy />, errorElement: <ErrorPage /> },
+  { path: "/cancellation-policy", element: <CancellationPolicy />, errorElement: <ErrorPage /> },
+
+  // Old alias to the form
+  { path: "/event-planning", element: <EventPlanningForm />, errorElement: <ErrorPage /> },
 
   // 404
-  {
-    path: "*",
-    element: <NotFound />,
-    errorElement: <ErrorPage />,
-  },
+  { path: "*", element: <NotFound />, errorElement: <ErrorPage /> },
 ]);
 
 export default router;

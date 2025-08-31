@@ -99,7 +99,7 @@ const initialState = {
   currentStep: 0,
   showVendorScreen: false,
   selectedVendors: [],
-  bookingType: "you-do-it", // 'you-do-it' | 'let-us-do-it'
+  bookingType: "", // 'you-do-it' | 'let-us-do-it'
   submitting: false,
   submitError: null,
   lastSubmission: null, // { bookingId, bookingType }
