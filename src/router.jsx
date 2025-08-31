@@ -74,7 +74,7 @@ const router = createBrowserRouter([
     path: '*', 
     element: <NotFound />,
     errorElement: <ErrorPage />
-  }
+  },
   {
     path: '/UserDashboard',
     element: <UserDashboard />,
