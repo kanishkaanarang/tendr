@@ -34,33 +34,92 @@ import CorporateDashboard from "./pages/corporate/Dashboard.jsx";
 import CustomerChatList from "./pages/customer/Chats";
 
 const router = createBrowserRouter([
-  { path: "/", element: <Home />, errorElement: <ErrorPage /> },
-  { path: "/AdminDashboard", element: <AdminDashboard />, errorElement: <ErrorPage /> },
-  { path: "/CorporateDashboard", element: <CorporateDashboard />, errorElement: <ErrorPage /> },
-  { path: "/UserDashboard", element: <UserDashboard />, errorElement: <ErrorPage /> },
+  { 
+    path: "/", 
+    element: <Home />, 
+    errorElement: <ErrorPage /> 
+  },
+  { 
+    path: "/AdminDashboard", 
+    element: <AdminDashboard />,
+    errorElement: <ErrorPage /> 
+  },
+  { 
+    path: "/CorporateDashboard", 
+    element: <CorporateDashboard />, 
+    errorElement: <ErrorPage /> 
+  },
+  { 
+    path: "/UserDashboard", 
+    element: <UserDashboard />, 
+    errorElement: <ErrorPage /> 
+  },
 
-  { path: "/corporate-login", element: <CorporateLogin />, errorElement: <ErrorPage /> },
-  { path: "/corporate-signup", element: <CorporateSignup />, errorElement: <ErrorPage /> },
+  { 
+    path: "/corporate-login", 
+    element: <CorporateLogin />, 
+    errorElement: <ErrorPage /> 
+  },
 
-  { path: "/VendorRegistration", element: <VendorRegistration />, errorElement: <ErrorPage /> },
+  { 
+    path: "/corporate-signup", 
+    element: <CorporateSignup />, 
+    errorElement: <ErrorPage /> 
+  },
 
-  // Your conversation view
-  { path: "/chat", element: <Chat />, errorElement: <ErrorPage /> },
+  { 
+    path: "/VendorRegistration", 
+    element: <VendorRegistration />, 
+    errorElement: <ErrorPage /> 
+  },
 
-  // Vendor details
-  { path: "/VendorDetails", element: <VendorDetails />, errorElement: <ErrorPage /> }, // legacy
-  { path: "/vendor/:id", element: <VendorDetails />, errorElement: <ErrorPage /> },
+  { 
+    path: "/chat", 
+    element: <Chat />, 
+    errorElement: <ErrorPage /> 
+  },
 
-  // Listings
-  { path: "/listings", element: <VendorList />, errorElement: <ErrorPage /> },
-  { path: "/listings/:vendorType", element: <VendorList />, errorElement: <ErrorPage /> },
+  { 
+    path: "/VendorDetails", 
+    element: <VendorDetails />, 
+    errorElement: <ErrorPage /> 
+  }, 
+
+  { path: "/vendor/:id", 
+    element: <VendorDetails />, 
+    errorElement: <ErrorPage /> 
+  },
+
+  { 
+    path: "/listings", 
+    element: <VendorList />, 
+    errorElement: <ErrorPage /> 
+  },
+
+  { 
+    path: "/listings/:vendorType",
+    element: <VendorList />, 
+    errorElement: <ErrorPage /> 
+  },
 
   // Auth
-  { path: "/login", element: <Auth />, errorElement: <ErrorPage /> },
-  { path: "/signup", element: <Auth />, errorElement: <ErrorPage /> },
+  { 
+    path: "/login", 
+    element: <Auth />, errorElement: <ErrorPage /> 
+  },
 
-  // Corporate
-  { path: "/CorporateBooking", element: <CorporateBooking />, errorElement: <ErrorPage /> },
+  { 
+    path: "/signup", 
+    element: <Auth />, 
+    errorElement: <ErrorPage /> 
+  },
+
+  { 
+    path: "/CorporateBooking", 
+    element: <CorporateBooking />, 
+    errorElement: <ErrorPage /> 
+  },
+
   {
     path: "/vendor",
     errorElement: <ErrorPage />,
@@ -73,24 +132,56 @@ const router = createBrowserRouter([
   },
 
   // Customer chat list (you-do-it)
-  { path: "/chats", element: <CustomerChatList />, errorElement: <ErrorPage /> },
+  { 
+    path: "/chats", 
+    element: <CustomerChatList />, 
+    errorElement: <ErrorPage /> 
+  },
 
   // Booking entry
-  { path: "/booking", element: <ChooseBooking />, errorElement: <ErrorPage /> },
+  { 
+    path: "/booking", 
+    element: <ChooseBooking />, 
+    errorElement: <ErrorPage /> 
+  },
 
   // Single form route (reads ?bookingType=you-do-it|let-us-do-it)
-  { path: "/plan-event/form", element: <EventPlanningForm />, errorElement: <ErrorPage /> },
+  { 
+    path: "/plan-event/form", 
+    element: <EventPlanningForm />, 
+    errorElement: <ErrorPage /> 
+  },
 
   // Info pages
-  { path: "/contact-us", element: <ContactUs />, errorElement: <ErrorPage /> },
-  { path: "/refund-policy", element: <RefundPolicy />, errorElement: <ErrorPage /> },
-  { path: "/cancellation-policy", element: <CancellationPolicy />, errorElement: <ErrorPage /> },
+  { 
+    path: "/contact-us", 
+    element: <ContactUs />, 
+    errorElement: <ErrorPage /> 
+  },
 
-  // Old alias to the form
-  { path: "/event-planning", element: <EventPlanningForm />, errorElement: <ErrorPage /> },
+  { 
+    path: "/refund-policy", 
+    element: <RefundPolicy />, 
+    errorElement: <ErrorPage /> 
+  },
 
-  // 404
-  { path: "*", element: <NotFound />, errorElement: <ErrorPage /> },
+  { 
+    path: "/cancellation-policy", 
+    element: <CancellationPolicy />, 
+    errorElement: <ErrorPage /> 
+  },
+
+  { 
+    path: "/event-planning", 
+    element: <EventPlanningForm />, 
+    errorElement: <ErrorPage /> 
+  },
+
+  { 
+    path: "*", 
+    element: <NotFound />, 
+    errorElement: <ErrorPage /> 
+  },
 ]);
 
 export default router;
