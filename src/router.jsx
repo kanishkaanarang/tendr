@@ -8,7 +8,8 @@ import EventPlanning from './pages/customer/EventPlanning';
 import NotFound from './pages/shared/NotFound';
 import ErrorPage from './components/ErrorPage';
 import CorporateLogin from "./pages/corporate/Login";
-import CorporateSignUp from "./pages/corporate/SignUp";
+import CorporateSignup from "./pages/corporate/SignUp.jsx";
+
 
 import OtpPage from './pages/customer/OtpVerification';
 import VendorList from './pages/customer/VendorList';
@@ -32,7 +33,7 @@ import ContactUs from './pages/info/ContactUs.jsx';
 import ChooseBooking from "./pages/customer/ChooseBooking";
 import AltBookingFlow from "./pages/customer/AltBookingFlow";
 
-// import CorporateDashboard from './pages/corporate/Dashboard.jsx';
+import CorporateDashboard from './pages/corporate/Dashboard.jsx';
 
 
 
@@ -89,16 +90,6 @@ const router = createBrowserRouter([
     path: '/corporate-signup',
     element: <CorporateSignup />,
     errorElement: <ErrorPage />,
-  },
-      {
-        path: '/login',
-    element: <CustomerAuth />,
-    errorElement: <ErrorPage />
-  },
-      {
-    path: '/signup',
-    element: <CustomerAuth />,
-    errorElement: <ErrorPage />
   },
   {
     path: '/VendorRegistration',
