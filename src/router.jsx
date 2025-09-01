@@ -33,6 +33,7 @@ import CorporateDashboard from "./pages/corporate/Dashboard.jsx";
 
 // only chat list for customers (no Conversation/ActiveChat components)
 import CustomerChatList from "./pages/customer/Chats";
+import EventPlanning from "./pages/customer/EventPlanning.jsx";
 
 const router = createBrowserRouter([
   { 
