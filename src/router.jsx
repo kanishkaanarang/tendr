@@ -52,9 +52,7 @@ const router = createBrowserRouter([
     element: <CorporateBooking />,
     errorElement: <ErrorPage />
   },
-  
-  {
-    path: '/AdminDashboard',
+
   { 
     path: "/AdminDashboard", 
     element: <AdminDashboard />,
@@ -79,7 +77,8 @@ const router = createBrowserRouter([
     path: '/UserDashboard',
     element: <UserDashboard />,
     errorElement: <ErrorPage />,
-  { 
+  },
+  {
     path: "/UserDashboard", 
     element: <UserDashboard />, 
     errorElement: <ErrorPage /> 
