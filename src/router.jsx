@@ -32,14 +32,30 @@ import ContactUs from './pages/info/ContactUs.jsx';
 import ChooseBooking from "./pages/customer/ChooseBooking";
 import AltBookingFlow from "./pages/customer/AltBookingFlow";
 
-// import CorporateDashboard from './pages/corporate/Dashboard.jsx';
-
-
+import CorporateDashboard from './pages/corporate/Dashboard.jsx';
+import TimelineBuilder from './pages/timeline/TimelineBuilder';
+import Timeline from './pages/timeline/Timeline';
+import Checkbox from './pages/checkbox/Checkbox';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <Home />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: '/custom-timeline',
+    element: <TimelineBuilder />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: '/prebuilt-timeline',
+    element: <Timeline />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: '/checkbox',
+    element: <Checkbox />,
     errorElement: <ErrorPage />,
   },
   
@@ -74,7 +90,7 @@ const router = createBrowserRouter([
     path: '*', 
     element: <NotFound />,
     errorElement: <ErrorPage />
-  }
+  },
   {
     path: '/UserDashboard',
     element: <UserDashboard />,
@@ -87,17 +103,17 @@ const router = createBrowserRouter([
   },
   {
     path: '/corporate-signup',
-    element: <CorporateSignup />,
+    element: <CorporateSignUp />,
     errorElement: <ErrorPage />,
   },
       {
         path: '/login',
-    element: <CustomerAuth />,
+    element: <Auth />,
     errorElement: <ErrorPage />
   },
       {
     path: '/signup',
-    element: <CustomerAuth />,
+    element: <Auth />,
     errorElement: <ErrorPage />
   },
   {

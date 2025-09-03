@@ -49,6 +49,18 @@ const Home = () => {
     navigate('/corporate-signup');
   };
 
+  const handledropdownChange = (event) => {
+    const selectedValue = event.target.value;
+    if (selectedValue === 'prebuilt') {
+      navigate('/prebuilt-timeline');
+    } else if (selectedValue === 'custom') {
+      navigate('/custom-timeline');
+    }
+    else if(selectedValue =='checkbox'){
+       navigate('/checkbox');
+    }
+  }
+
   const services = [
     {
       id: 1,
@@ -130,6 +142,12 @@ const Home = () => {
             <img src={tendrLogo} alt="Tendr - We Curate You Celebrate" className="logo-img" />
           </a>
           <div className="nav-buttons">
+            <select className="mx-10 "onClick={handledropdownChange}>
+              <option value="" disabled selected>Utilities</option>
+              <option value="checkbox">Checkbox</option>
+              <option value="prebuilt">PreBuilt Timeline</option>
+              <option value="custom">Custom Timeline</option>
+            </select>
             <a 
               href="https://wa.me/1234567890" 
               className="contact-icon whatsapp-icon" 
