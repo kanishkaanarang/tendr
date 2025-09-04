@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import './Home.css';
 import tendrLogo from '../../assets/logos/tendr-logo-secondary.png';
 import PlatformFlow from "../../components/PlatformFlow";
+import BasicSpeedDial from '../../components/BasicSpeedDial';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -136,7 +137,11 @@ const Home = () => {
   return (
     <div className="App">
       {/* Navigation */}
-      <nav className={`nav-container ${scrolled ? 'scrolled' : ''}`}>
+      <div className={`fixed bottom-6 right-6 z-50 transform transition-all duration-500 ${scrolled ? "opacity-100 scale-100" : "opacity-0 scale-75 pointer-events-none"}`}>
+        <BasicSpeedDial />
+      </div>
+      <nav className={`fixed top-0 left-0 w-full z-50 bg-white shadow transition-transform duration-500 ease-in-out
+          ${scrolled ? "-translate-y-full opacity-0" : "translate-y-0 opacity-100"}`}>
         <div className="nav">
           <a href="#" className="logo" onClick={handleLogoClick}>
             <img src={tendrLogo} alt="Tendr - We Curate You Celebrate" className="logo-img" />
