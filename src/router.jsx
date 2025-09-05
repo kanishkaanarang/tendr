@@ -36,6 +36,7 @@ import CorporateDashboard from './pages/corporate/Dashboard.jsx';
 import TimelineBuilder from './pages/timeline/TimelineBuilder';
 import Timeline from './pages/timeline/Timeline';
 import Checkbox from './pages/checkbox/Checkbox';
+import TimelinePicker from './pages/timeline/TimelinePicker';
 
 const router = createBrowserRouter([
   {
@@ -44,7 +45,12 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
-    path: '/custom-timeline',
+    path: '/timeline-picker',
+    element: <TimelinePicker />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: '/timeline',
     element: <TimelineBuilder />,
     errorElement: <ErrorPage />,
   },

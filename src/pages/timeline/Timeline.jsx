@@ -38,15 +38,15 @@ function Timeline() {
   return (
     <div className="bg-white">
       {/* Dropdown */}
-      <div className="m-5 flex items-center justify-center">
-        <label htmlFor="timeline-select" style={{ marginRight: 8 }}>
+      <div className="flex items-center justify-center ">
+        <label htmlFor="timeline-select" style={{ marginRight: 8, marginTop:15, marginBottom:10 }}>
           Choose a timeline:
         </label>
         <select
           id="timeline-select"
           value={selected}
           onChange={(e) => setSelected(e.target.value)}
-          className="border border-gray-600 rounded p-2"
+          className="border border-gray-600 rounded p-2 m-5"
         >
           {timelineKeys.map((key) => (
             <option key={key} value={key}>

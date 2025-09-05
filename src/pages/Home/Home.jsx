@@ -52,13 +52,16 @@ const Home = () => {
 
   const handledropdownChange = (event) => {
     const selectedValue = event.target.value;
-    if (selectedValue === 'prebuilt') {
-      navigate('/prebuilt-timeline');
-    } else if (selectedValue === 'custom') {
-      navigate('/custom-timeline');
+    if (selectedValue === 'timeline-picker') {
+      navigate('/timeline-picker');
+    } else if (selectedValue === 'aftermovie') {
+      navigate('/aftermovie');
     }
     else if(selectedValue =='checkbox'){
        navigate('/checkbox');
+    }
+    else if(selectedValue =='invitation'){
+       navigate('/invitation');
     }
   }
 
@@ -148,10 +151,11 @@ const Home = () => {
           </a>
           <div className="nav-buttons">
             <select className="mx-10 "onClick={handledropdownChange}>
-              <option value="" disabled selected>Utilities</option>
+              <option value="" disabled selected>Tendr Utilities</option>
               <option value="checkbox">Checkbox</option>
-              <option value="prebuilt">PreBuilt Timeline</option>
-              <option value="custom">Custom Timeline</option>
+              <option value="timeline-picker">Timeline</option>
+              <option value="aftermovie">Aftermovie</option>
+              <option value="invitaion">Invitaion Flyers</option>
             </select>
             <a 
               href="https://wa.me/1234567890" 
