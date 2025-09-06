@@ -57,8 +57,8 @@ const Home = () => {
     } else if (selectedValue === 'aftermovie') {
       navigate('/aftermovie');
     }
-    else if(selectedValue =='checkbox'){
-       navigate('/checkbox-picker');
+    else if(selectedValue =='checklist'){
+       navigate('/checklist-picker');
     }
     else if(selectedValue =='invitation'){
        navigate('/invitation');
@@ -152,7 +152,7 @@ const Home = () => {
           <div className="nav-buttons">
             <select className="mx-10 "onClick={handledropdownChange}>
               <option value="" disabled selected>Tendr Utilities</option>
-              <option value="checkbox">Checkbox</option>
+              <option value="checklist">Checklist</option>
               <option value="timeline-picker">Timeline</option>
               <option value="aftermovie">Aftermovie</option>
               <option value="invitaion">Invitaion Flyers</option>

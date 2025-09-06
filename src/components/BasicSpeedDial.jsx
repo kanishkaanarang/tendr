@@ -11,7 +11,7 @@ import GroupAddIcon from '@mui/icons-material/GroupAdd';
 
 const actions = [
   { icon: <TimelineIcon />, name: 'Timeline', path: '/timeline-picker' },
-  { icon: <CheckBoxIcon />, name: 'Checkbox', path: '/checkbox-picker' },
+  { icon: <CheckBoxIcon />, name: 'Checklist', path: '/checklist-picker' },
   { icon: <InsertInvitationIcon />, name: 'Invitation Flyers', path: '/invitation' },
   { icon: <MovieIcon />, name: 'Aftermovie', path: '/aftermovie' },
   {icon: <GroupAddIcon/>, name: 'RSVP Invite Tracker', path: '/invite-tracker' },

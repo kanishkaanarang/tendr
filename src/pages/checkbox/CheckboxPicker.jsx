@@ -19,7 +19,7 @@ export default function TimelinePicker() {
         <header className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-extrabold text-gray-800">
             <span className="bg-gradient-to-r from-amber-600 to-yellow-500 bg-clip-text text-transparent">
-              Choose Checkbox Type
+              Choose Checklist Type
             </span>
           </h1>
           <p className="mt-3 text-gray-600 text-base md:text-lg max-w-2xl mx-auto">
@@ -31,18 +31,18 @@ export default function TimelinePicker() {
 
         {/* Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
-          {/* Checkbox Type A */}
+          {/* Checklist Type A */}
           <div className="rounded-xl border bg-white p-8 shadow-md hover:shadow-lg transition flex flex-col">
             <div className="flex items-center gap-3">
               <span className="p-4 rounded-lg bg-amber-50 border border-amber-200">
                 <CalendarDays className="h-8 w-8 text-amber-700" />
               </span>
               <h2 className="text-xl font-semibold text-gray-800">
-                Checkbox Type A
+                Checklist Type A
               </h2>
             </div>
             <p className="mt-4 text-base text-gray-600 flex-grow">
-              Prebuilt checkboxes for common events. Pick one and tweak as needed.
+              Prebuilt Checklists for common events. Pick one and tweak as needed.
             </p>
 
             {/* mini steps */}
@@ -51,7 +51,7 @@ export default function TimelinePicker() {
                 <CheckCircle2 className="h-4 w-4 text-amber-700" /> Choose event
               </li>
               <li className="flex items-center gap-2">
-                <CheckCircle2 className="h-4 w-4 text-amber-700" /> Get checkbox
+                <CheckCircle2 className="h-4 w-4 text-amber-700" /> Get Checklist
               </li>
               <li className="flex items-center gap-2">
                 <CheckCircle2 className="h-4 w-4 text-amber-700" /> Make changes
@@ -59,25 +59,25 @@ export default function TimelinePicker() {
             </ol>
 
             <button
-              onClick={() => navigate("/prebuilt-checkbox")}
+              onClick={() => navigate("/prebuilt-Checklist")}
               className="mt-6 inline-flex items-center justify-center gap-2 rounded-md px-5 py-3 bg-amber-600 text-white text-base font-medium hover:bg-amber-700 transition w-full"
             >
               Continue <ArrowRight className="h-5 w-5" />
             </button>
           </div>
 
-          {/* Checkbox Type B */}
+          {/* Checklist Type B */}
           <div className="rounded-xl border bg-white p-8 shadow-md hover:shadow-lg transition flex flex-col">
             <div className="flex items-center gap-3">
               <span className="p-4 rounded-lg bg-amber-50 border border-amber-200">
                 <Briefcase className="h-8 w-8 text-amber-700" />
               </span>
               <h2 className="text-xl font-semibold text-gray-800">
-                Checkbox Type B
+                Checklist Type B
               </h2>
             </div>
             <p className="mt-4 text-base text-gray-600 flex-grow">
-              Create a custom checkbox from scratch. Perfect for corporates,
+              Create a custom Checklist from scratch. Perfect for corporates,
               offsites, or quick turnarounds.
             </p>
 
@@ -96,7 +96,7 @@ export default function TimelinePicker() {
             </ol>
 
             <button
-              onClick={() => navigate("/checkbox")}
+              onClick={() => navigate("/Checklist")}
               className="mt-6 inline-flex items-center justify-center gap-2 rounded-md px-5 py-3 bg-amber-600 text-white text-base font-medium hover:bg-amber-700 transition w-full"
             >
               Continue <ArrowRight className="h-5 w-5" />

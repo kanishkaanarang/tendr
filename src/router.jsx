@@ -65,7 +65,7 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
-    path: '/checkbox',
+    path: '/checklist',
     element: <Checkbox />,
     errorElement: <ErrorPage />,
   },
@@ -247,12 +247,12 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage /> 
   },
   {
-    path: '/checkbox-picker',
+    path: '/checklist-picker',
     element: <CheckboxPicker />,
     errorElement: <ErrorPage />
   },
   {
-    path: '/prebuilt-checkbox',
+    path: '/prebuilt-checklist',
     element: <PrebuiltCheckbox />,
     errorElement: <ErrorPage />
   }
