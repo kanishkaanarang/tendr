@@ -1,40 +1,40 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
 import SpeedDial from '@mui/material/SpeedDial';
-import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import SpeedDialAction from '@mui/material/SpeedDialAction';
-import FileCopyIcon from '@mui/icons-material/FileCopyOutlined';
-import SaveIcon from '@mui/icons-material/Save';
-import PrintIcon from '@mui/icons-material/Print';
-import ShareIcon from '@mui/icons-material/Share';
+import TimelineIcon from '@mui/icons-material/Timeline';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import InsertInvitationIcon from '@mui/icons-material/InsertInvitation';
+import MovieIcon from '@mui/icons-material/Movie';
 import { useNavigate } from 'react-router-dom';
+import tendrLogo from '../assets/logos/tendr.png';
+import GroupAddIcon from '@mui/icons-material/GroupAdd';
 
 const actions = [
-  { icon: <FileCopyIcon />, name: 'TimeLine',path:'/prebuilt-timeline' },
-  { icon: <SaveIcon />, name: 'Custom', path:'/custom-timeline' },
-  { icon: <PrintIcon />, name: 'CheckBox',path:'/checkbox' },
+  { icon: <TimelineIcon />, name: 'Timeline', path: '/timeline-picker' },
+  { icon: <CheckBoxIcon />, name: 'Checkbox', path: '/checkbox-picker' },
+  { icon: <InsertInvitationIcon />, name: 'Invitation Flyers', path: '/invitation' },
+  { icon: <MovieIcon />, name: 'Aftermovie', path: '/aftermovie' },
+  {icon: <GroupAddIcon/>, name: 'RSVP Invite Tracker', path: '/invite-tracker' },
 ];
 
+
 export default function BasicSpeedDial() {
-    const Navigate = useNavigate();
+  const navigate = useNavigate();
+
   return (
-      <SpeedDial
-        ariaLabel="SpeedDial basic"
-        sx={{ position: 'fixed', bottom: 50, right: 15 }}
-        icon={<SpeedDialIcon />}
-      >
-        {actions.map((action) => (
-          <SpeedDialAction
-            key={action.name}
-            icon={action.icon}
-            slotProps={{
-              tooltip: {
-                title: action.name,
-              },
-            }}
-            onClick={()=> Navigate(action.path)}
-          />
-        ))}
-      </SpeedDial>
+    <SpeedDial
+      ariaLabel="SpeedDial basic"
+       sx={{ position: 'fixed', bottom: 90, right: 40,'& .MuiFab-primary': { backgroundColor: 'white', color:'black',             boxShadow: '0 4px 8px rgba(0,0,0,0.2)','&:hover': {backgroundColor: '#f0f0f0',},'&:focus': {outline: 'none',},},}}
+      icon={<img src={tendrLogo} alt="logo" className="w-10 h-10" />}
+    >
+      {actions.map((action) => (
+        <SpeedDialAction
+          key={action.name}
+          icon={action.icon}  
+          tooltipTitle={action.name}
+          onClick={() => navigate(action.path)}
+        />
+      ))}
+    </SpeedDial>
   );
 }

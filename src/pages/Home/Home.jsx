@@ -58,7 +58,7 @@ const Home = () => {
       navigate('/aftermovie');
     }
     else if(selectedValue =='checkbox'){
-       navigate('/checkbox');
+       navigate('/checkbox-picker');
     }
     else if(selectedValue =='invitation'){
        navigate('/invitation');
@@ -140,7 +140,7 @@ const Home = () => {
   return (
     <div className="App">
       {/* Navigation */}
-      <div className={`fixed bottom-6 right-6 z-50 transform transition-all duration-500 ${scrolled ? "opacity-100 scale-100" : "opacity-0 scale-75 pointer-events-none"}`}>
+      <div className={`fixed bottom-2 right-1 z-50 transform transition-all duration-500 ${scrolled ? "opacity-100 scale-100" : "opacity-0 scale-75 pointer-events-none"}`}>
         <BasicSpeedDial />
       </div>
       <nav className={`fixed top-0 left-0 w-full z-50 bg-white shadow transition-transform duration-500 ease-in-out

@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { getVendors } from "../../apis/vendorApi";
 import CompareBar from "../../components/CompareBar";
 import CompareModal from "../../components/CompareModal";
+import BasicSpeedDial from "../../components/BasicSpeedDial";
 
 const VendorList = () => {
   const navigate = useNavigate();
@@ -40,14 +41,14 @@ const VendorList = () => {
   const [sortBy, setSortBy] = useState("rankingScore");
   const [sortOrder, setSortOrder] = useState("desc");
 
-  // === Compare feature state (NEW) ===
-  const [compareSelected, setCompareSelected] = useState([]); // max 2 vendors
+  // Compare
+  const [compareSelected, setCompareSelected] = useState([]);
   const [isCompareOpen, setIsCompareOpen] = useState(false);
   const toggleCompare = (vendor) => {
     setCompareSelected((prev) => {
       const exists = prev.find((v) => v._id === vendor._id);
       if (exists) return prev.filter((v) => v._id !== vendor._id);
-      if (prev.length >= 2) return prev; // optionally show toast
+      if (prev.length >= 2) return prev;
       return [...prev, vendor];
     });
   };
@@ -55,21 +56,22 @@ const VendorList = () => {
     setCompareSelected((prev) => prev.filter((v) => v._id !== id));
   const clearCompare = () => setCompareSelected([]);
 
+  // fetch on changes
   useEffect(() => {
     if (!locationTypeState || !serviceTypeState) return;
 
     setIsLoading(true);
-    const filters = {
+    const payload = {
       location: locationTypeState,
       serviceTypes: [serviceTypeState],
       sortBy,
       sortOrder,
       page: 1,
       limit: 10,
-      serviceFilters: secondaryFilters,
+      serviceFilters: secondaryFilters, // <- send selected secondary filters (keys depend on serviceType)
     };
 
-    getVendors(filters)
+    getVendors(payload)
       .then((data) => {
         setVendorList(data.vendors || []);
         setPaginationInfo(data.pagination || {});
@@ -83,7 +85,7 @@ const VendorList = () => {
     const nextPage = currentPage + 1;
     setIsLoading(true);
 
-    const filters = {
+    const payload = {
       location: locationTypeState,
       serviceTypes: [serviceTypeState],
       sortBy,
@@ -93,7 +95,7 @@ const VendorList = () => {
       serviceFilters: secondaryFilters,
     };
 
-    getVendors(filters)
+    getVendors(payload)
       .then((data) => {
         setVendorList((prev) => [...prev, ...(data.vendors || [])]);
         setPaginationInfo(data.pagination || {});
@@ -105,17 +107,18 @@ const VendorList = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <BasicSpeedDial/>
       <ListingsNav />
 
       <div className="flex flex-col lg:flex-row">
-        {/* Sidebar - Filters */}
+        {/* Sidebar */}
         <div className="w-full lg:w-1/4 bg-white shadow-lg lg:shadow-none lg:border-r border-gray-200">
           <div className="p-4 lg:p-6">
             <h2 className="text-lg sm:text-xl font-bold text-gray-800 mb-4 lg:mb-6">
               Filters
             </h2>
 
-            {/* Primary Filters */}
+            {/* Primary (unchanged) */}
             <div className="mb-6">
               <h3 className="text-sm sm:text-base font-semibold text-gray-700 mb-3">
                 Primary Filters
@@ -134,7 +137,7 @@ const VendorList = () => {
                 onSearch={() => {
                   setIsLoading(true);
                   setCurrentPage(1);
-                  const filters = {
+                  const p = {
                     location: locationTypeState,
                     serviceTypes: [serviceTypeState],
                     sortBy,
@@ -143,11 +146,10 @@ const VendorList = () => {
                     limit: 10,
                     serviceFilters: secondaryFilters,
                   };
-
-                  getVendors(filters)
+                  getVendors(p)
                     .then((data) => {
-                      setVendorList(data.vendors);
-                      setPaginationInfo(data.pagination);
+                      setVendorList(data.vendors || []);
+                      setPaginationInfo(data.pagination || {});
                     })
                     .catch((err) => console.error("Error fetching vendors:", err))
                     .finally(() => setIsLoading(false));
@@ -155,20 +157,25 @@ const VendorList = () => {
               />
             </div>
 
-            {/* Secondary Filters */}
+            {/* Secondary (vendor-aware) */}
             <div className="mb-6">
               <h3 className="text-sm sm:text-base font-semibold text-gray-700 mb-3">
                 Additional Filters
               </h3>
-              <SecondaryFilters_ListingPage onFiltersChange={setSecondaryFilters} />
+              <SecondaryFilters_ListingPage
+                serviceType={serviceTypeState}
+                vendors={vendorList}
+                onFiltersChange={setSecondaryFilters}
+              />
+
             </div>
 
-            {/* Apply Filters Button */}
+            {/* Apply Filters */}
             <button
               onClick={() => {
                 setIsLoading(true);
                 setCurrentPage(1);
-                const filters = {
+                const p = {
                   location: locationTypeState,
                   serviceTypes: [serviceTypeState],
                   sortBy,
@@ -177,11 +184,10 @@ const VendorList = () => {
                   limit: 10,
                   serviceFilters: secondaryFilters,
                 };
-
-                getVendors(filters)
+                getVendors(p)
                   .then((data) => {
-                    setVendorList(data.vendors);
-                    setPaginationInfo(data.pagination);
+                    setVendorList(data.vendors || []);
+                    setPaginationInfo(data.pagination || {});
                   })
                   .catch((err) => console.error("Error fetching vendors:", err))
                   .finally(() => setIsLoading(false));
@@ -193,9 +199,8 @@ const VendorList = () => {
           </div>
         </div>
 
-        {/* Main Content */}
+        {/* Main */}
         <div className="flex-1 p-4 lg:p-6">
-          {/* Header */}
           <div className="mb-6">
             <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800 mb-2">
               {serviceTypeState || "All"} Vendors
@@ -205,7 +210,6 @@ const VendorList = () => {
             </p>
           </div>
 
-          {/* Vendor List */}
           <VendorList_ListingPage
             eventType={eventTypeState}
             serviceType={serviceTypeState}
@@ -220,13 +224,10 @@ const VendorList = () => {
             sortOrder={sortOrder}
             setSortBy={setSortBy}
             setSortOrder={setSortOrder}
-            // NEW props
             compareSelected={compareSelected}
             onToggleCompare={toggleCompare}
           />
-          
 
-          {/* Pagination */}
           {paginationInfo && paginationInfo.totalPages > 1 && (
             <div className="mt-8 flex justify-center">
               <div className="flex space-x-2">
@@ -246,11 +247,10 @@ const VendorList = () => {
                       <button
                         key={pageNum}
                         onClick={() => handleShowMore()}
-                        className={`px-3 py-2 text-sm sm:text-base rounded-lg ${
-                          currentPage === pageNum
+                        className={`px-3 py-2 text-sm sm:text-base rounded-lg ${currentPage === pageNum
                             ? "bg-[#CCAB4A] text-white"
                             : "bg-white border border-gray-300 hover:bg-gray-50"
-                        }`}
+                          }`}
                       >
                         {pageNum}
                       </button>
@@ -271,7 +271,7 @@ const VendorList = () => {
         </div>
       </div>
 
-      {/* === Compare Bar & Modal (NEW) === */}
+      {/* Compare */}
       <CompareBar
         selected={compareSelected}
         onClear={clearCompare}
@@ -286,8 +286,8 @@ const VendorList = () => {
 
       {/* Footer (unchanged) */}
       <div className="footer h-fit pt-20 pb-5 bg-[#FFD3C3] text-[#D48060] rounded-t-[80px] transition-colors duration-300">
+        {/* … your footer as-is … */}
         <div className="top mx-20 flex justify-between">
-          {/* Left Section */}
           <div className="left flex flex-col gap-16">
             <div className="top text-[45px] font-bold">tendr</div>
             <div className="bottom flex flex-col gap-3">
@@ -305,7 +305,6 @@ const VendorList = () => {
               </div>
             </div>
           </div>
-          {/* Right Section */}
           <div className="right mt-4 font-bold text-[24px] flex flex-col gap-2">
             <div onClick={() => navigate("/plan-event/form")} className="group cursor-pointer transition-colors duration-300 hover:text-white">
               Support
