@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import logo from "../../assets/logos/tendr-logo-secondary.png";
 import user from "../../assets/ui/user-avatar.png";
 import partyBackground from "../../assets/ui/party-bg.jpeg";
 import BasicSpeedDial from "../../components/BasicSpeedDial";
 
+/* ---------- existing filters compiler (kept) ---------- */
 const compileFiltersMessage = (filters = {}) => {
   return `
 Guest: ${filters.guest || "N/A"}
@@ -18,29 +19,110 @@ Are you available?
 `.trim();
 };
 
+/* ---------- NEW: booking header compiler ---------- */
+const formatINR = (v) =>
+  v == null || v === "" ? "N/A" : `₹${Number(v).toLocaleString("en-IN")}`;
+
+const compileBookingHeader = ({
+  formData = {},
+  selectedVendors = [],
+  bookingType,
+  extraRequirements,
+  extraRequirementsText = "",
+}) => {
+  const {
+    eventName,
+    eventType,
+    guests,
+    budget,
+    location,
+    date,
+    time,
+    additionalInfo,
+  } = formData;
+
+  const vendorNames = (selectedVendors || []).map((v) =>
+    typeof v === "string" ? v : v?.name || v?.title || v?._id || "Vendor"
+  );
+
+  const lines = [
+    eventName ? `Event: ${eventName}` : null,
+    eventType ? `Type: ${eventType}` : null,
+    date ? `Date: ${date}` : null,
+    time ? `Time: ${time}` : null,
+    guests ? `Guests: ${guests}` : null,
+    budget ? `Budget: ${formatINR(budget)}` : null,
+    location ? `Location: ${location}` : null,
+    vendorNames.length ? `Vendors: ${vendorNames.join(" | ")}` : null,
+    bookingType ? `Booking Type: ${bookingType}` : null,
+    additionalInfo ? `Notes: ${additionalInfo}` : null,
+    extraRequirements && extraRequirementsText
+      ? `Extra Requirements: ${extraRequirementsText}`
+      : extraRequirements
+      ? `Extra Requirements: Yes`
+      : null,
+  ].filter(Boolean);
+
+  return lines.join("  •  ");
+};
+
 const Chat = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // fallback so /chat works even without state
+  // state from navigation (supports both flows)
+  const {
+    vendor: navVendor,
+    filters: navFilters,
+    from,                 // "booking" when coming from the booking button
+    bookingType,
+    formData,
+    selectedVendors,
+    extraRequirements,
+    extraRequirementsText,
+  } = location.state || {};
+
+  // fallback vendor so /chat works even without state
   const fallbackVendor = { _id: "concierge", name: "Tendr Concierge", approved: true };
-  const { vendor: navVendor, filters: navFilters } = location.state || {};
   const vendor = navVendor || fallbackVendor;
-  const filters = navFilters || {};
   const vendorApproved = vendor?.approved || false;
+
+  // keep old filters behaviour
+  const filters = navFilters || {};
 
   const [message, setMessage] = useState("");
   const [isVendorTyping, setIsVendorTyping] = useState(false);
   const [messages, setMessages] = useState([]);
   const [hasSentInitialMessage, setHasSentInitialMessage] = useState(false);
 
+  // Prepare booking header (sticky)
+  const bookingHeader = useMemo(() => {
+    if (from !== "booking") return "";
+    return compileBookingHeader({
+      formData,
+      selectedVendors,
+      bookingType,
+      extraRequirements,
+      extraRequirementsText,
+    });
+  }, [
+    from,
+    formData,
+    selectedVendors,
+    bookingType,
+    extraRequirements,
+    extraRequirementsText,
+  ]);
+
+  // Initial message ONLY for filters flow (kept as-is)
   useEffect(() => {
+    if (from === "booking") return; // don't auto-send a message for booking; header is enough
     if (filters && !hasSentInitialMessage && Object.keys(filters).length > 0) {
       const initialMessage = { text: compileFiltersMessage(filters), sender: "user" };
       setMessages([initialMessage]);
       setHasSentInitialMessage(true);
     }
-  }, [hasSentInitialMessage, filters]);
+  }, [hasSentInitialMessage, filters, from]);
 
   const handleUserTyping = (e) => {
     setMessage(e.target.value);
@@ -55,7 +137,7 @@ const Chat = () => {
     if (!vendorApproved) return;
 
     if (message.trim()) {
-      const userMessage = { text: message, sender: "user" };
+      const userMessage = { text: message.trim(), sender: "user" };
       setMessages((prev) => [...prev, userMessage]);
       setMessage("");
 
@@ -84,6 +166,7 @@ const Chat = () => {
       }}
     >
       <BasicSpeedDial />
+
       {/* Navbar */}
       <nav className="flex justify-between items-center px-6 py-4 shadow-md bg-white sticky top-0 z-50">
         <img
@@ -107,6 +190,16 @@ const Chat = () => {
         </div>
       </nav>
 
+      {/* Sticky Booking Header (only when from === "booking") */}
+      {bookingHeader && (
+        <div className="sticky top-[64px] z-40 bg-[#fff7f3] border-b border-[#ffd7c7]">
+          <div className="max-w-5xl mx-auto px-4 py-3 text-sm text-gray-800">
+            <span className="font-semibold text-[#ea7e53] mr-2">Booking Details:</span>
+            <span className="whitespace-pre-wrap">{bookingHeader}</span>
+          </div>
+        </div>
+      )}
+
       {/* Chat Section */}
       <div className="flex-1 flex flex-col p-4 overflow-y-auto space-y-4 bg-white bg-opacity-40 rounded-t-2xl shadow-lg mb-20">
         <div className="self-center text-sm text-gray-700">
@@ -116,7 +209,9 @@ const Chat = () => {
         {messages.map((msg, idx) => (
           <div key={idx} className={`${msg.sender === "user" ? "self-end" : "self-start"} mb-4`}>
             <div
-              className={`${msg.sender === "user" ? "bg-yellow-100" : "bg-white"} p-3 rounded-2xl shadow-md max-w-xs`}
+              className={`${
+                msg.sender === "user" ? "bg-yellow-100" : "bg-white"
+              } p-3 rounded-2xl shadow-md max-w-xs`}
             >
               <p className="text-sm text-gray-700 whitespace-pre-line">{msg.text}</p>
             </div>
@@ -138,13 +233,17 @@ const Chat = () => {
         <form onSubmit={handleSendMessage} className="flex items-center space-x-2">
           <input
             type="text"
-            placeholder={vendorApproved ? "Write your requirements" : "Waiting for vendor approval..."}
+            placeholder={
+              vendorApproved ? "Write your requirements" : "Waiting for vendor approval..."
+            }
             value={message}
             onChange={handleUserTyping}
             disabled={!vendorApproved}
             className={`flex-1 p-3 rounded-full border ${
               vendorApproved ? "border-gray-300" : "border-gray-200 bg-gray-100"
-            } focus:outline-none focus:ring-2 ${vendorApproved ? "focus:ring-yellow-400" : ""} text-sm`}
+            } focus:outline-none focus:ring-2 ${
+              vendorApproved ? "focus:ring-yellow-400" : ""
+            } text-sm`}
           />
           <button
             type="submit"
