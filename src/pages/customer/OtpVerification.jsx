@@ -1,3 +1,4 @@
+// src/pages/auth/OTPPage.jsx
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,6 +8,7 @@ import {
   clearError,
 } from "../../redux/authSlice";
 import logo from "../../assets/logos/tendr-logo-secondary.png";
+import Footer from "../../components/Footer"; // ✅ Import reusable footer
 
 const OTPPage = () => {
   const [otp, setOtp] = useState(["", "", "", ""]);
@@ -20,12 +22,11 @@ const OTPPage = () => {
 
   useEffect(() => {
     const corporateData = localStorage.getItem("corporatePlan");
-
     const isCorporateUser = !!corporateData;
     const isNormalUser = verificationId && userData?.phoneNumber;
 
     if (!isCorporateUser && !isNormalUser) {
-      navigate("/signup"); // redirecting to signup if not registered
+      navigate("/signup");
     }
   }, [verificationId, userData, navigate]);
 
@@ -41,8 +42,8 @@ const OTPPage = () => {
   const handleChange = (e) => {
     const value = e.target.value;
     const index = e.target.dataset.index;
-
     if (value.length > 1) return;
+
     const updatedOtp = [...otp];
     updatedOtp[index] = value;
     setOtp(updatedOtp);
@@ -53,10 +54,8 @@ const OTPPage = () => {
   };
 
   const handleKeyDown = (e, index) => {
-    if (e.key === "Backspace" && otp[index] === "") {
-      if (index > 0) {
-        document.getElementById(`otp-input-${index - 1}`).focus();
-      }
+    if (e.key === "Backspace" && otp[index] === "" && index > 0) {
+      document.getElementById(`otp-input-${index - 1}`).focus();
     }
   };
 
@@ -82,7 +81,7 @@ const OTPPage = () => {
       })
     ).then((result) => {
       if (result.meta.requestStatus === "fulfilled") {
-        navigate("/dashboard"); // Redirect to user dashboard after successful verification
+        navigate("/dashboard");
       }
     });
   };
@@ -93,7 +92,7 @@ const OTPPage = () => {
     dispatch(clearError());
     dispatch(resendOtpAction()).then((result) => {
       if (result.meta.requestStatus === "fulfilled") {
-        setOtp(["", "", "", ""]); // Clear OTP inputs
+        setOtp(["", "", "", ""]);
       }
     });
   };
@@ -116,11 +115,13 @@ const OTPPage = () => {
               Please enter the OTP (One-Time Password) sent to your registered
               phone number to complete your verification.
             </p>
+
             {error && (
               <div className="text-red-500 text-sm text-center mb-4">
                 {error}
               </div>
             )}
+
             <form onSubmit={handleVerify} className="space-y-4 w-full">
               <div className="flex justify-evenly gap-2 mb-1">
                 {otp.map((digit, index) => (
@@ -138,6 +139,7 @@ const OTPPage = () => {
                   />
                 ))}
               </div>
+
               <div className="flex justify-between text-xs text-gray-700 font-medium px-1">
                 <span>
                   Remaining Time:{" "}
@@ -159,6 +161,7 @@ const OTPPage = () => {
                   </button>
                 </span>
               </div>
+
               <div className="flex justify-center mt-2">
                 <button
                   type="submit"
@@ -174,27 +177,8 @@ const OTPPage = () => {
         </div>
       </div>
 
-      <footer className="w-full text-black text-sm py-3 px-4 text-center bg-opacity-60">
-        <div className="flex flex-wrap justify-center gap-2 sm:gap-4 font-semibold">
-          <span>tendr ©</span>
-          <span>|</span>
-          <a href="#" className="hover:underline cursor-pointer">
-            Support
-          </a>
-          <span>|</span>
-          <a href="#" className="hover:underline cursor-pointer">
-            Help Center
-          </a>
-          <span>|</span>
-          <a href="#" className="hover:underline cursor-pointer">
-            Vendor Support
-          </a>
-          <span>|</span>
-          <a href="#" className="hover:underline cursor-pointer">
-            Get in touch
-          </a>
-        </div>
-      </footer>
+      {/* ✅ Reusable Footer */}
+      <Footer />
     </div>
   );
 };
