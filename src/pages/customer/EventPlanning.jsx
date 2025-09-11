@@ -171,11 +171,24 @@ const EventPlanning = () => {
 
 
           {/* Options VendorTypes */}
-          <div className="grid md:grid-cols-4 gap-8 mb-12">
+           <div className="grid md:grid-cols-4 gap-8 mb-12">
             {vendors.map((vendor) => (
               <div
                 key={vendor.id}
-                onClick={() => openModal(vendor.id)}
+                // ⬇️ CHANGE: navigate to /listings and pass form data in state
+                onClick={() =>
+                  navigate('/listings', {
+                    state: {
+                      serviceType: vendor.id,                   // 'caterers' | 'photographers' | 'djs' | 'decorators'
+                      eventType: formData?.eventType || '',
+                      locationType: formData?.location || '',
+                      date: formData?.date || '',
+                      guestCount: Number(formData?.guests) || 0,
+                      vendors: [],
+                      pagination: {},
+                    },
+                  })
+                }
                 className="bg-white rounded-3xl p-8 text-center cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-xl border-2 border-transparent hover:border-[#ffb89e] shadow-lg"
               >
                 <div className="w-20 h-20 bg-[#ea7e53] rounded-2xl flex items-center justify-center mx-auto mb-6 text-white">
@@ -189,7 +202,6 @@ const EventPlanning = () => {
               </div>
             ))}
           </div>
-
 
           {/* [#FFD3C3]  Light Main*/}
           {/* [#FFD3C3]  Dark Main*/}

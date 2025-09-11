@@ -1,5 +1,4 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import WestIcon from "@mui/icons-material/West";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import FacebookIcon from "@mui/icons-material/Facebook";
@@ -10,6 +9,9 @@ import SecondaryFilters_ListingPage from "../../components/SecondaryFilters_List
 import VendorList_ListingPage from "../../components/VendorList_ListingPage";
 import { useEffect, useState } from "react";
 import { getVendors } from "../../apis/vendorApi";
+import CompareBar from "../../components/CompareBar";
+import CompareModal from "../../components/CompareModal";
+import Footer from "../../components/Footer"; // ✅ Import reusable footer
 
 const VendorList = () => {
   const navigate = useNavigate();
@@ -27,9 +29,7 @@ const VendorList = () => {
 
   const [eventTypeState, setEventTypeState] = useState(eventType || "");
   const [serviceTypeState, setServiceTypeState] = useState(serviceType || "");
-  const [locationTypeState, setLocationTypeState] = useState(
-    locationType || ""
-  );
+  const [locationTypeState, setLocationTypeState] = useState(locationType || "");
   const [dateState, setDateState] = useState(date || "");
   const [guestCountState, setGuestCountState] = useState(guestCount || 0);
 
@@ -40,6 +40,21 @@ const VendorList = () => {
   const [secondaryFilters, setSecondaryFilters] = useState({});
   const [sortBy, setSortBy] = useState("rankingScore");
   const [sortOrder, setSortOrder] = useState("desc");
+
+  // === Compare feature state (NEW) ===
+  const [compareSelected, setCompareSelected] = useState([]); // max 2 vendors
+  const [isCompareOpen, setIsCompareOpen] = useState(false);
+  const toggleCompare = (vendor) => {
+    setCompareSelected((prev) => {
+      const exists = prev.find((v) => v._id === vendor._id);
+      if (exists) return prev.filter((v) => v._id !== vendor._id);
+      if (prev.length >= 2) return prev; // optionally show toast
+      return [...prev, vendor];
+    });
+  };
+  const removeFromCompare = (id) =>
+    setCompareSelected((prev) => prev.filter((v) => v._id !== id));
+  const clearCompare = () => setCompareSelected([]);
 
   useEffect(() => {
     if (!locationTypeState || !serviceTypeState) return;
@@ -63,13 +78,7 @@ const VendorList = () => {
       })
       .catch((err) => console.error("Error fetching vendors:", err))
       .finally(() => setIsLoading(false));
-  }, [
-    sortBy,
-    sortOrder,
-    secondaryFilters,
-    locationTypeState,
-    serviceTypeState,
-  ]);
+  }, [sortBy, sortOrder, secondaryFilters, locationTypeState, serviceTypeState]);
 
   const handleShowMore = () => {
     const nextPage = currentPage + 1;
@@ -98,17 +107,21 @@ const VendorList = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <ListingsNav />
-      
+
       <div className="flex flex-col lg:flex-row">
         {/* Sidebar - Filters */}
         <div className="w-full lg:w-1/4 bg-white shadow-lg lg:shadow-none lg:border-r border-gray-200">
           <div className="p-4 lg:p-6">
-            <h2 className="text-lg sm:text-xl font-bold text-gray-800 mb-4 lg:mb-6">Filters</h2>
-            
+            <h2 className="text-lg sm:text-xl font-bold text-gray-800 mb-4 lg:mb-6">
+              Filters
+            </h2>
+
             {/* Primary Filters */}
             <div className="mb-6">
-              <h3 className="text-sm sm:text-base font-semibold text-gray-700 mb-3">Primary Filters</h3>
-              <PrimaryFilters_ListingPage 
+              <h3 className="text-sm sm:text-base font-semibold text-gray-700 mb-3">
+                Primary Filters
+              </h3>
+              <PrimaryFilters_ListingPage
                 eventType={eventTypeState}
                 setEventType={setEventTypeState}
                 serviceType={serviceTypeState}
@@ -137,9 +150,7 @@ const VendorList = () => {
                       setVendorList(data.vendors);
                       setPaginationInfo(data.pagination);
                     })
-                    .catch((err) =>
-                      console.error("Error fetching vendors:", err)
-                    )
+                    .catch((err) => console.error("Error fetching vendors:", err))
                     .finally(() => setIsLoading(false));
                 }}
               />
@@ -147,10 +158,10 @@ const VendorList = () => {
 
             {/* Secondary Filters */}
             <div className="mb-6">
-              <h3 className="text-sm sm:text-base font-semibold text-gray-700 mb-3">Additional Filters</h3>
-              <SecondaryFilters_ListingPage
-                onFiltersChange={setSecondaryFilters}
-              />
+              <h3 className="text-sm sm:text-base font-semibold text-gray-700 mb-3">
+                Additional Filters
+              </h3>
+              <SecondaryFilters_ListingPage onFiltersChange={setSecondaryFilters} />
             </div>
 
             {/* Apply Filters Button */}
@@ -173,9 +184,7 @@ const VendorList = () => {
                     setVendorList(data.vendors);
                     setPaginationInfo(data.pagination);
                   })
-                  .catch((err) =>
-                    console.error("Error fetching vendors:", err)
-                  )
+                  .catch((err) => console.error("Error fetching vendors:", err))
                   .finally(() => setIsLoading(false));
               }}
               className="w-full bg-[#CCAB4A] text-white py-2 sm:py-3 px-4 rounded-lg font-semibold hover:bg-[#ab8f39] transition-colors duration-200 text-sm sm:text-base"
@@ -190,10 +199,10 @@ const VendorList = () => {
           {/* Header */}
           <div className="mb-6">
             <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800 mb-2">
-              {serviceTypeState || 'All'} Vendors
+              {serviceTypeState || "All"} Vendors
             </h1>
-            <p className="text-sm sm:text-base text-gray-600">
-              {vendorList.length} vendors found in {locationTypeState || 'all locations'}
+            <p className="text-sm sm:text-base text-gray-600 ">
+              {vendorList.length} vendors found in {locationTypeState || "all locations"}
             </p>
           </div>
 
@@ -212,7 +221,11 @@ const VendorList = () => {
             sortOrder={sortOrder}
             setSortBy={setSortBy}
             setSortOrder={setSortOrder}
+            // NEW props
+            compareSelected={compareSelected}
+            onToggleCompare={toggleCompare}
           />
+          
 
           {/* Pagination */}
           {paginationInfo && paginationInfo.totalPages > 1 && (
@@ -225,24 +238,27 @@ const VendorList = () => {
                 >
                   Previous
                 </button>
-                
-                {Array.from({ length: Math.min(5, paginationInfo.totalPages) }, (_, i) => {
-                  const pageNum = i + 1;
-                  return (
-                    <button
-                      key={pageNum}
-                      onClick={() => handleShowMore()}
-                      className={`px-3 py-2 text-sm sm:text-base rounded-lg ${
-                        currentPage === pageNum
-                          ? 'bg-[#CCAB4A] text-white'
-                          : 'bg-white border border-gray-300 hover:bg-gray-50'
-                      }`}
-                    >
-                      {pageNum}
-                    </button>
-                  );
-                })}
-                
+
+                {Array.from(
+                  { length: Math.min(5, paginationInfo.totalPages) },
+                  (_, i) => {
+                    const pageNum = i + 1;
+                    return (
+                      <button
+                        key={pageNum}
+                        onClick={() => handleShowMore()}
+                        className={`px-3 py-2 text-sm sm:text-base rounded-lg ${
+                          currentPage === pageNum
+                            ? "bg-[#CCAB4A] text-white"
+                            : "bg-white border border-gray-300 hover:bg-gray-50"
+                        }`}
+                      >
+                        {pageNum}
+                      </button>
+                    );
+                  }
+                )}
+
                 <button
                   onClick={() => handleShowMore()}
                   disabled={isLoading}
@@ -256,88 +272,22 @@ const VendorList = () => {
         </div>
       </div>
 
-      {/* Footer */}
-      <div className="footer h-fit pt-20 pb-5 bg-[#FFD3C3] text-[#D48060] rounded-t-[80px] transition-colors duration-300">
-        <div className="top mx-20 flex justify-between">
-          {/* Left Section */}
-          <div className="left flex flex-col gap-16">
-            <div className="top text-[45px] font-bold">tendr</div>
-            <div className="bottom flex flex-col gap-3">
-              <div className="first text-2xl font-semibold">
-                Follow us on :-
-              </div>
-              <div className="second flex gap-5">
-                <div className="group cursor-pointer transition-colors duration-300">
-                  <LinkedInIcon
-                    className="text-black group-hover:text-white"
-                    sx={{ fontSize: 40 }}
-                  />
-                </div>
-                <div className="group cursor-pointer transition-colors duration-300">
-                  <InstagramIcon
-                    className="text-black group-hover:text-white"
-                    sx={{ fontSize: 40 }}
-                  />
-                </div>
-                <div className="group cursor-pointer transition-colors duration-300">
-                  <FacebookIcon
-                    className="text-black group-hover:text-white"
-                    sx={{ fontSize: 40 }}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-          {/* Right Section */}
-          <div className="right mt-4 font-bold text-[24px] flex flex-col gap-2">
-            <div
-              onClick={() => navigate("/plan-event/form")}
-              className="group cursor-pointer transition-colors duration-300 hover:text-white"
-            >
-              Support
-            </div>
-            <div
-              onClick={() => navigate("/plan-event/form")}
-              className="group cursor-pointer transition-colors duration-300 hover:text-white"
-            >
-              Help Center
-            </div>
-            <div
-              onClick={() => navigate("/vendor/register")}
-              className="group cursor-pointer transition-colors duration-300 hover:text-white"
-            >
-              Vendor Support
-            </div>
-            <div
-              onClick={() => navigate("/vendor/register")}
-              className="group cursor-pointer transition-colors duration-300 hover:text-white"
-            >
-              Vendor
-            </div>
-            <div
-              onClick={() => navigate("/plan-event/form")}
-              className="group cursor-pointer transition-colors duration-300 hover:text-white"
-            >
-              Get in touch
-            </div>
-          </div>
-        </div>
-        {/* Big tendr text in center */}
-        <div className="relative overflow-hidden">
-          <div className="center mx-20 text-[380px] font-bold text-center leading-none">
-            tendr
-          </div>
-        </div>
-        {/* Bottom row */}
-        <div className="bottom mx-12 text-xl font-bold flex justify-between">
-          <div className="left group cursor-pointer transition-colors duration-300 hover:text-white">
-            Copyright 2025 | tendr
-          </div>
-          <div className="right group cursor-pointer transition-colors duration-300 hover:text-white">
-            Privacy policy
-          </div>
-        </div>
-      </div>
+      {/* === Compare Bar & Modal (NEW) === */}
+      <CompareBar
+        selected={compareSelected}
+        onClear={clearCompare}
+        onOpen={() => setIsCompareOpen(true)}
+        onRemove={removeFromCompare}
+      />
+      <CompareModal
+        open={isCompareOpen}
+        onClose={() => setIsCompareOpen(false)}
+        vendors={compareSelected}
+      />
+
+      {/* Footer (unchanged) */}
+      
+      <Footer />
     </div>
   );
 };
