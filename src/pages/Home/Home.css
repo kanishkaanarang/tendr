@@ -156,12 +156,12 @@ body {
 /* Hero Section */
 .hero {
     background: 
-        linear-gradient(135deg, rgba(139, 69, 19, 0.4) 0%, rgba(160, 82, 45, 0.4) 100%),
-        url('https://images.unsplash.com/photo-1511578314322-379afb476865?w=1920&h=1080&fit=crop');
+        linear-gradient(120deg, rgba(232, 157, 103, 0.4) 0%, rgba(185, 138, 59, 0.245) 20%),
+        url('../../assets/backgrounds/bg.jpg');
     background-size: cover;
-    background-position: center;
+    background-position: center ;
     background-attachment: fixed;
-    color: #FFFFFF;
+    color: #FAEBD7;
     padding: 140px 0 100px;
     margin-top: 80px;
     position: relative;
@@ -194,13 +194,13 @@ body {
 }
 
 .hero-content h1 {
-    font-size: 4rem;
+    font-size: 3.8rem;
     font-weight: 900;
     margin-bottom: 2rem;
-    letter-spacing: -2px;
-    line-height: 1.1;
+    letter-spacing: -1px;
+    line-height: 1.5;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-    background: linear-gradient(45deg, #FFFFFF, #F5F5DC, #FFFFFF);
+    background: linear-gradient(45deg, #FFFFFF, #f8f8da, #FFFFFF);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -213,7 +213,7 @@ body {
     letter-spacing: -2px;
     line-height: 1.1;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-    background: linear-gradient(45deg, #FFFFFF, #F5F5DC, #FFFFFF);
+    background: linear-gradient(45deg, #FFFFFF, #fffff5, #FFFFFF);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
