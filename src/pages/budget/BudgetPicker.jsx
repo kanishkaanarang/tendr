@@ -37,6 +37,14 @@ const eventTypes = [
     description: 'Fun and casual celebrations',
     icon: '🎉',
     color: 'from-yellow-500 to-orange-500'
+  },
+  {
+    id: 'custom',
+    name: 'Custom Budget',
+    description: 'Create a completely custom budget allocation from scratch',
+    icon: '⚙️',
+    color: 'from-gray-500 to-gray-600',
+    isCustom: true
   }
 ];
 
@@ -44,11 +52,11 @@ export default function BudgetPicker() {
   const navigate = useNavigate();
 
   const handleEventSelect = (eventType) => {
-    navigate('/budget-allocator', { state: { eventType } });
-  };
-
-  const handleCustomBudget = () => {
-    navigate('/budget-allocator', { state: { isCustom: true } });
+    if (eventType === 'custom') {
+      navigate('/budget-allocator', { state: { isCustom: true } });
+    } else {
+      navigate('/budget-allocator', { state: { eventType } });
+    }
   };
 
   return (
@@ -57,9 +65,11 @@ export default function BudgetPicker() {
       
       <div className="container mx-auto px-6 py-12">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-800 mb-4">Budget Allocator</h1>
+        <div className="bg-gradient-to-r from-amber-600 to-yellow-500 bg-clip-text text-transparent text-5xl mb-6 font-bold">
+              Choose Budget Type
+            </div>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Plan your event budget with our smart allocation tool. Choose an event type to get started with pre-configured budget categories, or create a custom budget from scratch.
+            Plan your event budget with our smart allocation tool.
           </p>
         </div>
 
@@ -87,22 +97,6 @@ export default function BudgetPicker() {
               </div>
             </div>
           ))}
-        </div>
-
-        <div className="text-center">
-          <div className="bg-white rounded-xl shadow-lg p-8 max-w-md mx-auto">
-            <div className="w-16 h-16 bg-gradient-to-br from-gray-500 to-gray-600 rounded-full flex items-center justify-center mx-auto mb-4">
-              <span className="text-3xl">⚙️</span>
-            </div>
-            <h3 className="text-xl font-bold text-gray-800 mb-2">Custom Budget</h3>
-            <p className="text-gray-600 mb-6">Create a completely custom budget allocation from scratch</p>
-            <button
-              onClick={handleCustomBudget}
-              className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-300"
-            >
-              Start Custom Budget
-            </button>
-          </div>
         </div>
 
         <div className="mt-16 text-center">
