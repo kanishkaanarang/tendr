@@ -34,7 +34,7 @@ const EventPlanning = () => {
   const location = useLocation();
   const [activeModal, setActiveModal] = useState(null);
   const [extraRequirements, setExtraRequirements] = useState(false);
-  const [showExtraReq, setShowExtraReq] = useState(false);
+  const [showExtraReq, setShowExtraReq] = useState();
   const [extraRequirementsText, setExtraRequirementsText] = useState("");
 
   const dispatch = useDispatch();
@@ -255,7 +255,7 @@ const EventPlanning = () => {
               <p className="text-lg text-gray-600 mb-4">
                 Require more than one service?
               </p>
-              <div className="btn flex justify-center mb-4">
+              {/* <div className="btn flex justify-center mb-4">
                 <button
                   type="button"
                   onClick={() => navigate("/group-booking")}
@@ -269,7 +269,7 @@ const EventPlanning = () => {
                     />
                   </span>
                 </button>
-              </div>
+              </div> */}
 
               {/* NEW Extra Requirements toggle */}
               <div className="btn flex justify-center">
@@ -425,8 +425,8 @@ const EventPlanning = () => {
                       : dispatch(addSelectedVendor(v.id))
                   }
                   className={`flex items-center justify-between rounded-2xl p-5 text-left border-2 transition-all ${checked
-                      ? "bg-[#ffe3d7] border-[#f4a07d]"
-                      : "bg-white border-[#ffd7c7] hover:bg-[#fff5f0]"
+                    ? "bg-[#ffe3d7] border-[#f4a07d]"
+                    : "bg-white border-[#ffd7c7] hover:bg-[#fff5f0]"
                     }`}
                 >
                   <div className="flex items-center gap-4">
@@ -452,31 +452,31 @@ const EventPlanning = () => {
           </div>
 
           {/* Extra requirements */}
-         <div className="w-full max-w-4xl mt-6">
-  {/* Checkbox */}
-  <label className="flex items-center gap-3 bg-white rounded-2xl py-4 px-5 border-2 border-[#ffd7c7]">
-    <input
-      type="checkbox"
-      className="w-5 h-5 accent-[#ff8d61]"
-      checked={extraRequirements}
-      onChange={(e) => setExtraRequirements(e.target.checked)}
-    />
-    <span className="text-gray-700">
-      I have extra requirements (Table, Chair, Cooler, Mats…)
-    </span>
-  </label>
+          <div className="w-full max-w-4xl mt-6">
+            {/* Checkbox */}
+            <label className="flex items-center gap-3 bg-white rounded-2xl py-4 px-5 border-2 border-[#ffd7c7]">
+              <input
+                type="checkbox"
+                className="w-5 h-5 accent-[#ff8d61]"
+                checked={extraRequirements}
+                onChange={(e) => setExtraRequirements(e.target.checked)}
+              />
+              <span className="text-gray-700">
+                I have extra requirements (Table, Chair, Cooler, Mats…)
+              </span>
+            </label>
 
-  {/* Conditionally render textarea */}
-  {extraRequirements && (
-    <textarea
-      className="w-full mt-4 p-4 border-2 border-[#ffd7c7] rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#ff8d61]"
-      rows={4}
-      placeholder="Please specify your extra requirements..."
-      value={extraRequirementsText}
-      onChange={(e) => setExtraRequirementsText(e.target.value)}
-    />
-  )}
-</div>
+            {/* Conditionally render textarea */}
+            {extraRequirements && (
+              <textarea
+                className="w-full mt-4 p-4 border-2 border-[#ffd7c7] rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#ff8d61]"
+                rows={4}
+                placeholder="Please specify your extra requirements..."
+                value={extraRequirementsText}
+                onChange={(e) => setExtraRequirementsText(e.target.value)}
+              />
+            )}
+          </div>
 
 
           {/* CTA */}
@@ -488,31 +488,31 @@ const EventPlanning = () => {
               ← Back
             </button>
 
-           <button
-  type="button"
-  onClick={() =>
-    navigate("/chat", {
-      state: {
-        from: "booking",
-        bookingType,
-        formData,               // your full form object
-        selectedVendors,        // array of vendor objects/ids
-        extraRequirements,      // boolean
-        extraRequirementsText,  // <-- add this so header can show the text
-      },
-      replace: true,
-    })
-  }
-  className="group cursor-pointer bg-white hover:bg-[#ea7e53] hover:text-white rounded-2xl pl-4 pr-2 flex items-center justify-between text-[#ea7e53] font-bold w-[260px] h-[48px] transform transition-transform duration-300 ease-in-out hover:scale-105 hover:-translate-y-1 active:scale-95 shadow-lg"
->
-  <span className="pb-[2px] text-lg">Booking → Open Chat</span>
-  <span className="group-hover:bg-white arrowButton w-[30px] h-[30px] bg-[#ea7e53] rounded-xl flex items-center justify-center transition duration-300">
-    <EastIcon
-      className="text-white group-hover:text-[#ea7e53] transition duration-300"
-      fontSize="medium"
-    />
-  </span>
-</button>
+            <button
+              type="button"
+              onClick={() =>
+                navigate("/chat", {
+                  state: {
+                    from: "booking",
+                    bookingType,
+                    formData,               // your full form object
+                    selectedVendors,        // array of vendor objects/ids
+                    extraRequirements,      // boolean
+                    extraRequirementsText,  // <-- add this so header can show the text
+                  },
+                  replace: true,
+                })
+              }
+              className="group cursor-pointer bg-white hover:bg-[#ea7e53] hover:text-white rounded-2xl pl-4 pr-2 flex items-center justify-between text-[#ea7e53] font-bold w-[260px] h-[48px] transform transition-transform duration-300 ease-in-out hover:scale-105 hover:-translate-y-1 active:scale-95 shadow-lg"
+            >
+              <span className="pb-[2px] text-lg">Booking → Open Chat</span>
+              <span className="group-hover:bg-white arrowButton w-[30px] h-[30px] bg-[#ea7e53] rounded-xl flex items-center justify-center transition duration-300">
+                <EastIcon
+                  className="text-white group-hover:text-[#ea7e53] transition duration-300"
+                  fontSize="medium"
+                />
+              </span>
+            </button>
 
           </div>
 
@@ -623,8 +623,8 @@ const EventPlanning = () => {
                       handleInputChange(currentQuestion.id, option)
                     }
                     className={`w-full text-xl p-4 text-left rounded-2xl transition-all duration-200 border-2 ${formData[currentQuestion.id] === option
-                        ? "bg-[#ffcdb9] border-[#ff885d] text-gray-800 shadow-md"
-                        : "bg-white border-[#ffc1ab] text-gray-700 hover:bg-[#fff1eb] hover:border-[#fa9e7d]"
+                      ? "bg-[#ffcdb9] border-[#ff885d] text-gray-800 shadow-md"
+                      : "bg-white border-[#ffc1ab] text-gray-700 hover:bg-[#fff1eb] hover:border-[#fa9e7d]"
                       }`}
                   >
                     {option}
@@ -642,8 +642,8 @@ const EventPlanning = () => {
             onClick={prevStep}
             disabled={currentStep === 0}
             className={`flex items-center text-lg px-6 py-3 rounded-2xl transition-all duration-300 ${currentStep === 0
-                ? "text-gray-400 cursor-not-allowed"
-                : "text-gray-600 hover:bg-white hover:text-black hover:scale-110 hover:-translate-y-1"
+              ? "text-gray-400 cursor-not-allowed"
+              : "text-gray-600 hover:bg-white hover:text-black hover:scale-110 hover:-translate-y-1"
               }`}
           >
             <ChevronLeft className="w-5 h-5 mr-2" />
@@ -655,8 +655,8 @@ const EventPlanning = () => {
             onClick={nextStep}
             disabled={!formData[currentQuestion.id]}
             className={`flex items-center text-lg px-8 py-3 rounded-2xl transition-all duration-300 ${formData[currentQuestion.id]
-                ? "bg-[#ff7a49] text-white transform hover:scale-110 hover:-translate-y-1 shadow-lg"
-                : "bg-gray-200 text-gray-400 cursor-not-allowed"
+              ? "bg-[#ff7a49] text-white transform hover:scale-110 hover:-translate-y-1 shadow-lg"
+              : "bg-gray-200 text-gray-400 cursor-not-allowed"
               }`}
           >
             {currentStep === questions.length - 1

@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { Paperclip, X as XIcon, Image as ImageIcon } from "lucide-react";
 import logo from "../../assets/logos/tendr-logo-secondary.png";
 import user from "../../assets/ui/user-avatar.png";
 import partyBackground from "../../assets/ui/party-bg.jpeg";
@@ -59,12 +60,16 @@ const compileBookingHeader = ({
     extraRequirements && extraRequirementsText
       ? `Extra Requirements: ${extraRequirementsText}`
       : extraRequirements
-      ? `Extra Requirements: Yes`
-      : null,
+        ? `Extra Requirements: Yes`
+        : null,
   ].filter(Boolean);
 
   return lines.join("  •  ");
 };
+
+const MAX_FILES = 10;
+const MAX_MB = 10; // per file
+const ACCEPTED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 
 const Chat = () => {
   const navigate = useNavigate();
@@ -74,7 +79,7 @@ const Chat = () => {
   const {
     vendor: navVendor,
     filters: navFilters,
-    from,                 // "booking" when coming from the booking button
+    from, // "booking" when coming from the booking button
     bookingType,
     formData,
     selectedVendors,
@@ -94,6 +99,10 @@ const Chat = () => {
   const [isVendorTyping, setIsVendorTyping] = useState(false);
   const [messages, setMessages] = useState([]);
   const [hasSentInitialMessage, setHasSentInitialMessage] = useState(false);
+
+  // NEW: attachments selected but not yet sent
+  const [pendingAttachments, setPendingAttachments] = useState([]); // [{url, file, name, size, type, id}]
+  const fileInputRef = useRef(null);
 
   // Prepare booking header (sticky)
   const bookingHeader = useMemo(() => {
@@ -124,6 +133,14 @@ const Chat = () => {
     }
   }, [hasSentInitialMessage, filters, from]);
 
+  // Cleanup object URLs when component unmounts
+  useEffect(() => {
+    return () => {
+      pendingAttachments.forEach((a) => URL.revokeObjectURL(a.url));
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleUserTyping = (e) => {
     setMessage(e.target.value);
     clearTimeout(window.vendorTypingTimeout);
@@ -132,27 +149,112 @@ const Chat = () => {
     }, 1000);
   };
 
+  const openFilePicker = () => {
+    if (!fileInputRef.current) return;
+    fileInputRef.current.click();
+  };
+
+  const handleFilesChosen = (e) => {
+    const files = Array.from(e.target.files || []);
+    if (!files.length) return;
+
+    // basic validations
+    const currentCount = pendingAttachments.length;
+    const availableSlots = Math.max(0, MAX_FILES - currentCount);
+    const slice = files.slice(0, availableSlots);
+
+    const rejected = [];
+    const accepted = [];
+
+    slice.forEach((file) => {
+      const tooBig = file.size > MAX_MB * 1024 * 1024;
+      const badType = !ACCEPTED_TYPES.includes(file.type);
+      if (tooBig || badType) {
+        rejected.push({ name: file.name, reason: tooBig ? `>${MAX_MB}MB` : "type" });
+        return;
+      }
+      const url = URL.createObjectURL(file);
+      accepted.push({
+        id: `${file.name}-${file.size}-${Date.now()}`,
+        url,
+        file,
+        name: file.name,
+        size: file.size,
+        type: file.type,
+      });
+    });
+
+    if (rejected.length) {
+      const msg = rejected
+        .map((r) => `• ${r.name} (${r.reason})`)
+        .join("\n");
+      alert(
+        `Some files were not added:\n${msg}\n\nAllowed: JPG/PNG/WebP/GIF, up to ${MAX_MB}MB each.`
+      );
+    }
+
+    if (currentCount + accepted.length >= MAX_FILES) {
+      alert(`You can attach up to ${MAX_FILES} images per message.`);
+    }
+
+    setPendingAttachments((prev) => [...prev, ...accepted]);
+    // reset input so selecting same file again retriggers onChange
+    e.target.value = "";
+  };
+
+  const removePendingAttachment = (id) => {
+    setPendingAttachments((prev) => {
+      const found = prev.find((p) => p.id === id);
+      if (found) URL.revokeObjectURL(found.url);
+      return prev.filter((p) => p.id !== id);
+    });
+  };
+
   const handleSendMessage = (e) => {
     e.preventDefault();
     if (!vendorApproved) return;
 
-    if (message.trim()) {
-      const userMessage = { text: message.trim(), sender: "user" };
-      setMessages((prev) => [...prev, userMessage]);
-      setMessage("");
+    const trimmed = message.trim();
+    const hasImages = pendingAttachments.length > 0;
 
-      setIsVendorTyping(true);
-      setTimeout(() => {
-        setMessages((prev) => [
-          ...prev,
-          {
-            text: "Thank you for your message! I'll get back to you shortly with a detailed response.",
-            sender: "vendor",
-          },
-        ]);
-        setIsVendorTyping(false);
-      }, 2000);
-    }
+    if (!trimmed && !hasImages) return;
+
+    const userMessage = {
+      text: trimmed || "",
+      sender: "user",
+      attachments: hasImages
+        ? pendingAttachments.map((a) => ({
+          url: a.url,
+          name: a.name,
+          type: a.type,
+          size: a.size,
+        }))
+        : undefined,
+      ts: Date.now(),
+    };
+
+    setMessages((prev) => [...prev, userMessage]);
+    setMessage("");
+
+    // Clear pending attachments (keep object URLs alive in the message UI)
+    setPendingAttachments([]);
+
+    // Simulated vendor reply
+    setIsVendorTyping(true);
+    setTimeout(() => {
+      setMessages((prev) => [
+        ...prev,
+        {
+          text:
+            "Thanks! Got your details" +
+            (hasImages ? " and photos" : "") +
+            ". I’ll revert shortly.",
+          sender: "vendor",
+          ts: Date.now(),
+        },
+      ]);
+      setIsVendorTyping(false);
+    }, 1500);
   };
 
   return (
@@ -162,7 +264,9 @@ const Chat = () => {
         backgroundImage: `url(${partyBackground})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
         backgroundAttachment: "fixed",
+        backgroundColor: "#fdf6f3", // fallback matching the image tone
       }}
     >
       <BasicSpeedDial />
@@ -201,19 +305,42 @@ const Chat = () => {
       )}
 
       {/* Chat Section */}
-      <div className="flex-1 flex flex-col p-4 overflow-y-auto space-y-4 bg-white bg-opacity-40 rounded-t-2xl shadow-lg mb-20">
+      <div className="flex-1 flex flex-col p-4 overflow-y-auto space-y-4 bg-white bg-opacity-40 rounded-t-2xl shadow-lg mb-28">
         <div className="self-center text-sm text-gray-700">
           Chatting with <b>{vendor?.name || "Vendor"}</b>
         </div>
 
         {messages.map((msg, idx) => (
-          <div key={idx} className={`${msg.sender === "user" ? "self-end" : "self-start"} mb-4`}>
+          <div key={msg.ts || idx} className={`${msg.sender === "user" ? "self-end" : "self-start"} mb-2`}>
             <div
-              className={`${
-                msg.sender === "user" ? "bg-yellow-100" : "bg-white"
-              } p-3 rounded-2xl shadow-md max-w-xs`}
+              className={`${msg.sender === "user" ? "bg-yellow-100" : "bg-white"
+                } p-3 rounded-2xl shadow-md max-w-xs`}
             >
-              <p className="text-sm text-gray-700 whitespace-pre-line">{msg.text}</p>
+              {!!msg.text && (
+                <p className="text-sm text-gray-700 whitespace-pre-line">{msg.text}</p>
+              )}
+
+              {/* Render attachments if any */}
+              {Array.isArray(msg.attachments) && msg.attachments.length > 0 && (
+                <div className={`mt-2 grid gap-2 ${msg.attachments.length > 1 ? "grid-cols-2" : "grid-cols-1"}`}>
+                  {msg.attachments.map((att, i) => (
+                    <a
+                      key={i}
+                      href={att.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="block"
+                      title={att.name}
+                    >
+                      <img
+                        src={att.url}
+                        alt={att.name || "attachment"}
+                        className="w-full h-28 object-cover rounded-xl border"
+                      />
+                    </a>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         ))}
@@ -228,29 +355,92 @@ const Chat = () => {
         )}
       </div>
 
+      {/* Pending attachment previews (above input) */}
+      {pendingAttachments.length > 0 && (
+        <div className="fixed bottom-20 left-0 right-0 z-50">
+          <div className="mx-auto max-w-3xl px-4">
+            <div className="bg-white rounded-2xl shadow-lg p-3 border">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2 text-sm text-gray-700">
+                  <ImageIcon className="w-4 h-4" />
+                  <span>Attachments ({pendingAttachments.length}/{MAX_FILES})</span>
+                </div>
+                <span className="text-[11px] text-gray-500">
+                  Allowed: JPG/PNG/WebP/GIF • up to {MAX_MB}MB each
+                </span>
+              </div>
+              <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
+                {pendingAttachments.map((att) => (
+                  <div key={att.id} className="relative group">
+                    <img
+                      src={att.url}
+                      alt={att.name}
+                      className="w-full h-24 object-cover rounded-xl border"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removePendingAttachment(att.id)}
+                      className="absolute -top-2 -right-2 bg-black/70 hover:bg-black text-white rounded-full p-1"
+                      aria-label="Remove"
+                      title="Remove"
+                    >
+                      <XIcon className="w-3 h-3" />
+                    </button>
+                    <div className="mt-1 text-[11px] text-gray-600 truncate" title={att.name}>
+                      {att.name}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Chat Input */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white shadow-inner p-4 z-50">
-        <form onSubmit={handleSendMessage} className="flex items-center space-x-2">
+      <div className="fixed bottom-0 left-0 right-0 bg-white shadow-inner p-3 z-50">
+        <form onSubmit={handleSendMessage} className="mx-auto max-w-3xl flex items-center gap-2">
+          {/* Hidden file input */}
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/png,image/jpeg,image/webp,image/gif"
+            multiple
+            onChange={handleFilesChosen}
+            className="hidden"
+          />
+
+          {/* Attach button */}
+          <button
+            type="button"
+            onClick={openFilePicker}
+            className={`flex items-center justify-center shrink-0 rounded-full border px-3 py-3 ${vendorApproved ? "border-gray-300 hover:bg-gray-50" : "border-gray-200 bg-gray-100 cursor-not-allowed"
+              }`}
+            disabled={!vendorApproved}
+            title="Attach photos"
+            aria-label="Attach photos"
+          >
+            <Paperclip className="w-5 h-5" />
+          </button>
+
+          {/* Message input */}
           <input
             type="text"
-            placeholder={
-              vendorApproved ? "Write your requirements" : "Waiting for vendor approval..."
-            }
+            placeholder={vendorApproved ? "Write your requirements" : "Waiting for vendor approval..."}
             value={message}
             onChange={handleUserTyping}
             disabled={!vendorApproved}
-            className={`flex-1 p-3 rounded-full border ${
-              vendorApproved ? "border-gray-300" : "border-gray-200 bg-gray-100"
-            } focus:outline-none focus:ring-2 ${
-              vendorApproved ? "focus:ring-yellow-400" : ""
-            } text-sm`}
+            className={`flex-1 p-3 rounded-full border ${vendorApproved ? "border-gray-300" : "border-gray-200 bg-gray-100"
+              } focus:outline-none focus:ring-2 ${vendorApproved ? "focus:ring-yellow-400" : ""
+              } text-sm`}
           />
+
+          {/* Send button */}
           <button
             type="submit"
             disabled={!vendorApproved}
-            className={`${
-              vendorApproved ? "bg-yellow-400 hover:bg-yellow-500" : "bg-gray-300 cursor-not-allowed"
-            } text-white font-semibold px-6 py-3 rounded-full text-sm`}
+            className={`shrink-0 ${vendorApproved ? "bg-yellow-400 hover:bg-yellow-500" : "bg-gray-300 cursor-not-allowed"
+              } text-white font-semibold px-6 py-3 rounded-full text-sm`}
           >
             Send
           </button>
