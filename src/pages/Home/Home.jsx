@@ -60,6 +60,9 @@ const Home = () => {
     else if(selectedValue =='checklist'){
        navigate('/checklist-picker');
     }
+    else if(selectedValue =='budget'){
+       navigate('/budget-picker');
+    }
     else if(selectedValue =='invitation'){
        navigate('/invitation');
     }
@@ -154,6 +157,7 @@ const Home = () => {
               <option value="" disabled selected>Tendr Utilities</option>
               <option value="checklist">Checklist</option>
               <option value="timeline-picker">Timeline</option>
+              <option value="budget">Budget Allocator</option>
               <option value="aftermovie">Aftermovie</option>
               <option value="invitaion">Invitaion Flyers</option>
             </select>
