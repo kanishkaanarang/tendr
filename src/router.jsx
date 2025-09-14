@@ -38,6 +38,8 @@ import Checkbox from './pages/checkbox/Checkbox';
 import TimelinePicker from './pages/timeline/TimelinePicker';
 import CheckboxPicker from './pages/checkbox/CheckboxPicker.jsx';
 import PrebuiltCheckbox from './pages/checkbox/PrebuiltCheckbox.jsx';
+import BudgetPicker from './pages/budget/BudgetPicker.jsx';
+import BudgetAllocator from './pages/budget/BudgetAllocator.jsx';
 
 // only chat list for customers (no Conversation/ActiveChat components)
 import CustomerChatList from "./pages/customer/Chats";
@@ -254,6 +256,16 @@ const router = createBrowserRouter([
   {
     path: '/prebuilt-checklist',
     element: <PrebuiltCheckbox />,
+    errorElement: <ErrorPage />
+  },
+  {
+    path: '/budget-picker',
+    element: <BudgetPicker />,
+    errorElement: <ErrorPage />
+  },
+  {
+    path: '/budget-allocator',
+    element: <BudgetAllocator />,
     errorElement: <ErrorPage />
   }
 ]);
