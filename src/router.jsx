@@ -44,6 +44,7 @@ import BudgetAllocator from './pages/budget/BudgetAllocator.jsx';
 // only chat list for customers (no Conversation/ActiveChat components)
 import CustomerChatList from "./pages/customer/Chats";
 import EventPlanning from "./pages/customer/EventPlanning.jsx";
+import GiftHampersCakes from './pages/customer/GiftHampersCakes';
 
 const router = createBrowserRouter([
   { 
@@ -267,7 +268,12 @@ const router = createBrowserRouter([
     path: '/budget-allocator',
     element: <BudgetAllocator />,
     errorElement: <ErrorPage />
-  }
+  },
+  {
+    path: '/gift-hampers-cakes',
+    element: <GiftHampersCakes />,
+    errorElement: <ErrorPage />,
+  },
 ]);
 
 export default router;

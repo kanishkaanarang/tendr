@@ -69,6 +69,10 @@ const Home = () => {
     }
   }
 
+  const handleGiftHampersClick = () => {
+    navigate('/gift-hampers-cakes');
+  };
+
   const services = [
     {
       id: 1,
@@ -170,6 +174,13 @@ const Home = () => {
               onClick={handleWhatsAppClick}
             >
               💬
+            </a>
+            <a
+              href="/gift-hampers-cakes" 
+              className="nav-link" 
+              onClick={handleGiftHampersClick}
+            >
+              Gift Hampers & Cakes
             </a>
             <a href="/login" className="sign-in" onClick={handleSignInClick}>
               Sign in
