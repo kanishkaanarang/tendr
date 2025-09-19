@@ -124,12 +124,12 @@ export default function CheckBox() {
   };
 
   return (
-    <div className="min-w-screen mx-auto p-6 bg-white min-h-screen">
+    <div className="min-w-screen mx-auto px-40 py-20 bg-white min-h-screen">
       <BasicSpeedDial/>
 
       {/* Event selector */}
       <div className="mb-6">
-        <label className="block mb-2 font-medium text-gray-700">Choose Event:</label>
+        <label className="block mb-2 font-medium text-gray-700 text-2xl">Choose Event:</label>
         <select
           value={selectedEvent}
           onChange={handleSelectEvent}
@@ -142,8 +142,8 @@ export default function CheckBox() {
         </select>
       </div>
 
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Checklist Builder</h1>
+      <div className="flex justify-between items-center mb-6 mt-[40px]">
+        <div className="text-4xl font-bold">Checklist Builder</div>
         <div className="flex gap-2">
           <button onClick={addEvent} className="px-4 py-2 bg-blue-500 text-white rounded">
             + Add Event
