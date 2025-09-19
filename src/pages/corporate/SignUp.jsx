@@ -141,9 +141,8 @@ export default function CorporateSignup() {
               <img
                 src={logo}
                 alt="tendr logo"
-                className="w-36 h-auto mb-1"
+                className="w-44 h-auto mb-1"
               />
-              <p className="text-xs text-gray-600 font-medium">WE CURATE YOU CELEBRATE</p>
             </div>
           </div>
 
