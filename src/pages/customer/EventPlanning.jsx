@@ -163,6 +163,23 @@ const EventPlanning = () => {
     dispatch(setFormData({ field, value }));
   };
 
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter' && formData[currentQuestion.id]) {
+      nextStep();
+    }
+  };
+
+  const handleSelectKeyPress = (e, option) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      handleInputChange(currentQuestion.id, option);
+      // Auto-advance to next step after selection
+      setTimeout(() => {
+        nextStep();
+      }, 100);
+    }
+  };
+
   /**
    * On Next:
    * - If not last question → advance step.
@@ -570,6 +587,7 @@ const EventPlanning = () => {
                 onChange={(e) =>
                   handleInputChange(currentQuestion.id, e.target.value)
                 }
+                onKeyPress={handleKeyPress}
                 placeholder={currentQuestion.placeholder}
                 className="w-full p-4 text-xl bg-white border-2 border-[#ff885d] rounded-2xl text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff885d] focus:border-transparent transition-all duration-200"
                 autoFocus
@@ -583,6 +601,7 @@ const EventPlanning = () => {
                 onChange={(e) =>
                   handleInputChange(currentQuestion.id, e.target.value)
                 }
+                onKeyPress={handleKeyPress}
                 placeholder={currentQuestion.placeholder}
                 className="w-full p-4 text-xl bg-white border-2 border-[#ff885d] rounded-2xl text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff885d] focus:border-transparent transition-all duration-200"
                 autoFocus
@@ -596,6 +615,7 @@ const EventPlanning = () => {
                 onChange={(e) =>
                   handleInputChange(currentQuestion.id, e.target.value)
                 }
+                onKeyPress={handleKeyPress}
                 className="w-full p-4 text-xl bg-white border-2 border-[#ff885d] rounded-2xl text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#ff885d] focus:border-transparent transition-all duration-200"
               />
             )}
@@ -606,6 +626,7 @@ const EventPlanning = () => {
                 onChange={(e) =>
                   handleInputChange(currentQuestion.id, e.target.value)
                 }
+                onKeyPress={handleKeyPress}
                 placeholder={currentQuestion.placeholder}
                 rows={4}
                 className="w-full p-4 text-xl bg-white border-2 border-[#ff885d] rounded-2xl text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff885d] focus:border-transparent transition-all duration-200 resize-none"
@@ -619,10 +640,16 @@ const EventPlanning = () => {
                   <button
                     type="button"
                     key={index}
-                    onClick={() =>
-                      handleInputChange(currentQuestion.id, option)
-                    }
-                    className={`w-full text-xl p-4 text-left rounded-2xl transition-all duration-200 border-2 ${formData[currentQuestion.id] === option
+                    tabIndex={0}
+                    onClick={() => {
+                      handleInputChange(currentQuestion.id, option);
+                      // Auto-advance to next step after selection
+                      setTimeout(() => {
+                        nextStep();
+                      }, 100);
+                    }}
+                    onKeyPress={(e) => handleSelectKeyPress(e, option)}
+                    className={`w-full text-xl p-4 text-left rounded-2xl transition-all duration-200 border-2 focus:outline-none focus:ring-2 focus:ring-[#ff885d] focus:ring-offset-2 ${formData[currentQuestion.id] === option
                       ? "bg-[#ffcdb9] border-[#ff885d] text-gray-800 shadow-md"
                       : "bg-white border-[#ffc1ab] text-gray-700 hover:bg-[#fff1eb] hover:border-[#fa9e7d]"
                       }`}
