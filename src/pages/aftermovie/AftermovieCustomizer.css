@@ -1,0 +1,113 @@
+/* Aftermovie Customizer Styles */
+.customizer-container {
+  background: linear-gradient(145deg, #ffffff 0%, #fefefe 100%);
+  border-radius: 1rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.upload-area {
+  transition: all 0.3s ease;
+  background: linear-gradient(145deg, #faf5ff 0%, #f3e8ff 100%);
+}
+
+.upload-area:hover {
+  border-color: #8b5cf6;
+  background: linear-gradient(145deg, #f3e8ff 0%, #e9d5ff 100%);
+  transform: translateY(-2px);
+}
+
+.create-button {
+  background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+.create-button:hover {
+  background: linear-gradient(135deg, #7c3aed 0%, #db2777 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(139, 92, 246, 0.4);
+}
+
+.create-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Loading animation */
+.loading-spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Upload icon animation */
+.upload-icon {
+  transition: all 0.3s ease;
+}
+
+.upload-area:hover .upload-icon {
+  transform: scale(1.1);
+  filter: drop-shadow(0 4px 8px rgba(139, 92, 246, 0.3));
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .upload-area {
+    padding: 2rem;
+  }
+  
+  .upload-icon {
+    font-size: 3rem;
+  }
+  
+  .create-button {
+    padding: 0.75rem 1.5rem;
+  }
+}
+
+/* Focus styles for accessibility */
+.create-button:focus,
+.upload-area:focus {
+  outline: 2px solid #8b5cf6;
+  outline-offset: 2px;
+}
+
+/* File upload drag and drop states */
+.upload-area.drag-over {
+  border-color: #8b5cf6;
+  background: linear-gradient(145deg, #e9d5ff 0%, #ddd6fe 100%);
+  transform: scale(1.02);
+}
+
+.upload-area.drag-over .upload-icon {
+  transform: scale(1.2);
+  color: #8b5cf6;
+}
+
+/* Success state */
+.upload-area.success {
+  border-color: #10b981;
+  background: linear-gradient(145deg, #d1fae5 0%, #a7f3d0 100%);
+}
+
+.upload-area.success .upload-icon {
+  color: #10b981;
+}
+
+/* Error state */
+.upload-area.error {
+  border-color: #ef4444;
+  background: linear-gradient(145deg, #fee2e2 0%, #fecaca 100%);
+}
+
+.upload-area.error .upload-icon {
+  color: #ef4444;
+}

@@ -46,6 +46,17 @@ import CustomerChatList from "./pages/customer/Chats";
 import EventPlanning from "./pages/customer/EventPlanning.jsx";
 import GiftHampersCakes from './pages/customer/GiftHampersCakes';
 
+// Invitation components
+import InvitationFlyerPicker from './pages/invitation/InvitationFlyerPicker';
+import TemplateGallery from './pages/invitation/TemplateGallery';
+import InvitationCustomizer from './pages/invitation/InvitationCustomizer';
+import InvitationPreview from './pages/invitation/InvitationPreview';
+import CustomTemplateRequest from './pages/invitation/CustomTemplateRequest';
+
+// Aftermovie components
+import AftermoviePicker from './pages/aftermovie/AftermoviePicker';
+import AftermovieCustomizer from './pages/aftermovie/AftermovieCustomizer';
+
 const router = createBrowserRouter([
   { 
     path: "/", 
@@ -272,6 +283,43 @@ const router = createBrowserRouter([
   {
     path: '/gift-hampers-cakes',
     element: <GiftHampersCakes />,
+    errorElement: <ErrorPage />,
+  },
+  // Invitation routes
+  {
+    path: '/invitation',
+    element: <InvitationFlyerPicker />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: '/invitation/templates/:eventType',
+    element: <TemplateGallery />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: '/invitation/customize/:eventType/:templateId',
+    element: <InvitationCustomizer />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: '/invitation/preview/:eventType/:templateId',
+    element: <InvitationPreview />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: '/invitation/custom-request/:eventType',
+    element: <CustomTemplateRequest />,
+    errorElement: <ErrorPage />,
+  },
+  // Aftermovie routes
+  {
+    path: '/aftermovie',
+    element: <AftermoviePicker />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: '/aftermovie/customize/:aftermovieType',
+    element: <AftermovieCustomizer />,
     errorElement: <ErrorPage />,
   },
 ]);
