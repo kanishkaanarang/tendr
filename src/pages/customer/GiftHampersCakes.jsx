@@ -852,6 +852,23 @@ const GiftHampersCakes = () => {
             Discover our curated collection of delicious cakes and luxurious gift hampers. 
             Perfect for every celebration and special occasion.
           </p>
+          
+          {/* Delivery Information Banner */}
+          <div className="mt-6 max-w-4xl mx-auto">
+            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-4">
+              <div className="flex items-center justify-center">
+                <span className="text-blue-500 text-xl mr-3">🚚</span>
+                <div className="text-center">
+                  <h3 className="font-semibold text-blue-800 mb-1">Delivery Options</h3>
+                  <p className="text-sm text-blue-700">
+                    <strong>Cakes:</strong> Both pickup and home delivery available • 
+                    <strong> Gift Hampers:</strong> Home delivery only (pickup not available)
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
           <div className="mt-4">
             <button
               onClick={() => navigate('/')}
@@ -1069,6 +1086,23 @@ const GiftHampersCakes = () => {
               {!deliveryOption && (
                 <div className="mb-6">
                   <h3 className="font-semibold text-gray-800 mb-4">How would you like to receive your order?</h3>
+                  
+                  {/* Check if cart contains gift hampers */}
+                  {cart.some(item => item.category === 'hampers') && (
+                    <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                      <div className="flex items-start">
+                        <span className="text-blue-500 text-xl mr-3">ℹ️</span>
+                        <div>
+                          <h4 className="font-semibold text-blue-800 mb-1">Delivery Information</h4>
+                          <p className="text-sm text-blue-700">
+                            <strong>For Cakes:</strong> Both pickup and home delivery are available.<br/>
+                            <strong>For Gift Hampers:</strong> Only home delivery is available. Pickup is not available for gift hampers.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <button
                       onClick={() => setDeliveryOption('delivery')}
@@ -1080,16 +1114,20 @@ const GiftHampersCakes = () => {
                       </div>
                       <p className="text-sm text-gray-600">We'll deliver your order to your address</p>
                     </button>
-                    <button
-                      onClick={() => setDeliveryOption('pickup')}
-                      className="p-4 border-2 border-orange-200 rounded-lg hover:border-orange-400 hover:bg-orange-50 transition-colors text-left"
-                    >
-                      <div className="flex items-center mb-2">
-                        <span className="text-2xl mr-3">🏪</span>
-                        <h4 className="font-semibold text-gray-800">Store Pickup</h4>
-                      </div>
-                      <p className="text-sm text-gray-600">Visit our store to collect your order</p>
-                    </button>
+                    
+                    {/* Only show pickup option if cart doesn't contain gift hampers */}
+                    {!cart.some(item => item.category === 'hampers') && (
+                      <button
+                        onClick={() => setDeliveryOption('pickup')}
+                        className="p-4 border-2 border-orange-200 rounded-lg hover:border-orange-400 hover:bg-orange-50 transition-colors text-left"
+                      >
+                        <div className="flex items-center mb-2">
+                          <span className="text-2xl mr-3">🏪</span>
+                          <h4 className="font-semibold text-gray-800">Store Pickup</h4>
+                        </div>
+                        <p className="text-sm text-gray-600">Visit our store to collect your order</p>
+                      </button>
+                    )}
                   </div>
                 </div>
               )}

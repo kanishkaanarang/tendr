@@ -164,7 +164,7 @@ const Home = () => {
               <option value="timeline-picker">Timeline</option>
               <option value="budget">Budget Allocator</option>
               <option value="aftermovie">Aftermovie</option>
-              <option value="invitaion">Invitaion Flyers</option>
+              <option value="invitation">Invitation Flyers</option>
             </select>
             <a 
               href="https://wa.me/1234567890" 
