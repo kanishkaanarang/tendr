@@ -1,3 +1,5 @@
+
+
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
 
 * {
@@ -114,26 +116,6 @@ body {
   display: block;
 }
 
-.nav-link {
-    color: #8B4513;
-    text-decoration: none;
-    font-weight: 500;
-    padding: 0.5rem 1rem;
-    border-radius: 50px;
-    transition: all 0.3s;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(139, 69, 19, 0.1);
-}
-
-.nav-link:hover {
-    background: rgba(139, 69, 19, 0.1);
-    color: #8B4513;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(139, 69, 19, 0.15);
-}
-
-
 .sign-in {
     color: #6366f1;
     text-decoration: none;
@@ -176,12 +158,12 @@ body {
 /* Hero Section */
 .hero {
     background: 
-        linear-gradient(120deg, rgba(232, 157, 103, 0.4) 0%, rgba(185, 138, 59, 0.245) 20%),
+        linear-gradient(135deg, rgba(95, 56, 19, 0.753) 0%, rgba(0, 0, 0, 0.4) 100%),
         url('../../assets/backgrounds/bg.jpg');
     background-size: cover;
-    background-position: center ;
+    background-position: center;
     background-attachment: fixed;
-    color: #FAEBD7;
+    color: #FFFFFF;
     padding: 140px 0 100px;
     margin-top: 80px;
     position: relative;
@@ -214,13 +196,13 @@ body {
 }
 
 .hero-content h1 {
-    font-size: 3.8rem;
+    font-size: 4rem;
     font-weight: 900;
     margin-bottom: 2rem;
-    letter-spacing: -1px;
-    line-height: 1.5;
+    letter-spacing: -2px;
+    line-height: 1.1;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-    background: linear-gradient(45deg, #FFFFFF, #f8f8da, #FFFFFF);
+    background: #FFFFFF;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -233,7 +215,7 @@ body {
     letter-spacing: -2px;
     line-height: 1.1;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-    background: linear-gradient(45deg, #FFFFFF, #fffff5, #FFFFFF);
+    background: #FFFFFF;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -348,7 +330,7 @@ body {
     text-align: center;
     font-size: 1.4rem;
     font-weight: 700;
-    color: #1a1a1a;
+    color: #8B4513;
     letter-spacing: -0.5px;
 }
 
@@ -510,7 +492,7 @@ body {
 }
 
 .events-subtitle {
-    color: #9ca3af;
+    color: #CD853F;
     margin-bottom: 1rem;
     font-size: 1.1rem;
     font-weight: 500;
@@ -521,7 +503,7 @@ body {
 .events-title {
     font-size: 3.5rem;
     font-weight: 800;
-    color: #1a1a1a;
+    color: #8B4513;
     letter-spacing: -1px;
     position: relative;
 }
@@ -534,7 +516,7 @@ body {
     transform: translateX(-50%);
     width: 80px;
     height: 6px;
-    background: linear-gradient(145deg, #6366f1, #8b5cf6);
+    background: linear-gradient(145deg, #CD853F, #DEB887);
     border-radius: 3px;
 }
 
@@ -584,7 +566,7 @@ body {
 
 .event-overlay h3 {
     font-size: 1.8rem;
-    font-weight: 800;
+    font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 1px;
 }
@@ -703,10 +685,6 @@ body {
     padding: 0 2rem;
     position: relative;
     z-index: 1;
-}
-
-.footer-container strong {
-    color: #A0522D;
 }
 
 .footer-content {
@@ -856,20 +834,26 @@ body {
 }
 
 .footer-brand h1{
-  color: #A0522D;
-  margin-bottom: 15px;
-    font-size: 1.8rem;
+    color: #4b2e0f;
+  margin-bottom: 25px;
+    font-size: 2.2rem;
     font-weight: 700;
+    text-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
 }
 
 .footer-brand p {
-  margin: 6px 0;
+  margin: 10px 0;
   font-size: 0.95rem;
-  color:#2e1b0f; ; 
+  color: #a26320; 
+}
+
+.footer-brand strong{
+    font-weight: 700;
+    color: #4b2e0f;
 }
 
 .footer-brand a {
-  color: #f0c674;
+  color: #a26320;
   text-decoration: none;
 }
 
@@ -908,7 +892,7 @@ body {
 }
 
 .footer-col li {
-  color: #2e1b0f;
+    color: #a26320;
     text-decoration: none;
     transition: all 0.3s;
     font-weight: 400;
@@ -917,7 +901,7 @@ body {
 }
 
 .footer-col li:hover {
-    color: #6366f1;
+    color: #4b2e0f;
     transform: translateX(8px);
 
 }
@@ -930,7 +914,8 @@ body {
     font-size: 1.2rem;
     margin-bottom: 1rem;
     font-weight: 700;
-    color:#A0522D;
+    color: #4b2e0f;
+    text-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
 }
 
 /* Social icons */
@@ -949,7 +934,7 @@ body {
     align-items: center;
     justify-content: center;
     font-size: 1.4rem;
-    color: #A0522D;
+    color: #8B4513;
     text-decoration: none;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     background: rgba(255, 255, 255, 0.3);
@@ -976,11 +961,11 @@ body {
 }
 
 .footer-bottom p {
-  color: #6b3d1c;
+  color: #a26320;
   text-decoration: none;
   margin: 0 5px;
 }
 
 .footer-bottom p:hover {
-  text-decoration: underline;
+  text-decoration: underline;
 }
