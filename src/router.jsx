@@ -46,16 +46,13 @@ import CustomerChatList from "./pages/customer/Chats";
 import EventPlanning from "./pages/customer/EventPlanning.jsx";
 import GiftHampersCakes from './pages/customer/GiftHampersCakes';
 
-// Invitation components
-import InvitationFlyerPicker from './pages/invitation/InvitationFlyerPicker';
-import TemplateGallery from './pages/invitation/TemplateGallery';
-import InvitationCustomizer from './pages/invitation/InvitationCustomizer';
-import InvitationPreview from './pages/invitation/InvitationPreview';
-import CustomTemplateRequest from './pages/invitation/CustomTemplateRequest';
+import BookingReviewPage from './pages/booking/BookingReviewPage';
+import PaymentSelectionPage from './pages/booking/PaymentSelectionPage';
+import PaymentProcessing from './pages/booking/PaymentProcessingPage';
+import PaymentSuccessPage from './pages/booking/PaymentSuccessPage';
+import PaymentFailedPage from './pages/booking/PaymentFailedPage';
+import BookingConfirmation from './pages/booking/BookingConfirmation';
 
-// Aftermovie components
-import AftermoviePicker from './pages/aftermovie/AftermoviePicker';
-import AftermovieCustomizer from './pages/aftermovie/AftermovieCustomizer';
 
 const router = createBrowserRouter([
   { 
@@ -222,6 +219,30 @@ const router = createBrowserRouter([
     element: <ChooseBooking />, 
     errorElement: <ErrorPage /> 
   },
+    {
+      path: "/booking/review",
+      element: <BookingReviewPage />
+    },
+    {
+      path: "/booking/payment",
+      element: <PaymentSelectionPage />
+    },
+    {
+      path: "/booking/payment-processing",
+      element: <PaymentProcessing />
+    },
+    {
+      path: "/booking/payment-success",
+      element: <PaymentSuccessPage />
+    },
+    {
+      path: "/booking/payment-failed",
+      element: <PaymentFailedPage />
+    },
+    {
+      path: "/booking/confirmation",
+      element: <BookingConfirmation />
+    },
 
   // Single form route (reads ?bookingType=you-do-it|let-us-do-it)
   { 
@@ -285,43 +306,7 @@ const router = createBrowserRouter([
     element: <GiftHampersCakes />,
     errorElement: <ErrorPage />,
   },
-  // Invitation routes
-  {
-    path: '/invitation',
-    element: <InvitationFlyerPicker />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: '/invitation/templates/:eventType',
-    element: <TemplateGallery />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: '/invitation/customize/:eventType/:templateId',
-    element: <InvitationCustomizer />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: '/invitation/preview/:eventType/:templateId',
-    element: <InvitationPreview />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: '/invitation/custom-request/:eventType',
-    element: <CustomTemplateRequest />,
-    errorElement: <ErrorPage />,
-  },
-  // Aftermovie routes
-  {
-    path: '/aftermovie',
-    element: <AftermoviePicker />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: '/aftermovie/customize/:aftermovieType',
-    element: <AftermovieCustomizer />,
-    errorElement: <ErrorPage />,
-  },
 ]);
+
 
 export default router;
