@@ -1,14 +1,38 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  CalendarDays,
-  Briefcase,
-  ArrowRight,
-  CheckCircle2,
-} from "lucide-react";
+import { CalendarDays, Briefcase, ArrowRight, CheckCircle2 } from "lucide-react";
+import axios from "axios";
 
 export default function TimelinePicker() {
   const navigate = useNavigate();
+
+  const handleCreateTimeline = async (eventType) => {
+    try {
+      const token = localStorage.getItem("token"); // authConsumer ke liye agar token stored hai
+      const res = await axios.post(
+        "https://tendr-backend-75ag.onrender.com", //
+        {
+          title: `My ${eventType} Timeline`,
+          description: `Auto-created ${eventType} timeline`,
+          eventType,
+          items: [],
+        },
+        {
+          headers: {
+            Authorization: token ? `Bearer ${token}` : "",
+          },
+        }
+      );
+
+      console.log("Timeline created:", res.data);
+
+      // timeline create hone ke baad uski details par redirect kar do
+      navigate(`/timeline/${res.data._id}`);
+    } catch (err) {
+      console.error("Error creating timeline:", err.response?.data || err.message);
+      alert("Failed to create timeline!");
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6">
@@ -57,7 +81,7 @@ export default function TimelinePicker() {
             </ol>
 
             <button
-              onClick={() => navigate("/prebuilt-timeline")}
+              onClick={() => handleCreateTimeline("wedding")}
               className="mt-6 inline-flex items-center justify-center gap-2 rounded-md px-5 py-3 bg-amber-600 text-white text-base font-medium hover:bg-amber-700 transition w-full"
             >
               Continue <ArrowRight className="h-5 w-5" />
@@ -94,7 +118,7 @@ export default function TimelinePicker() {
             </ol>
 
             <button
-              onClick={() => navigate("/timeline")}
+              onClick={() => handleCreateTimeline("custom")}
               className="mt-6 inline-flex items-center justify-center gap-2 rounded-md px-5 py-3 bg-amber-600 text-white text-base font-medium hover:bg-amber-700 transition w-full"
             >
               Continue <ArrowRight className="h-5 w-5" />
