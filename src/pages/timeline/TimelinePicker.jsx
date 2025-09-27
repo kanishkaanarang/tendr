@@ -10,7 +10,7 @@ export default function TimelinePicker() {
     try {
       const token = localStorage.getItem("token"); // authConsumer ke liye agar token stored hai
       const res = await axios.post(
-        "https://tendr-backend-75ag.onrender.com", //
+        "https://tendr-backend-75ag.onrender.com/api/timelines",
         {
           title: `My ${eventType} Timeline`,
           description: `Auto-created ${eventType} timeline`,
