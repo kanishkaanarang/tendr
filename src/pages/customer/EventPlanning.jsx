@@ -1,5 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { io } from "socket.io-client";
+
+
+
 import {
   ChevronRight,
   ChevronLeft,
@@ -29,7 +33,66 @@ import {
 import MakeAGroup_Nav from "../../components/MakeAGroup_Nav.jsx";
 import EventFormSummary from "../../components/EventFormSummary.jsx";
 
+
+
+
+
 const EventPlanning = () => {
+  const socketRef = useRef(null);
+  const openChatWithSocket = () => {
+    // Agar socket already connected nahi hai to connect karo
+    if (!socketRef.current) {
+      socketRef.current = io("http://localhost:8080", {
+        query: {
+          userId: localStorage.getItem("userId") || "guest",
+          role: "user",
+          chatType: "EVENT",
+        }
+      });
+
+      // Socket connect hone ke baad event emit karna
+      socketRef.current.on("connect", () => {
+        console.log("Socket connected:", socketRef.current.id);
+
+        socketRef.current.emit("open_conversation", {
+          requestId: formData.eventName || `req_${Date.now()}`,
+          chatType: "EVENT",
+          extraRequirements,
+          extraRequirementsText,
+        });
+      });
+
+      // Backend se response suno
+      socketRef.current.on("conversation_opened", (conversation) => {
+        navigate("/chat", {
+          state: {
+            chatId: conversation._id,
+            chatType: "EVENT",
+            extraRequirements,
+            extraRequirementsText,
+          },
+          replace: true,
+        });
+      });
+      
+      // Cleanup on unmount - optional if connection persists
+      // useEffect me return kar sakte ho agar chahiye
+    } else {
+      // Agar socket already connected hai to directly event emit kar do
+      socketRef.current.emit("open_conversation", {
+        requestId: formData.eventName || `req_${Date.now()}`,
+        chatType: "EVENT",
+        extraRequirements,
+        extraRequirementsText,
+      });
+    }
+  };
+
+
+  
+
+  
+
   // Navigation handlers for checklist and timeline
   const handleGoToChecklist = () => {
     navigate('/prebuilt-checklist');
@@ -538,30 +601,51 @@ const EventPlanning = () => {
             </button>
 
             <button
-              type="button"
-              onClick={() =>
-                navigate("/chat", {
-                  state: {
-                    from: "booking",
-                    bookingType,
-                    formData,               // your full form object
-                    selectedVendors,        // array of vendor objects/ids
-                    extraRequirements,      // boolean
-                    extraRequirementsText,  // <-- add this so header can show the text
-                  },
-                  replace: true,
-                })
-              }
-              className="group cursor-pointer bg-white hover:bg-[#ea7e53] hover:text-white rounded-2xl pl-4 pr-2 flex items-center justify-between text-[#ea7e53] font-bold w-[260px] h-[48px] transform transition-transform duration-300 ease-in-out hover:scale-105 hover:-translate-y-1 active:scale-95 shadow-lg"
-            >
-              <span className="pb-[2px] text-lg">Booking → Open Chat</span>
-              <span className="group-hover:bg-white arrowButton w-[30px] h-[30px] bg-[#ea7e53] rounded-xl flex items-center justify-center transition duration-300">
-                <EastIcon
-                  className="text-white group-hover:text-[#ea7e53] transition duration-300"
-                  fontSize="medium"
-                />
-              </span>
-            </button>
+  type="button"
+  // onClick={async () => {
+  //   // Call backend to start chat with all relevant data
+  //   const res = await fetch("/api/chat/start", {
+  //     method: "POST",
+  //     headers: { "Content-Type": "application/json" },
+  //     body: JSON.stringify({
+  //       chatType: "EVENT",
+  //       formData,             // your full form object
+  //       selectedVendors,      // array of vendor objects/ids
+  //       extraRequirements,    // boolean
+  //       extraRequirementsText // header text
+  //     }),
+  //   });
+
+  //   const data = await res.json();
+  //   console.log("Chat started:", data);
+
+  //   // Navigate to chat screen and pass all needed info, including backend response
+  //   navigate("/chat", {
+  //     state: {
+  //       chatId: data.chatId,           // backend response
+  //       chatType: "EVENT",
+  //       bookingType,
+  //       formData,
+  //       selectedVendors,
+  //       extraRequirements,
+  //       extraRequirementsText,
+  //       from: "booking",               // keep this for compatibility
+  //     },
+  //     replace: true,
+  //   });
+  // }}
+  onClick={openChatWithSocket}
+  className="group cursor-pointer bg-white hover:bg-[#ea7e53] hover:text-white rounded-2xl pl-4 pr-2 flex items-center justify-between text-[#ea7e53] font-bold w-[260px] h-[48px] transform transition-transform duration-300 ease-in-out hover:scale-105 hover:-translate-y-1 active:scale-95 shadow-lg"
+>
+  <span className="pb-[2px] text-lg">Booking → Open Chat</span>
+  <span className="group-hover:bg-white arrowButton w-[30px] h-[30px] bg-[#ea7e53] rounded-xl flex items-center justify-center transition duration-300">
+    <EastIcon
+      className="text-white group-hover:text-[#ea7e53] transition duration-300"
+      fontSize="medium"
+    />
+  </span>
+</button>
+
 
           </div>
 
