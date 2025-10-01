@@ -111,7 +111,7 @@ export default function FloatingChatButton({ hideOnRoutes = ["/chat", "/chats"] 
     if (choice === "support") {
       // Socket logic for support chat
       if (!socketRef.current) {
-  socketRef.current = io("https://tendr-one.vercel.app", {
+  socketRef.current = io("https://tendr-backend-75ag.onrender.com", {
           query: {
             userId: localStorage.getItem("userId") || "guest",
             role: "user",

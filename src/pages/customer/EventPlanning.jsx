@@ -42,7 +42,7 @@ const EventPlanning = () => {
   const openChatWithSocket = () => {
     // Agar socket already connected nahi hai to connect karo
     if (!socketRef.current) {
-  socketRef.current = io("https://tendr-one.vercel.app", {
+  socketRef.current = io("https://tendr-backend-75ag.onrender.com", {
         query: {
           userId: localStorage.getItem("userId") || "guest",
           role: "user",
