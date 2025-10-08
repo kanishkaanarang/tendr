@@ -206,42 +206,37 @@ const sidebar_arr = [
   {
     label: 'Dashboard',
     icon: <LayoutDashboard size={22} />,
-    key: 'dashboard',
+    key: 'Dashboard',
   },
   {
     label: 'Bookings',
     icon: <CalendarFold size={22} />,
-    key: 'bookings',
+    key: 'Bookings',
   },
   {
     label: 'Payments',
     icon: <BadgeIndianRupee size={22} />,
-    key: 'payments',
+    key: 'Payments',
   },
   {
     label: 'Vendors',
     icon: <BriefcaseBusiness size={22} />,
-    key: 'vendors',
+    key: 'Vendors',
   },
   {
     label: 'Users',
     icon: <UserRound size={22} />,
-    key: 'users',
+    key: 'Users',
   },
   {
-    label: 'Vendor-User',   
+    label: 'Chat',   
     icon: <MessageCircle size={22} />,
-    key: 'vendoruser',
+    key: 'Chat',
   },
   {
-    label: 'Support',       
+    label: 'Chat - Users',       
     icon: <MessagesSquare size={22} />,
-    key: 'support',
-  },
-  {
-    label: 'Concierge',    
-    icon: <HandPlatter size={22} />,
-    key: 'concierge',
+    key: 'ChatUsers',
   }
 ];
 
