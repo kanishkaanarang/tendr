@@ -64,8 +64,8 @@ export default function BudgetPicker() {
       <BasicSpeedDial />
       
       <div className="container mx-auto px-6 py-12">
-        <div className="text-center mb-12">
-        <div className="bg-gradient-to-r from-amber-600 to-yellow-500 bg-clip-text text-transparent text-5xl mb-6 font-bold">
+        <div className="text-center mb-2">
+        <div className="bg-gradient-to-r from-amber-600 to-yellow-500 bg-clip-text text-transparent text-5xl mb-2 font-bold p-4">
               Choose Budget Type
             </div>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
@@ -73,7 +73,7 @@ export default function BudgetPicker() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12 p-20">
           {eventTypes.map((event) => (
             <div
               key={event.id}

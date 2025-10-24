@@ -6,7 +6,6 @@ import router from "./router";
 import store from "./store";
 import ErrorBoundary from "./components/ErrorBoundary";
 import FloatingChatButton from "./components/FloatingChatButton";
-import BasicSpeedDial from "./components/BasicSpeedDial";
 
 
 function App() {

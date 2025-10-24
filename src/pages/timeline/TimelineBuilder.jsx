@@ -37,9 +37,9 @@ export default function TimelineBuilder() {
   };
 
   return (
-    <div className="p-6 min-h-screen mx-auto bg-white">
+    <div className="p-6 min-h-screen mx-auto bg-white px-40 py-40">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Custom Timeline Builder</h1>
+        <div className="text-4xl font-bold">Custom Timeline Builder</div>
         <button
           onClick={() => setPreview(!preview)}
           className="px-4 py-2 rounded-lg bg-blue-500 text-white"

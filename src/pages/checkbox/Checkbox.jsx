@@ -96,10 +96,10 @@ export default function CheckBox() {
   };
 
   return (
-    <div className="min-w-screen mx-auto p-6 bg-white min-h-screen">
+    <div className="min-w-screen mx-auto px-40 py-40 bg-white min-h-screen">
       <BasicSpeedDial/>
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Checklist Builder</h1>
+      <div className="flex justify-between items-center mb-6 mt-[40px]">
+        <div className="text-4xl font-bold">Checklist Builder</div>
         <div className="flex gap-2">
           <button
             onClick={addEvent}

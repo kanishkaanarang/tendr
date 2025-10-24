@@ -243,7 +243,7 @@ const Home = () => {
                   </div>
                 ))}
               </div>
-              <a href="#corporate-contact" className="corporate-btn" onClick={handleCorporateClick}>
+              <a href="/corporate-signup" className="corporate-btn" onClick={handleCorporateClick}>
                 Book Corporate Events
               </a>
             </div>
