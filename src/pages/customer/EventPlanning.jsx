@@ -1,8 +1,6 @@
-import React, { useEffect, useState,useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { io } from "socket.io-client";
-
-
 
 import {
   ChevronRight,
@@ -17,8 +15,11 @@ import {
   X,
   Plus,
 } from "lucide-react";
+
 import EastIcon from "@mui/icons-material/East";
+
 import { useSelector, useDispatch } from "react-redux";
+
 import {
   setFormData,
   goToNextStep,
@@ -30,19 +31,17 @@ import {
   setBookingType,
 } from "../../redux/eventPlanningSlice.js";
 
+import { setFilters } from "../../redux/listingFiltersSlice";
+
 import MakeAGroup_Nav from "../../components/MakeAGroup_Nav.jsx";
 import EventFormSummary from "../../components/EventFormSummary.jsx";
-
-
-
-
 
 const EventPlanning = () => {
   const socketRef = useRef(null);
   const openChatWithSocket = () => {
     // Agar socket already connected nahi hai to connect karo
     if (!socketRef.current) {
-  socketRef.current = io("https://tendr-backend-75ag.onrender.com", {
+      socketRef.current = io("https://tendr-backend-75ag.onrender.com", {
         query: {
           userId: localStorage.getItem("userId") || "guest",
           role: "user",
@@ -74,7 +73,7 @@ const EventPlanning = () => {
           replace: true,
         });
       });
-      
+
       // Cleanup on unmount - optional if connection persists
       // useEffect me return kar sakte ho agar chahiye
     } else {
@@ -89,9 +88,9 @@ const EventPlanning = () => {
   };
 
 
-  
 
-  
+
+
 
   // Navigation handlers for checklist and timeline
   const handleGoToChecklist = () => {
@@ -278,10 +277,14 @@ const EventPlanning = () => {
   const currentQuestion = questions[currentStep];
   const progress = ((currentStep + 1) / questions.length) * 100;
 
+
+
   /** =======================
    *  END STEP (Both Flows)
    *  ======================= */
+
   if (showVendorScreen) {
+
     // ---- FLOW A: YOU DO IT → keep your current grid screen exactly as-is
     if (bookingType === "you-do-it") {
       return (
@@ -308,25 +311,24 @@ const EventPlanning = () => {
 
             {/* ...existing extra requirements code... */}
 
-            
+
             {/* Options VendorTypes */}
             <div className="grid md:grid-cols-4 gap-8 mb-12">
               {vendors.map((vendor) => (
                 <div
                   key={vendor.id}
-                  onClick={() =>
-                    navigate("/listings", {
-                      state: {
+                  onClick={() => {
+                    dispatch(
+                      setFilters({
                         serviceType: vendor.id,
                         eventType: formData?.eventType || "",
                         locationType: formData?.location || "",
                         date: formData?.date || "",
                         guestCount: Number(formData?.guests) || 0,
-                        vendors: [],
-                        pagination: {},
-                      },
-                    })
-                  }
+                      })
+                    );
+                    navigate("/listings");
+                  }}
                   className="bg-white rounded-3xl p-8 text-center cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-xl border-2 border-transparent hover:border-[#ffb89e] shadow-lg"
                 >
                   <div className="w-20 h-20 bg-[#ea7e53] rounded-2xl flex items-center justify-center mx-auto mb-6 text-white">
@@ -618,50 +620,50 @@ const EventPlanning = () => {
             </button>
 
             <button
-  type="button"
-  // onClick={async () => {
-  //   // Call backend to start chat with all relevant data
-  //   const res = await fetch("/api/chat/start", {
-  //     method: "POST",
-  //     headers: { "Content-Type": "application/json" },
-  //     body: JSON.stringify({
-  //       chatType: "EVENT",
-  //       formData,             // your full form object
-  //       selectedVendors,      // array of vendor objects/ids
-  //       extraRequirements,    // boolean
-  //       extraRequirementsText // header text
-  //     }),
-  //   });
+              type="button"
+              // onClick={async () => {
+              //   // Call backend to start chat with all relevant data
+              //   const res = await fetch("/api/chat/start", {
+              //     method: "POST",
+              //     headers: { "Content-Type": "application/json" },
+              //     body: JSON.stringify({
+              //       chatType: "EVENT",
+              //       formData,             // your full form object
+              //       selectedVendors,      // array of vendor objects/ids
+              //       extraRequirements,    // boolean
+              //       extraRequirementsText // header text
+              //     }),
+              //   });
 
-  //   const data = await res.json();
-  //   console.log("Chat started:", data);
+              //   const data = await res.json();
+              //   console.log("Chat started:", data);
 
-  //   // Navigate to chat screen and pass all needed info, including backend response
-  //   navigate("/chat", {
-  //     state: {
-  //       chatId: data.chatId,           // backend response
-  //       chatType: "EVENT",
-  //       bookingType,
-  //       formData,
-  //       selectedVendors,
-  //       extraRequirements,
-  //       extraRequirementsText,
-  //       from: "booking",               // keep this for compatibility
-  //     },
-  //     replace: true,
-  //   });
-  // }}
-  onClick={openChatWithSocket}
-  className="group cursor-pointer bg-white hover:bg-[#ea7e53] hover:text-white rounded-2xl pl-4 pr-2 flex items-center justify-between text-[#ea7e53] font-bold w-[260px] h-[48px] transform transition-transform duration-300 ease-in-out hover:scale-105 hover:-translate-y-1 active:scale-95 shadow-lg"
->
-  <span className="pb-[2px] text-lg">Booking → Open Chat</span>
-  <span className="group-hover:bg-white arrowButton w-[30px] h-[30px] bg-[#ea7e53] rounded-xl flex items-center justify-center transition duration-300">
-    <EastIcon
-      className="text-white group-hover:text-[#ea7e53] transition duration-300"
-      fontSize="medium"
-    />
-  </span>
-</button>
+              //   // Navigate to chat screen and pass all needed info, including backend response
+              //   navigate("/chat", {
+              //     state: {
+              //       chatId: data.chatId,           // backend response
+              //       chatType: "EVENT",
+              //       bookingType,
+              //       formData,
+              //       selectedVendors,
+              //       extraRequirements,
+              //       extraRequirementsText,
+              //       from: "booking",               // keep this for compatibility
+              //     },
+              //     replace: true,
+              //   });
+              // }}
+              onClick={openChatWithSocket}
+              className="group cursor-pointer bg-white hover:bg-[#ea7e53] hover:text-white rounded-2xl pl-4 pr-2 flex items-center justify-between text-[#ea7e53] font-bold w-[260px] h-[48px] transform transition-transform duration-300 ease-in-out hover:scale-105 hover:-translate-y-1 active:scale-95 shadow-lg"
+            >
+              <span className="pb-[2px] text-lg">Booking → Open Chat</span>
+              <span className="group-hover:bg-white arrowButton w-[30px] h-[30px] bg-[#ea7e53] rounded-xl flex items-center justify-center transition duration-300">
+                <EastIcon
+                  className="text-white group-hover:text-[#ea7e53] transition duration-300"
+                  fontSize="medium"
+                />
+              </span>
+            </button>
 
 
           </div>
@@ -707,11 +709,15 @@ const EventPlanning = () => {
         </div>
       </div>
     );
+
   }
+
+
 
   /** =======================
    *  QUESTION-BY-QUESTION FORM
    *  ======================= */
+
   return (
     <div className="min-h-screen bg-[#ffeae2] flex items-center justify-center p-4">
       <div className="w-full max-w-2xl">
@@ -865,6 +871,7 @@ const EventPlanning = () => {
       </div>
     </div>
   );
+
 };
 
 export default EventPlanning;

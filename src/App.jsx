@@ -11,11 +11,8 @@ import FloatingChatButton from "./components/FloatingChatButton";
 function App() {
   return (
     <ErrorBoundary>
-      <Provider store={store}>
         <RouterProvider router={router} />
         <FloatingChatButton />
-
-      </Provider>
     </ErrorBoundary>
   );
 }
