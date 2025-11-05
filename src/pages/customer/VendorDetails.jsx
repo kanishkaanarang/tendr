@@ -24,6 +24,8 @@ import live_counter from "../../assets/vendor-details/live_counter-catering.jpeg
 import Footer from "../../components/Footer"; // ✅ Import reusable footer
 
 import { getVendorById } from "../../apis/vendorApi";
+import BasicSpeedDial from "../../components/BasicSpeedDial";
+import { useSelector } from "react-redux";
 
 const VendorDetailsPage = () => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -102,12 +104,14 @@ const VendorDetailsPage = () => {
   const isPhoneVerified = !!vendor?.phoneVerified;
 
   const filtersData = {
-    guest: 100,
-    location: "Jalandhar",
-    date: "2025-05-10",
-    time: "7:00 PM",
-    foodType: "South Indian",
-    decorTheme: "Royal",
+    guest: useSelector((state) => state.eventPlanning.formData.guests),
+    location: useSelector((state) => state.eventPlanning.formData.location),
+    date: useSelector((state) => state.eventPlanning.formData.date),
+    // time: useSelector((state) => state.eventPlanning.formData.time),
+    foodType: useSelector((state) => state.eventPlanning.formData.location),
+    decorTheme: useSelector((state) => state.eventPlanning.formData.additionalInfo),
+    budget : useSelector((state) => state.eventPlanning.formData.budget),
+    eventType : useSelector((state) => state.eventPlanning.formData.eventType)
   };
 
   // ===== DO NOT CHANGE PAYMENT/CHAT/DBOARD per your instruction =====
@@ -193,7 +197,8 @@ const VendorDetailsPage = () => {
   }
 
   return (
-    <div className="">
+    <div className="bg-white text-black">
+      <BasicSpeedDial />
       {/* Navbar */}
       <div className="navbar border-b-[1px] border-[#CCAB4A]">
         <ListingsNav />
@@ -312,7 +317,7 @@ const VendorDetailsPage = () => {
                   <CheckCircle2 className="w-3 h-3" /> Phone verified
                 </span>
               )}
-              
+
               {maxConcurrentEvents != null && (
                 <span className="inline-flex items-center gap-1 text-xs font-medium px-3 py-1 rounded-full border border-amber-500 text-amber-700 bg-amber-50">
                   <Users className="w-3 h-3" /> {maxConcurrentEvents} events concurrently
@@ -427,10 +432,11 @@ const VendorDetailsPage = () => {
               {`Guest: ${filtersData.guest}
 Location: ${filtersData.location}
 Date: ${filtersData.date}
-Time: ${filtersData.time}
 Food Type: ${filtersData.foodType}
-Decor Theme: ${filtersData.decorTheme}
-Are you available?`}
+Additional Info: ${filtersData.additionalInfo}
+Budget : ${filtersData.budget}
+Event Type : ${filtersData.eventType}
+`}
             </div>
 
             {/* DO NOT CHANGE: Chat button */}
@@ -445,7 +451,7 @@ Are you available?`}
               Chat with Vendor
             </button>
 
-          
+
 
             {/* DO NOT CHANGE: Pay button */}
             <button

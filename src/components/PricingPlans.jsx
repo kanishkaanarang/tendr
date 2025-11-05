@@ -1,9 +1,9 @@
 import React from 'react';
 import { FiCheck } from 'react-icons/fi';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 
 const PricingPlans = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const plans = [
     {
       title: "Basic Plan",
@@ -40,7 +40,7 @@ const PricingPlans = () => {
         "Professional After Movie ₹750",
         "Customized Invitation Flyer ₹750"
       ],
-      isPopular: false
+      isPopular: true
     },
     {
       title: "Elite Plan",
@@ -58,7 +58,7 @@ const PricingPlans = () => {
       ],
       mandatoryAddon: "Included",
       optionalAddons: ["All included"],
-      isPopular: true
+      isPopular: false
     }
   ];
 
@@ -75,7 +75,7 @@ const PricingPlans = () => {
             <div key={index} className="relative">
               {/* Popular Badge */}
               {plan.isPopular && (
-                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
                   <div className="bg-gradient-to-r from-amber-500 to-yellow-600 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
                     Popular
                   </div>
@@ -123,13 +123,7 @@ const PricingPlans = () => {
                    </div>
                  </div>
 
-                                   {/* Get Started Button */}
-                  <button 
-                    onClick={() => navigate('/corporate-signup', { state: { plan } })}
-                    className="w-full bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 hover:scale-105 shadow-lg"
-                  >
-                    Get Started
-                  </button>
+                 
               </div>
             </div>
           ))}

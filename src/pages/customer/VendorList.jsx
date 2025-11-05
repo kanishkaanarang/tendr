@@ -1,3 +1,7 @@
+import { useSelector, useDispatch } from "react-redux";
+import { setFilters } from "../../redux/listingFiltersSlice.js";
+
+
 import { useNavigate, useLocation } from "react-router-dom";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import InstagramIcon from "@mui/icons-material/Instagram";
@@ -17,38 +21,32 @@ const VendorList = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const dispatch = useDispatch();
+
   const {
-    eventType = "",
-    serviceType = "",
-    date = "",
-    locationType = "",
-    guestCount = 0,
-    vendors = [],
-    pagination = {},
-  } = location.state || {};
+    eventType,
+    serviceType,
+    locationType,
+    date,
+    guestCount,
+  } = useSelector((state) => state.listingFilters);
 
-  const [eventTypeState, setEventTypeState] = useState(eventType || "");
-  const [serviceTypeState, setServiceTypeState] = useState(serviceType || "");
-  const [locationTypeState, setLocationTypeState] = useState(locationType || "");
-  const [dateState, setDateState] = useState(date || "");
-  const [guestCountState, setGuestCountState] = useState(guestCount || 0);
-
-  const [vendorList, setVendorList] = useState(vendors);
-  const [paginationInfo, setPaginationInfo] = useState(pagination);
+  const [vendorList, setVendorList] = useState([]);
+  const [paginationInfo, setPaginationInfo] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [secondaryFilters, setSecondaryFilters] = useState({});
   const [sortBy, setSortBy] = useState("rankingScore");
   const [sortOrder, setSortOrder] = useState("desc");
 
-  // === Compare feature state (NEW) ===
-  const [compareSelected, setCompareSelected] = useState([]); // max 2 vendors
+  // Compare
+  const [compareSelected, setCompareSelected] = useState([]);
   const [isCompareOpen, setIsCompareOpen] = useState(false);
   const toggleCompare = (vendor) => {
     setCompareSelected((prev) => {
       const exists = prev.find((v) => v._id === vendor._id);
       if (exists) return prev.filter((v) => v._id !== vendor._id);
-      if (prev.length >= 2) return prev; // optionally show toast
+      if (prev.length >= 2) return prev;
       return [...prev, vendor];
     });
   };
@@ -56,21 +54,43 @@ const VendorList = () => {
     setCompareSelected((prev) => prev.filter((v) => v._id !== id));
   const clearCompare = () => setCompareSelected([]);
 
+  // NEW: modal to show selected vendors from top picks button
+  const [isSelectedModalOpen, setIsSelectedModalOpen] = useState(false);
+
+  // Booking review navigation after vendor selection
+  const handleGoToBookingReview = () => {
+    // Example: collect all event and vendor data here
+    const bookingDetails = {
+      eventName: eventType,
+      service: serviceType,
+      date: date,
+      guests: guestCount,
+      vendors: vendorList.filter(v => v.selected), // or your selection logic
+      address: locationType,
+      basePrice: 250, // replace with actual price logic
+      customerId: localStorage.getItem("userId"),
+      addons: [],
+      amount: 250,
+    };
+    navigate('/booking/review', { state: { booking: bookingDetails } });
+  };
+
+  // fetch on changes
   useEffect(() => {
-    if (!locationTypeState || !serviceTypeState) return;
+    if (!locationType || !serviceType) return;
 
     setIsLoading(true);
-    const filters = {
-      location: locationTypeState,
-      serviceTypes: [serviceTypeState],
+    const payload = {
+      location: locationType,
+      serviceTypes: [serviceType],
       sortBy,
       sortOrder,
       page: 1,
       limit: 10,
-      serviceFilters: secondaryFilters,
+      serviceFilters: secondaryFilters, // <- send selected secondary filters
     };
 
-    getVendors(filters)
+    getVendors(payload)
       .then((data) => {
         setVendorList(data.vendors || []);
         setPaginationInfo(data.pagination || {});
@@ -78,111 +98,116 @@ const VendorList = () => {
       })
       .catch((err) => console.error("Error fetching vendors:", err))
       .finally(() => setIsLoading(false));
-  }, [sortBy, sortOrder, secondaryFilters, locationTypeState, serviceTypeState]);
+  }, [sortBy, sortOrder, secondaryFilters, locationType, serviceType]);
 
-  const handleShowMore = () => {
-    const nextPage = currentPage + 1;
+  const fetchPage = (pageNum) => {
     setIsLoading(true);
-
-    const filters = {
-      location: locationTypeState,
-      serviceTypes: [serviceTypeState],
+    const payload = {
+      location: locationType,
+      serviceTypes: [serviceType],
       sortBy,
       sortOrder,
-      page: nextPage,
+      page: pageNum,
+      limit: 10,
+      serviceFilters: secondaryFilters,
+    };
+    getVendors(payload)
+      .then((data) => {
+        if (pageNum === 1) {
+          setVendorList(data.vendors || []);
+        } else {
+          setVendorList((prev) => [...prev, ...(data.vendors || [])]);
+        }
+        setPaginationInfo(data.pagination || {});
+        setCurrentPage(pageNum);
+      })
+      .catch((err) => console.error("Error fetching vendors:", err))
+      .finally(() => setIsLoading(false));
+  };
+
+  const handleShowMore = () => fetchPage(currentPage + 1);
+
+  const handleSearch = () => {
+    if (!locationType || !serviceType) return;
+
+    setIsLoading(true);
+    const payload = {
+      location: locationType,
+      serviceTypes: [serviceType],
+      sortBy,
+      sortOrder,
+      page: 1,
       limit: 10,
       serviceFilters: secondaryFilters,
     };
 
-    getVendors(filters)
+    getVendors(payload)
       .then((data) => {
-        setVendorList((prev) => [...prev, ...(data.vendors || [])]);
+        setVendorList(data.vendors || []);
         setPaginationInfo(data.pagination || {});
-        setCurrentPage(nextPage);
+        setCurrentPage(1);
       })
-      .catch((err) => console.error("Error fetching more vendors:", err))
+      .catch((err) => console.error("Error fetching vendors:", err))
       .finally(() => setIsLoading(false));
   };
+
 
   return (
     <div className="min-h-screen bg-gray-50">
       <ListingsNav />
-
       <div className="flex flex-col lg:flex-row">
-        {/* Sidebar - Filters */}
+        {/* Sidebar */}
         <div className="w-full lg:w-1/4 bg-white shadow-lg lg:shadow-none lg:border-r border-gray-200">
           <div className="p-4 lg:p-6">
+            {/* Add button to go to booking review */}
+            <button
+              onClick={handleGoToBookingReview}
+              className="mb-4 px-6 py-3 bg-amber-500 text-white rounded-lg font-semibold hover:bg-amber-600 w-full"
+            >
+              Review & Continue Booking
+            </button>
             <h2 className="text-lg sm:text-xl font-bold text-gray-800 mb-4 lg:mb-6">
               Filters
             </h2>
 
-            {/* Primary Filters */}
+            {/* Primary (unchanged) */}
             <div className="mb-6">
               <h3 className="text-sm sm:text-base font-semibold text-gray-700 mb-3">
                 Primary Filters
               </h3>
-              <PrimaryFilters_ListingPage
-                eventType={eventTypeState}
-                setEventType={setEventTypeState}
-                serviceType={serviceTypeState}
-                setServiceType={setServiceTypeState}
-                locationType={locationTypeState}
-                setLocationType={setLocationTypeState}
-                date={dateState}
-                setDate={setDateState}
-                guestCount={guestCountState}
-                setGuestCount={setGuestCountState}
-                onSearch={() => {
-                  setIsLoading(true);
-                  setCurrentPage(1);
-                  const filters = {
-                    location: locationTypeState,
-                    serviceTypes: [serviceTypeState],
-                    sortBy,
-                    sortOrder,
-                    page: 1,
-                    limit: 10,
-                    serviceFilters: secondaryFilters,
-                  };
-
-                  getVendors(filters)
-                    .then((data) => {
-                      setVendorList(data.vendors);
-                      setPaginationInfo(data.pagination);
-                    })
-                    .catch((err) => console.error("Error fetching vendors:", err))
-                    .finally(() => setIsLoading(false));
-                }}
-              />
+              <PrimaryFilters_ListingPage onSearch={handleSearch} />
             </div>
 
-            {/* Secondary Filters */}
+            {/* Secondary (vendor-aware) */}
             <div className="mb-6">
               <h3 className="text-sm sm:text-base font-semibold text-gray-700 mb-3">
                 Additional Filters
               </h3>
-              <SecondaryFilters_ListingPage onFiltersChange={setSecondaryFilters} />
+              <SecondaryFilters_ListingPage
+                serviceType={serviceType}
+                vendors={vendorList}
+                onFiltersChange={setSecondaryFilters}
+              />
             </div>
 
-            {/* Apply Filters Button */}
+            {/* Apply Filters */}
             <button
               onClick={() => {
                 setIsLoading(true);
                 setCurrentPage(1);
-                const filters = {
-                  location: locationTypeState,
-                  serviceTypes: [serviceTypeState],
+                const p = {
+                  location: locationType,
+                  serviceTypes: [serviceType],
                   sortBy,
                   sortOrder,
                   page: 1,
                   limit: 10,
                   serviceFilters: secondaryFilters,
                 };
-
-                getVendors(filters)
+                getVendors(p)
                   .then((data) => {
-                    setVendorList(data.vendors);
-                    setPaginationInfo(data.pagination);
+                    setVendorList(data.vendors || []);
+                    setPaginationInfo(data.pagination || {});
                   })
                   .catch((err) => console.error("Error fetching vendors:", err))
                   .finally(() => setIsLoading(false));
@@ -194,25 +219,72 @@ const VendorList = () => {
           </div>
         </div>
 
-        {/* Main Content */}
+        {/* Main */}
         <div className="flex-1 p-4 lg:p-6">
-          {/* Header */}
+          {/* Header / Top picks bar with button */}
           <div className="mb-6">
-            <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800 mb-2">
-              {serviceTypeState || "All"} Vendors
-            </h1>
-            <p className="text-sm sm:text-base text-gray-600 ">
-              {vendorList.length} vendors found in {locationTypeState || "all locations"}
-            </p>
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+              <div>
+                <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800 mb-1">
+                  {serviceType || "All"} Vendors
+                </h1>
+
+              </div>
+
+              {/* NEW BUTTON */}
+              <button
+                onClick={() => setIsSelectedModalOpen(true)}
+                disabled={compareSelected.length === 0}
+                className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-sm sm:text-base transition ${compareSelected.length === 0
+                  ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                  : "bg-[#CCAB4A] text-white hover:bg-[#ab8f39]"
+                  }`}
+                title={
+                  compareSelected.length === 0
+                    ? "No vendors selected yet"
+                    : "Open selected vendors"
+                }
+              >
+                Show Selected Vendors
+                {compareSelected.length > 0 && (
+                  <span className="ml-1 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-white/20 px-2 text-white">
+                    {compareSelected.length}
+                  </span>
+                )}
+              </button>
+            </div>
+
+            {/* Chips row like "Top picks for …" (optional, basic) */}
+            <div className="mt-3 flex flex-wrap items-center gap-2">
+              {serviceType && (
+                <span className="px-2.5 py-1 rounded-full text-xs bg-gray-100 text-gray-700">
+                  {serviceType}
+                </span>
+              )}
+              {locationType && (
+                <span className="px-2.5 py-1 rounded-full text-xs bg-gray-100 text-gray-700">
+                  {locationType}
+                </span>
+              )}
+              {date && (
+                <span className="px-2.5 py-1 rounded-full text-xs bg-gray-100 text-gray-700">
+                  {date}
+                </span>
+              )}
+              {guestCount ? (
+                <span className="px-2.5 py-1 rounded-full text-xs bg-gray-100 text-gray-700">
+                  {guestCount} guests
+                </span>
+              ) : null}
+            </div>
           </div>
 
-          {/* Vendor List */}
           <VendorList_ListingPage
-            eventType={eventTypeState}
-            serviceType={serviceTypeState}
-            date={dateState}
-            locationType={locationTypeState}
-            guestCount={guestCountState}
+            eventType={eventType}
+            serviceType={serviceType}
+            date={date}
+            locationType={locationType}
+            guestCount={guestCount}
             vendors={vendorList}
             paginationInfo={paginationInfo}
             handleShowMore={handleShowMore}
@@ -221,19 +293,16 @@ const VendorList = () => {
             sortOrder={sortOrder}
             setSortBy={setSortBy}
             setSortOrder={setSortOrder}
-            // NEW props
             compareSelected={compareSelected}
             onToggleCompare={toggleCompare}
           />
-          
 
-          {/* Pagination */}
           {paginationInfo && paginationInfo.totalPages > 1 && (
             <div className="mt-8 flex justify-center">
               <div className="flex space-x-2">
                 <button
-                  onClick={() => handleShowMore()}
-                  disabled={isLoading}
+                  onClick={() => fetchPage(Math.max(1, currentPage - 1))}
+                  disabled={isLoading || currentPage === 1}
                   className="px-3 py-2 text-sm sm:text-base bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Previous
@@ -246,12 +315,13 @@ const VendorList = () => {
                     return (
                       <button
                         key={pageNum}
-                        onClick={() => handleShowMore()}
-                        className={`px-3 py-2 text-sm sm:text-base rounded-lg ${
-                          currentPage === pageNum
-                            ? "bg-[#CCAB4A] text-white"
-                            : "bg-white border border-gray-300 hover:bg-gray-50"
-                        }`}
+                        onClick={() =>
+                          pageNum > currentPage ? handleShowMore() : fetchPage(pageNum)
+                        }
+                        className={`px-3 py-2 text-sm sm:text-base rounded-lg ${currentPage === pageNum
+                          ? "bg-[#CCAB4A] text-white"
+                          : "bg-white border border-gray-300 hover:bg-gray-50"
+                          }`}
                       >
                         {pageNum}
                       </button>
@@ -260,8 +330,12 @@ const VendorList = () => {
                 )}
 
                 <button
-                  onClick={() => handleShowMore()}
-                  disabled={isLoading}
+                  onClick={() => fetchPage(currentPage + 1)}
+                  disabled={
+                    isLoading ||
+                    (paginationInfo.totalPages &&
+                      currentPage >= paginationInfo.totalPages)
+                  }
                   className="px-3 py-2 text-sm sm:text-base bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Next
@@ -272,7 +346,7 @@ const VendorList = () => {
         </div>
       </div>
 
-      {/* === Compare Bar & Modal (NEW) === */}
+      {/* Compare (existing) */}
       <CompareBar
         selected={compareSelected}
         onClear={clearCompare}
@@ -284,6 +358,112 @@ const VendorList = () => {
         onClose={() => setIsCompareOpen(false)}
         vendors={compareSelected}
       />
+
+      {/* NEW: Selected Vendors Modal */}
+      {isSelectedModalOpen && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40"
+          onClick={() => setIsSelectedModalOpen(false)}
+        >
+          <div
+            className="w-[95%] max-w-3xl bg-white rounded-2xl shadow-xl p-5 sm:p-6"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-800">
+                Selected Vendors ({compareSelected.length})
+              </h3>
+              <button
+                className="px-3 py-1.5 text-sm rounded-lg bg-gray-100 hover:bg-gray-200"
+                onClick={() => setIsSelectedModalOpen(false)}
+              >
+                Close
+              </button>
+            </div>
+
+            {compareSelected.length === 0 ? (
+              <div className="text-gray-600 text-sm">
+                No vendors selected yet. Use the “Compare” toggle on vendor cards.
+              </div>
+            ) : (
+              <>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {compareSelected.map((v) => (
+                    <div
+                      key={v._id}
+                      className="border border-gray-200 rounded-xl p-4 flex gap-4 items-start"
+                    >
+                      <img
+                        src={
+                          v?.coverImage ||
+                          v?.images?.[0] ||
+                          "https://placehold.co/160x120?text=Vendor"
+                        }
+                        alt={v?.name || "Vendor"}
+                        className="w-28 h-20 object-cover rounded-lg bg-gray-100"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <div className="font-semibold text-gray-800 truncate">
+                          {v?.name || "Unnamed Vendor"}
+                        </div>
+                        <div className="text-sm text-gray-600 mt-0.5">
+                          {v?.primaryService || serviceType}
+                          {v?.city ? ` • ${v.city}` : ""}
+                        </div>
+                        {v?.startingPrice != null && (
+                          <div className="text-sm text-gray-700 mt-1">
+                            Starting from ₹{Number(v.startingPrice).toLocaleString("en-IN")}
+                          </div>
+                        )}
+                        <div className="mt-3 flex gap-2">
+                          <button
+                            className="text-xs px-3 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200"
+                            onClick={() => removeFromCompare(v._id)}
+                          >
+                            Remove
+                          </button>
+                          <button
+                            className="text-xs px-3 py-1.5 rounded-lg bg-[#CCAB4A] text-white hover:bg-[#ab8f39]"
+                            onClick={() => navigate(`/vendors/${v._id}`)}
+                          >
+                            View
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mt-5 flex items-center justify-between">
+                  <button
+                    onClick={clearCompare}
+                    className="px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-sm font-medium"
+                  >
+                    Clear All
+                  </button>
+                  <div className="flex gap-2">
+                    <button
+                      className="px-4 py-2 rounded-lg bg-white border border-gray-300 hover:bg-gray-50 text-sm font-medium"
+                      onClick={() => setIsSelectedModalOpen(false)}
+                    >
+                      Close
+                    </button>
+                    <button
+                      className="px-4 py-2 rounded-lg bg-[#CCAB4A] text-white hover:bg-[#ab8f39] text-sm font-semibold"
+                      onClick={() => {
+                        setIsSelectedModalOpen(false);
+                        setIsCompareOpen(true); // quick jump to compare if needed
+                      }}
+                    >
+                      Compare Them
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Footer (unchanged) */}
       

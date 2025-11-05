@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Home.css';
 import tendrLogo from '../../assets/logos/tendr-logo-secondary.png';
-import Footer from '../../components/Footer'; // ✅ import reusable Footer
+import PlatformFlow from "../../components/PlatformFlow";
+import BasicSpeedDial from '../../components/BasicSpeedDial';
+import Footer from '../../components/Footer';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -25,6 +27,10 @@ const Home = () => {
     });
   };
 
+  const handleWhatsAppClick = () => {
+    window.open('https://wa.me/9211668427', '_blank');
+  };
+
   const handleSignInClick = () => {
     navigate('/login');
   };
@@ -43,6 +49,28 @@ const Home = () => {
 
   const handleCorporateClick = () => {
     navigate('/corporate-signup');
+  };
+
+  const handledropdownChange = (event) => {
+    const selectedValue = event.target.value;
+    if (selectedValue === 'timeline-picker') {
+      navigate('/timeline-picker');
+    } else if (selectedValue === 'aftermovie') {
+      navigate('/aftermovie');
+    }
+    else if(selectedValue =='checklist'){
+       navigate('/checklist-picker');
+    }
+    else if(selectedValue =='budget'){
+       navigate('/budget-picker');
+    }
+    else if(selectedValue =='invitation'){
+       navigate('/invitation');
+    }
+  }
+
+  const handleGiftHampersClick = () => {
+    navigate('/gift-hampers-cakes');
   };
 
   const services = [
@@ -120,19 +148,39 @@ const Home = () => {
   return (
     <div className="App">
       {/* Navigation */}
-      <nav className={`nav-container ${scrolled ? 'scrolled' : ''}`}>
+      <div className={`fixed bottom-2 right-1 z-50 transform transition-all duration-500 ${scrolled ? "opacity-100 scale-100" : "opacity-0 scale-75 pointer-events-none"}`}>
+        <BasicSpeedDial />
+      </div>
+      <nav className={`fixed top-0 left-0 w-full z-50 bg-white shadow transition-transform duration-500 ease-in-out
+          ${scrolled ? "-translate-y-full opacity-0" : "translate-y-0 opacity-100"}`}>
         <div className="nav">
           <a href="#" className="logo" onClick={handleLogoClick}>
-            <img src={tendrLogo} alt="tendr - We Curate You Celebrate" className="logo-img" />
+            <img src={tendrLogo} alt="Tendr - We Curate You Celebrate" className="logo-img" />
           </a>
           <div className="nav-buttons">
+            <select className="mx-10 "onClick={handledropdownChange}>
+              <option value="" disabled selected>Tendr Utilities</option>
+              <option value="checklist">Checklist</option>
+              <option value="timeline-picker">Timeline</option>
+              <option value="budget">Budget Allocator</option>
+              <option value="aftermovie">Aftermovie</option>
+              <option value="invitation">Invitation Flyers</option>
+            </select>
             <a 
-              href="https://wa.me/9211668427" 
+              href="https://wa.me/1234567890" 
               className="contact-icon whatsapp-icon" 
               target="_blank" 
               rel="noopener noreferrer"
+              onClick={handleWhatsAppClick}
             >
               💬
+            </a>
+            <a
+              href="/gift-hampers-cakes" 
+              className="nav-link" 
+              onClick={handleGiftHampersClick}
+            >
+              Gift Hampers & Cakes
             </a>
             <a href="/login" className="sign-in" onClick={handleSignInClick}>
               Sign in
@@ -143,17 +191,15 @@ const Home = () => {
           </div>
         </div>
       </nav>
-
+      
       {/* Hero Section */}
       <section className="hero">
-        <div className="hero-container">
-          <div className="hero-content">
-            <h1>Experience Event Planning</h1>
-            <p className="hero-subtitle">We Curate You Celebrate</p>
-            <a href="/plan-event/form" className="cta-button" onClick={handleBookingClick}>
-              Booking
-            </a>
-          </div>
+        <div className="hero-content">
+          <h1>Experience Event Planning</h1>
+          <p className="hero-subtitle">We Curate You Celebrate</p>
+          <button className="cta-button" onClick={handleBookingClick}>
+            Booking
+          </button>
         </div>
       </section>
 
@@ -198,7 +244,7 @@ const Home = () => {
                   </div>
                 ))}
               </div>
-              <a href="#corporate-contact" className="corporate-btn" onClick={handleCorporateClick}>
+              <a href="/corporate-signup" className="corporate-btn" onClick={handleCorporateClick}>
                 Book Corporate Events
               </a>
             </div>
@@ -213,7 +259,7 @@ const Home = () => {
           </div>
         </div>
       </section>
-
+      
       {/* Events Gallery */}
       <section className="events-section" id="events">
         <div className="events-container">
@@ -243,15 +289,15 @@ const Home = () => {
         <div className="partner-content">
           <h2>Become a Partner</h2>
           <p>3 easy steps to join the tendr!</p>
-          <a href="#start" className="partner-btn" onClick={handlePartnerClick}>
+          <button className="partner-btn" onClick={handlePartnerClick}>
             Start Here
-          </a>
+          </button>
           <div className="partner-visual"></div>
         </div>
       </section>
 
-      {/* ✅ Reusable Footer */}
-      <Footer />
+      {/* Footer */}
+      <Footer/>
     </div>
   );
 };

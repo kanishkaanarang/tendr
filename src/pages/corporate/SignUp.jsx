@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import logo from "../../assets/logos/tendr-logo-secondary.png";
-
+// import TendrPremiumBanner from "../../components/TendrPremiumBanner";
 import PricingPlans from "../../components/PricingPlans";
 
 export default function CorporateSignup() {
@@ -50,7 +50,9 @@ export default function CorporateSignup() {
     annualEvents: "",
     plan: "",
     password: "",
-    confirmPassword: ""
+    confirmPassword: "",
+    gstNumber: "",
+    gstRegistrationType: ""
   });
 
   const [errors, setErrors] = useState({});
@@ -85,6 +87,8 @@ export default function CorporateSignup() {
     if (!formData.plan) newErrors.plan = "Required";
     if (!formData.password) newErrors.password = "Required";
     if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = "Passwords don't match";
+    if (!formData.gstNumber.trim()) newErrors.gstNumber = "Required";
+    if (!formData.gstRegistrationType) newErrors.gstRegistrationType = "Required";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -137,9 +141,8 @@ export default function CorporateSignup() {
               <img
                 src={logo}
                 alt="tendr logo"
-                className="w-32 h-auto mb-1"
+                className="w-44 h-auto mb-1"
               />
-              <p className="text-xs text-gray-600 font-medium">WE CURATE YOU CELEBRATE</p>
             </div>
           </div>
 
@@ -425,6 +428,47 @@ export default function CorporateSignup() {
 
                 <div>
                   <label className="block text-xs font-medium text-gray-700 mb-1">
+                    GST Number *
+                  </label>
+                  <input
+                    type="text"
+                    name="gstNumber"
+                    value={formData.gstNumber}
+                    onChange={handleChange}
+                    className={`w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all ${
+                      errors.gstNumber ? 'border-red-500' : ''
+                    }`}
+                    placeholder="Enter GST Number"
+                  />
+                  {errors.gstNumber && (
+                    <p className="text-red-500 text-xs mt-1">{errors.gstNumber}</p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-xs font-medium text-gray-700 mb-1">
+                    GST Registration Type *
+                  </label>
+                  <select
+                    name="gstRegistrationType"
+                    value={formData.gstRegistrationType}
+                    onChange={handleChange}
+                    className={`w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all ${
+                      errors.gstRegistrationType ? 'border-red-500' : ''
+                    }`}
+                  >
+                    <option value="">Select GST Registration Type</option>
+                    <option value="regular">Regular</option>
+                    <option value="composition">Composition</option>
+                    <option value="unregistered">Unregistered</option>
+                  </select>
+                  {errors.gstRegistrationType && (
+                    <p className="text-red-500 text-xs mt-1">{errors.gstRegistrationType}</p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-xs font-medium text-gray-700 mb-1">
                     Password *
                   </label>
                   <input
@@ -595,7 +639,7 @@ export default function CorporateSignup() {
       </div>
 
       {/* Tendr Premium Promotional Banner */}
-      <TendrPremiumBanner />
+      {/* <TendrPremiumBanner /> */}
 
       {/* Pricing Plans */}
       <PricingPlans />

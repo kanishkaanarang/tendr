@@ -1,0 +1,255 @@
+/* Aftermovie Picker Styles */
+.aftermovie-card {
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  background: linear-gradient(145deg, #ffffff 0%, #fefefe 100%);
+}
+
+.aftermovie-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+/* Gradient backgrounds for different options */
+.reel-gradient {
+  background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+}
+
+.slideshow-gradient {
+  background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+}
+
+/* Video container styles */
+.demo-video-container {
+  position: relative;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.demo-video-container:hover {
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  transform: scale(1.02);
+}
+
+/* Video fallback styles */
+.video-fallback {
+  background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
+}
+
+/* Feature list styles */
+.feature-item {
+  transition: all 0.2s ease;
+}
+
+.feature-item:hover {
+  transform: translateX(4px);
+  color: #8b5cf6;
+}
+
+/* Button animations */
+.create-button {
+  background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+.create-button:hover {
+  background: linear-gradient(135deg, #7c3aed 0%, #db2777 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(139, 92, 246, 0.4);
+}
+
+/* Process step animations */
+.process-step {
+  animation: fadeInUp 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+.process-step:nth-child(1) { animation-delay: 0.1s; }
+.process-step:nth-child(2) { animation-delay: 0.2s; }
+.process-step:nth-child(3) { animation-delay: 0.3s; }
+.process-step:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Icon animations */
+.option-icon {
+  transition: all 0.5s ease;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+}
+
+.option-icon:hover {
+  transform: scale(1.1) rotate(5deg);
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.3));
+}
+
+/* Card hover effects */
+.option-card {
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 2px solid transparent;
+}
+
+.option-card:hover {
+  border-color: rgba(139, 92, 246, 0.3);
+  box-shadow: 0 25px 50px -12px rgba(139, 92, 246, 0.25);
+}
+
+/* Demo badge */
+.demo-badge {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Feature grid animations */
+.feature-grid {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  padding: 0.25rem 0;
+  transition: all 0.2s ease;
+}
+
+.feature-item:hover {
+  transform: translateX(4px);
+  color: #8b5cf6;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .aftermovie-card {
+    margin-bottom: 1rem;
+  }
+  
+  .option-icon {
+    font-size: 4rem;
+  }
+  
+  .demo-video-container {
+    height: 12rem;
+  }
+  
+  .feature-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #8b5cf6, #ec4899);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #7c3aed, #db2777);
+}
+
+/* Loading animation for videos */
+.video-loading {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Focus styles for accessibility */
+.create-button:focus,
+.option-card:focus {
+  outline: 2px solid #8b5cf6;
+  outline-offset: 2px;
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  .aftermovie-card {
+    box-shadow: none;
+    border: 1px solid #e5e7eb;
+  }
+}
+
+/* Glow effect for active cards */
+.option-card.active {
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+}
+
+/* Staggered animation for cards */
+.option-card {
+  animation: fadeInUp 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+.option-card:nth-child(1) { animation-delay: 0.1s; }
+.option-card:nth-child(2) { animation-delay: 0.3s; }
+
+/* Video controls styling */
+video::-webkit-media-controls-panel {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+video::-webkit-media-controls-play-button,
+video::-webkit-media-controls-pause-button {
+  background-color: rgba(139, 92, 246, 0.8);
+  border-radius: 50%;
+}
+
+/* Hover effects for process steps */
+.process-step:hover .process-number {
+  transform: scale(1.1);
+  background: linear-gradient(135deg, #7c3aed, #db2777);
+}
+
+.process-number {
+  transition: all 0.3s ease;
+}
+
+/* Feature icon animations */
+.feature-icon {
+  transition: all 0.2s ease;
+}
+
+.feature-item:hover .feature-icon {
+  transform: scale(1.2);
+  color: #8b5cf6;
+}

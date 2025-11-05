@@ -76,7 +76,7 @@ body {
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
-.whatsapp-icon {
+/* .whatsapp-icon {
     background: linear-gradient(145deg, #10b981, #059669);
     color: white;
 }
@@ -84,7 +84,55 @@ body {
 .whatsapp-icon:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+} */
+
+.whatsapp-icon {
+  background: #25d366;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  cursor: pointer;
+  margin-right: 12px;
+  padding: 0;
+  transition: box-shadow 0.2s;
 }
+
+.whatsapp-icon:hover {
+  background: linear-gradient(145deg, #DEB887, #F4A460);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(205, 133, 63, 0.4);
+}
+
+.whatsapp-logo {
+  width: 22px;
+  height: 22px;
+  display: block;
+}
+
+.nav-link {
+    color: #8B4513;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    transition: all 0.3s;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(139, 69, 19, 0.1);
+}
+
+.nav-link:hover {
+    background: rgba(139, 69, 19, 0.1);
+    color: #8B4513;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(139, 69, 19, 0.15);
+}
+
 
 .sign-in {
     color: #6366f1;
@@ -128,12 +176,12 @@ body {
 /* Hero Section */
 .hero {
     background: 
-        linear-gradient(135deg, rgba(139, 69, 19, 0.4) 0%, rgba(160, 82, 45, 0.4) 100%),
-        url('https://images.unsplash.com/photo-1511578314322-379afb476865?w=1920&h=1080&fit=crop');
+        linear-gradient(120deg, rgba(232, 157, 103, 0.4) 0%, rgba(185, 138, 59, 0.245) 20%),
+        url('../../assets/backgrounds/bg.jpg');
     background-size: cover;
-    background-position: center;
+    background-position: center ;
     background-attachment: fixed;
-    color: #FFFFFF;
+    color: #FAEBD7;
     padding: 140px 0 100px;
     margin-top: 80px;
     position: relative;
@@ -166,13 +214,13 @@ body {
 }
 
 .hero-content h1 {
-    font-size: 4rem;
+    font-size: 3.8rem;
     font-weight: 900;
     margin-bottom: 2rem;
-    letter-spacing: -2px;
-    line-height: 1.1;
+    letter-spacing: -1px;
+    line-height: 1.5;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-    background: linear-gradient(45deg, #FFFFFF, #F5F5DC, #FFFFFF);
+    background: linear-gradient(45deg, #FFFFFF, #f8f8da, #FFFFFF);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -185,7 +233,7 @@ body {
     letter-spacing: -2px;
     line-height: 1.1;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-    background: linear-gradient(45deg, #FFFFFF, #F5F5DC, #FFFFFF);
+    background: linear-gradient(45deg, #FFFFFF, #fffff5, #FFFFFF);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -657,6 +705,10 @@ body {
     z-index: 1;
 }
 
+.footer-container strong {
+    color: #A0522D;
+}
+
 .footer-content {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -804,9 +856,9 @@ body {
 }
 
 .footer-brand h1{
-    color: #4b2e0f;
-  margin-bottom: 25px;
-    font-size: 2.2rem;
+  color: #A0522D;
+  margin-bottom: 15px;
+    font-size: 1.8rem;
     font-weight: 700;
     text-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
 }
@@ -814,12 +866,7 @@ body {
 .footer-brand p {
   margin: 10px 0;
   font-size: 0.95rem;
-  color: #a26320; 
-}
-
-.footer-brand strong{
-    font-weight: 700;
-    color: #4b2e0f;
+  color:#2e1b0f; ; 
 }
 
 .footer-brand a {
@@ -862,7 +909,7 @@ body {
 }
 
 .footer-col li {
-    color: #a26320;
+  color: #2e1b0f;
     text-decoration: none;
     transition: all 0.3s;
     font-weight: 400;
@@ -884,8 +931,7 @@ body {
     font-size: 1.2rem;
     margin-bottom: 1rem;
     font-weight: 700;
-    color: #4b2e0f;
-    text-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
+    color:#A0522D;
 }
 
 /* Social icons */
@@ -904,7 +950,7 @@ body {
     align-items: center;
     justify-content: center;
     font-size: 1.4rem;
-    color: #8B4513;
+    color: #A0522D;
     text-decoration: none;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     background: rgba(255, 255, 255, 0.3);
@@ -931,7 +977,7 @@ body {
 }
 
 .footer-bottom p {
-  color: #a26320;
+  color: #6b3d1c;
   text-decoration: none;
   margin: 0 5px;
 }

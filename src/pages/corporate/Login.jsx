@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import loginbackground from "../../assets/backgrounds/login-bg.png";
 import logo from "../../assets/logos/tendr-logo-secondary.png";
-import Footer from "../../components/Footer";   // ✅ import shared footer
+import Footer from "../../components/Footer";
 
 const CorporateLogin = () => {
   const navigate = useNavigate();
@@ -204,7 +204,6 @@ const CorporateLogin = () => {
         </div>
       </div>
 
-      {/* ✅ Reusable Footer */}
       <Footer />
     </div>
   );
