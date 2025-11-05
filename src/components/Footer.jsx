@@ -20,7 +20,7 @@ export default function Footer() {
             <a href="mailto:contacttendr@gmail.com">contacttendr@gmail.com</a>
           </p>
           <p>
-            <strong>Phone:</strong> +91-9211668427
+            <strong>Phone:</strong> ‪+91-9211668427‬
           </p>
           <p>
             <strong>Address:</strong> DELHI NCR
@@ -98,5 +98,5 @@ export default function Footer() {
         </p>
       </div>
     </footer>
-  );
+  );
 }

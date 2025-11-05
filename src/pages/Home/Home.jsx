@@ -1,10 +1,20 @@
+// src/pages/Home/Home.jsx
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Home.css';
 import tendrLogo from '../../assets/logos/tendr-logo-secondary.png';
-import PlatformFlow from "../../components/PlatformFlow";
+import PlatformFlow from '../../components/PlatformFlow';
 import BasicSpeedDial from '../../components/BasicSpeedDial';
 import Footer from '../../components/Footer';
+import { easeIn, motion } from 'framer-motion';
+import { FaFacebookF, FaInstagram, FaLinkedinIn } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
+import corpo from '../../assets/ui/corpo.jpg';
+import CorporateLogin from '../../components/corporateEventPlanning.jsx';
+import JourneyFlow from '../../components/JourneyFlow';
+
+// WhatsApp icon
+import { FaWhatsapp } from "react-icons/fa";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -20,285 +30,335 @@ const Home = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleLogoClick = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
+  // Logo should navigate to the home route (works from other pages as well)
+  const handleLogoClick = (e) => {
+    e.preventDefault();
+    navigate('/');
   };
 
-  const handleWhatsAppClick = () => {
+  const handleWhatsAppClick = (e) => {
+    e.preventDefault();
     window.open('https://wa.me/9211668427', '_blank');
   };
 
-  const handleSignInClick = () => {
+  const handleSignInClick = (e) => {
+    e.preventDefault();
     navigate('/login');
   };
 
-  const handleSignUpClick = () => {
-    navigate('/signup');
+  // removed sign up - not needed per requirements
+
+  const handleBookingSelect = (e) => {
+    const val = e.target.value;
+    if (!val) return;
+    if (val === 'corporate') {
+      navigate('/corporate/login'); // your corporate booking route
+    } else if (val === 'celebration') {
+      navigate('/booking'); // general booking / choose booking
+    }
+    // reset select to default (optional)
+    e.target.selectedIndex = 0;
   };
 
-  const handleBookingClick = () => {
-    navigate('/booking');
-  };
-
-  const handlePartnerClick = () => {
-    navigate('/vendor/register');
-  };
-
-  const handleCorporateClick = () => {
-    navigate('/corporate-signup');
+  const handleVendorSelect = (e) => {
+    const val = e.target.value;
+    if (!val) return;
+    if (val === 'register') {
+      navigate('/vendor/register');
+    } else if (val === 'portfolio') {
+      navigate('/listings'); // vendor listings / portfolio area
+    }
+    e.target.selectedIndex = 0;
   };
 
   const handledropdownChange = (event) => {
     const selectedValue = event.target.value;
-    if (selectedValue === 'timeline-picker') {
+    if (!selectedValue) return;
+    if (selectedValue === 'timeline') {
       navigate('/timeline-picker');
     } else if (selectedValue === 'aftermovie') {
       navigate('/aftermovie');
+    } else if (selectedValue === 'checklist') {
+      navigate('/checklist-picker');
+    } else if (selectedValue === 'Budget Allocator') {
+      navigate('/budget-allocator');
+    } else if (selectedValue === 'invitation') {
+      navigate('/invitation');
+    } else if (selectedValue === 'our-products') {
+      navigate('/gift-hampers-cakes');
     }
-    else if(selectedValue =='checklist'){
-       navigate('/checklist-picker');
-    }
-    else if(selectedValue =='budget'){
-       navigate('/budget-picker');
-    }
-    else if(selectedValue =='invitation'){
-       navigate('/invitation');
-    }
-  }
+    event.target.selectedIndex = 0;
+  };
 
-  const handleGiftHampersClick = () => {
+  const handleGiftHampersClick = (e) => {
+    e.preventDefault();
     navigate('/gift-hampers-cakes');
   };
 
+  const handlePartnerClick = (e) => {
+    e.preventDefault();
+    navigate('/vendor/register');
+  };
+
+  const handleCorporateClick = (e) => {
+    e.preventDefault();
+    navigate('/corporate-signup');
+  };
+
   const services = [
-    {
-      id: 1,
-      title: 'Photography',
-      image: 'https://artincontext.org/wp-content/uploads/2022/07/What-Is-the-Definition-of-Fine-Art-Photography.avif'
-    },
-    {
-      id: 2,
-      title: 'Entertainment',
-      image: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=400&h=300&fit=crop'
-    },
-    {
-      id: 3,
-      title: 'Decor',
-      image: 'https://images.unsplash.com/photo-1469371670807-013ccf25f16a?w=400&h=300&fit=crop'
-    },
-    {
-      id: 4,
-      title: 'Catering',
-      image: 'https://images.unsplash.com/photo-1551218808-94e220e084d2?w=400&h=300&fit=crop'
-    }
+    { id: 1, title: 'Photography', image: 'https://artincontext.org/wp-content/uploads/2022/07/What-Is-the-Definition-of-Fine-Art-Photography.avif' },
+    { id: 2, title: 'Entertainment', image: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=400&h=300&fit=crop' },
+    { id: 3, title: 'Decor', image: 'https://images.unsplash.com/photo-1469371670807-013ccf25f16a?w=400&h=300&fit=crop' },
+    { id: 4, title: 'Catering', image: 'https://images.unsplash.com/photo-1551218808-94e220e084d2?w=400&h=300&fit=crop' }
   ];
 
   const events = [
-    {
-      id: 1,
-      title: 'Dinner Eve',
-      image: 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=500&h=400&fit=crop'
-    },
-    {
-      id: 2,
-      title: 'Family Gathering',
-      image: 'https://belvederebanquets.com/wp-content/uploads/2024/02/Belvedere-Family-Reunion-Ideas-Create-New-Memories-With-Fun-Activities.jpg'
-    },
-    {
-      id: 3,
-      title: 'Lunch Celebrations',
-      image: 'https://images.unsplash.com/photo-1530023367847-a683933f4172?w=500&h=400&fit=crop'
-    },
-    {
-      id: 4,
-      title: 'Marriage Ceremony',
-      image: 'https://seasons5.com.au/wp-content/uploads/2024/06/luxury-wedding-trends.jpg'
-    },
-    {
-      id: 5,
-      title: 'Magical Ring Ceremony',
-      image: 'https://images.unsplash.com/photo-1469371670807-013ccf25f16a?w=500&h=400&fit=crop'
-    }
+    { id: 1, title: 'Dinner Eve', image: 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=500&h=400&fit=crop' },
+    { id: 2, title: 'Family Gathering', image: 'https://belvederebanquets.com/wp-content/uploads/2024/02/Belvedere-Family-Reunion-Ideas-Create-New-Memories-With-Fun-Activities.jpg' },
+    { id: 3, title: 'Lunch Celebrations', image: 'https://images.unsplash.com/photo-1530023367847-a683933f4172?w=500&h=400&fit=crop' },
+    { id: 4, title: 'Marriage Ceremony', image: 'https://seasons5.com.au/wp-content/uploads/2024/06/luxury-wedding-trends.jpg' },
+    { id: 5, title: 'Magical Ring Ceremony', image: 'https://images.unsplash.com/photo-1469371670807-013ccf25f16a?w=500&h=400&fit=crop' },
+    { id: 6, title: 'Birthday Bash', image: 'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=500&h=400&fit=crop' }
   ];
 
   const features = [
-    {
-      id: 1,
-      icon: '🏢',
-      title: 'Corporate Events',
-      description: 'Meetings, conferences, and seminars'
-    },
-    {
-      id: 2,
-      icon: '🎯',
-      title: 'Team Building',
-      description: 'Engaging activities and workshops'
-    },
-    {
-      id: 3,
-      icon: '🏆',
-      title: 'Award Ceremonies',
-      description: 'Recognition events and galas'
-    }
+    { id: 1, icon: '🏢', title: 'Corporate Events', description: 'Meetings, conferences, and seminars' },
+    { id: 2, icon: '🎯', title: 'Team Building', description: 'Engaging activities and workshops' },
+    { id: 3, icon: '🏆', title: 'Award Ceremonies', description: 'Recognition events and galas' }
   ];
+
+  
 
   return (
     <div className="App">
-      {/* Navigation */}
-      <div className={`fixed bottom-2 right-1 z-50 transform transition-all duration-500 ${scrolled ? "opacity-100 scale-100" : "opacity-0 scale-75 pointer-events-none"}`}>
+      {/* Speed dial (floating) */}
+      <div className={`sticky bottom-2 right-1 z-50 transform transition-all duration-500 ${scrolled ? "opacity-100 scale-100" : "opacity-0 scale-75 pointer-events-none"}`}>
         <BasicSpeedDial />
       </div>
-      <nav className={`fixed top-0 left-0 w-full z-50 bg-white shadow transition-transform duration-500 ease-in-out
-          ${scrolled ? "-translate-y-full opacity-0" : "translate-y-0 opacity-100"}`}>
-        <div className="nav">
-          <a href="#" className="logo" onClick={handleLogoClick}>
-            <img src={tendrLogo} alt="Tendr - We Curate You Celebrate" className="logo-img" />
+
+      {/* Header / Navbar */}
+<nav
+  className={`fixed top-0 left-0 w-full z-50 bg-white shadow transition-transform duration-500 ease-in-out ${
+    scrolled ? "translate-y-0 opacity-100" : "translate-y-0 opacity-100"
+  }`}
+>
+  <div className="nav">
+    <a href="/" className="logo" onClick={handleLogoClick}>
+      <img
+        src={tendrLogo}
+        alt="Tendr - We Curate You Celebrate"
+        className="logo-img"
+      />
+    </a>
+
+    <div className="nav-buttons">
+      {/* Our Products Dropdown */}
+      <div className="dropdown">
+        <button className="dropdown-btn">
+          Our Products <span>▾</span>
+        </button>
+        <div className="dropdown-content">
+          <div className="dropdown-header">Smart Planning Tools</div>
+          <div className="dropdown-subtext">Professional planning made easy</div>
+
+          <a href="/checklist">
+            <i className="fa-regular fa-square-check"></i> Checklist
           </a>
-          <div className="nav-buttons">
-            <select className="mx-10 "onClick={handledropdownChange}>
-              <option value="" disabled selected>Tendr Utilities</option>
-              <option value="checklist">Checklist</option>
-              <option value="timeline-picker">Timeline</option>
-              <option value="budget">Budget Allocator</option>
-              <option value="aftermovie">Aftermovie</option>
-              <option value="invitation">Invitation Flyers</option>
-            </select>
-            <a 
-              href="https://wa.me/1234567890" 
-              className="contact-icon whatsapp-icon" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              onClick={handleWhatsAppClick}
-            >
-              💬
-            </a>
-            <a
-              href="/gift-hampers-cakes" 
-              className="nav-link" 
-              onClick={handleGiftHampersClick}
-            >
-              Gift Hampers & Cakes
-            </a>
-            <a href="/login" className="sign-in" onClick={handleSignInClick}>
-              Sign in
-            </a>
-            <a href="/signup" className="sign-up" onClick={handleSignUpClick}>
-              Sign Up
-            </a>
-          </div>
+          <a href="/timeline-picker">
+            <i className="fa-regular fa-clock"></i> Timeline
+          </a>
+          <a href="/budget-allocator">
+            <i className="fa-solid fa-wallet"></i> Budget Allocator
+          </a>
+          <a href="/aftermovie">
+            <i className="fa-solid fa-video"></i> Aftermovie
+          </a>
+          <a href="/invitation">
+            <i className="fa-regular fa-envelope"></i> Invitation Flyers
+          </a>
         </div>
-      </nav>
-      
+      </div>
+
+      {/* Vendors Dropdown */}
+      <div className="dropdown">
+  <button className="dropdown-btn">
+    About Vendors <span>▾</span>
+  </button>
+  <div className="dropdown-content">
+    <a
+      href="#"
+      onClick={(e) => {
+        e.preventDefault();
+        // navigate to registration page normally
+        window.location.href = "/vendor/register";
+      }}
+    >
+      <i className="fa-solid fa-user-plus"></i> Register as Vendor
+    </a>
+
+    <button
+      className="dropdown-link"
+      onClick={(e) => {
+        e.preventDefault();
+        const section = document.getElementById("events");
+        if (section) {
+          const yOffset = -80; // adjust for navbar height
+          const y =
+            section.getBoundingClientRect().top + window.scrollY + yOffset;
+          window.scrollTo({ top: y, behavior: "smooth" });
+        }
+      }}
+    >
+      <i className="fa-solid fa-briefcase"></i> Vendor Portfolio
+    </button>
+  </div>
+</div>
+
+
+      {/* Booking Dropdown */}
+      <div className="dropdown">
+  <button className="dropdown-btn">
+    Booking <span>▾</span>
+  </button>
+  <div className="dropdown-content">
+    <button
+      className="dropdown-link"
+      onClick={(e) => {
+        e.preventDefault();
+
+        // Close dropdown if needed (optional)
+        const section = document.getElementById("corporate-section");
+        if (section) {
+          const yOffset = -80; // offset for fixed navbar height
+          const y =
+            section.getBoundingClientRect().top + window.scrollY + yOffset;
+          window.scrollTo({ top: y, behavior: "smooth" });
+        }
+      }}
+    >
+      <i className="fa-solid fa-building"></i> Corporate Booking
+    </button>
+
+    <a href="/booking">
+      <i className="fa-solid fa-champagne-glasses"></i> Other Celebrations
+    </a>
+  </div>
+</div>
+
+
+
+      {/* Gift Hampers */}
+      <a
+        href="/gift-hampers-cakes"
+        className="nav-link mx-4"
+        onClick={handleGiftHampersClick}
+      >
+        Gift Hampers & Cakes
+      </a>
+
+      {/* WhatsApp */}
+      <a
+        href="https://wa.me/9211668427"
+        className="contact-icon whatsapp-icon"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Chat on WhatsApp"
+        title="Chat on WhatsApp"
+      >
+        <FaWhatsapp size={22} />
+      </a>
+
+      {/* Sign in */}
+      <a href="/login" className="sign-in mx-4" onClick={handleSignInClick}>
+        Sign in
+      </a>
+    </div>
+  </div>
+</nav>
+
+
+
       {/* Hero Section */}
       <section className="hero">
         <div className="hero-content">
           <h1>Experience Event Planning</h1>
           <p className="hero-subtitle">We Curate You Celebrate</p>
-          <button className="cta-button" onClick={handleBookingClick}>
-            Booking
-          </button>
+          <button className="cta-button" onClick={() => navigate('/booking')}> Booking </button>
         </div>
       </section>
 
-      {/* Services Section */}
-      <section className="services-section" id="services">
-        <div className="services-container">
-          <div className="services-grid">
-            {services.map((service) => (
-              <div key={service.id} className="service-card">
-                <div
-                  className="service-image"
-                  style={{ backgroundImage: `url('${service.image}')` }}
-                ></div>
-                <h3>{service.title}</h3>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <JourneyFlow />
+
 
       {/* Corporate Booking Section */}
-      <section className="corporate-booking-section">
-        <div className="corporate-container">
-          <div className="corporate-content">
-            <div className="corporate-text">
-              <span className="corporate-badge">Professional Services</span>
-              <h2 className="corporate-title">Corporate Event Planning</h2>
-              <p className="corporate-description">
-                Elevate your business events with our comprehensive corporate planning services. 
-                From executive meetings to large-scale conferences, we handle every detail with 
-                professional excellence.
-              </p>
-              <div className="corporate-features">
-                {features.map((feature) => (
-                  <div key={feature.id} className="feature-item">
-                    <div className="feature-icon">{feature.icon}</div>
-                    <div className="feature-text">
-                      <h4>{feature.title}</h4>
-                      <p>{feature.description}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <a href="/corporate-signup" className="corporate-btn" onClick={handleCorporateClick}>
-                Book Corporate Events
-              </a>
-            </div>
-            <div className="corporate-image">
-              <div 
-                className="corporate-img" 
-                style={{ 
-                  backgroundImage: `url('https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600&h=500&fit=crop')` 
-                }}
-              ></div>
-            </div>
-          </div>
-        </div>
-      </section>
-      
+      <CorporateLogin />
       {/* Events Gallery */}
       <section className="events-section" id="events">
-        <div className="events-container">
-          <div className="events-header">
-            <p className="events-subtitle">A tour of events we have executed.</p>
-            <h2 className="events-title">A Glimpse Into Our Events</h2>
-          </div>
-          <div className="events-grid">
-            {events.map((event) => (
-              <div key={event.id} className="event-card">
-                <div
-                  className="event-image"
-                  style={{ backgroundImage: `url('${event.image}')` }}
-                >
-                  <div className="event-overlay">
-                    <h3>{event.title}</h3>
-                  </div>
-                </div>
-              </div>
-            ))}
+  <div className="events-container">
+    <div className="events-header">
+      <p className="events-subtitle">A tour of events we have executed.</p>
+      <h2 className="events-title">A Glimpse Into Our Events</h2>
+    </div>
+
+    <div className="events-grid">
+      {events.map(event => (
+        <div key={event.id} className="event-card">
+          <div
+            className="event-image"
+            style={{ backgroundImage: `url('${event.image}')` }}
+          >
+            <div className="event-overlay">
+              <h3>{event.title}</h3>
+            </div>
           </div>
         </div>
-      </section>
+      ))}
+    </div>
+  </div>
+</section>
 
       {/* Partner Section */}
-      <section className="partner-section">
-        <div className="partner-content">
-          <h2>Become a Partner</h2>
-          <p>3 easy steps to join the tendr!</p>
-          <button className="partner-btn" onClick={handlePartnerClick}>
-            Start Here
-          </button>
-          <div className="partner-visual"></div>
-        </div>
-      </section>
+<section className="partner-section">
+  <div className="partner-overlay"></div>
+
+  <div className="partner-content">
+    <h2>Become a Partner</h2>
+    <p>3 easy steps to join the tendr!</p>
+    <button
+      className="partner-btn"
+      onClick={() => navigate("/vendor/register")}
+    >
+      START HERE 
+    </button>
+
+    {/* Steps container */}
+    <div className="partner-steps">
+      <div className="step">
+        <div className="step-circle">1</div>
+        <h4>Register</h4>
+        <p>Join our network of event professionals</p>
+      </div>
+
+      <div className="step">
+        <div className="step-circle">2</div>
+        <h4>Verify</h4>
+        <p>Complete our verification process</p>
+      </div>
+
+      <div className="step">
+        <div className="step-circle">3</div>
+        <h4>Grow</h4>
+        <p>Start receiving bookings and grow your business</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 
       {/* Footer */}
-      <Footer/>
+      <Footer />
     </div>
   );
 };
 
-export default Home;
+export default Home
