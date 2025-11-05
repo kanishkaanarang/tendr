@@ -1,3 +1,7 @@
+import { useSelector, useDispatch } from "react-redux";
+import { setFilters } from "../../redux/listingFiltersSlice.js";
+
+
 import { useNavigate, useLocation } from "react-router-dom";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import InstagramIcon from "@mui/icons-material/Instagram";
@@ -16,24 +20,18 @@ const VendorList = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const dispatch = useDispatch();
+
   const {
-    eventType = "",
-    serviceType = "",
-    date = "",
-    locationType = "",
-    guestCount = 0,
-    vendors = [],
-    pagination = {},
-  } = location.state || {};
+    eventType,
+    serviceType,
+    locationType,
+    date,
+    guestCount,
+  } = useSelector((state) => state.listingFilters);
 
-  const [eventTypeState, setEventTypeState] = useState(eventType || "");
-  const [serviceTypeState, setServiceTypeState] = useState(serviceType || "");
-  const [locationTypeState, setLocationTypeState] = useState(locationType || "");
-  const [dateState, setDateState] = useState(date || "");
-  const [guestCountState, setGuestCountState] = useState(guestCount || 0);
-
-  const [vendorList, setVendorList] = useState(vendors);
-  const [paginationInfo, setPaginationInfo] = useState(pagination);
+  const [vendorList, setVendorList] = useState([]);
+  const [paginationInfo, setPaginationInfo] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [secondaryFilters, setSecondaryFilters] = useState({});
@@ -58,14 +56,32 @@ const VendorList = () => {
   // NEW: modal to show selected vendors from top picks button
   const [isSelectedModalOpen, setIsSelectedModalOpen] = useState(false);
 
+  // Booking review navigation after vendor selection
+  const handleGoToBookingReview = () => {
+    // Example: collect all event and vendor data here
+    const bookingDetails = {
+      eventName: eventType,
+      service: serviceType,
+      date: date,
+      guests: guestCount,
+      vendors: vendorList.filter(v => v.selected), // or your selection logic
+      address: locationType,
+      basePrice: 250, // replace with actual price logic
+      customerId: localStorage.getItem("userId"),
+      addons: [],
+      amount: 250,
+    };
+    navigate('/booking/review', { state: { booking: bookingDetails } });
+  };
+
   // fetch on changes
   useEffect(() => {
-    if (!locationTypeState || !serviceTypeState) return;
+    if (!locationType || !serviceType) return;
 
     setIsLoading(true);
     const payload = {
-      location: locationTypeState,
-      serviceTypes: [serviceTypeState],
+      location: locationType,
+      serviceTypes: [serviceType],
       sortBy,
       sortOrder,
       page: 1,
@@ -81,13 +97,13 @@ const VendorList = () => {
       })
       .catch((err) => console.error("Error fetching vendors:", err))
       .finally(() => setIsLoading(false));
-  }, [sortBy, sortOrder, secondaryFilters, locationTypeState, serviceTypeState]);
+  }, [sortBy, sortOrder, secondaryFilters, locationType, serviceType]);
 
   const fetchPage = (pageNum) => {
     setIsLoading(true);
     const payload = {
-      location: locationTypeState,
-      serviceTypes: [serviceTypeState],
+      location: locationType,
+      serviceTypes: [serviceType],
       sortBy,
       sortOrder,
       page: pageNum,
@@ -110,14 +126,45 @@ const VendorList = () => {
 
   const handleShowMore = () => fetchPage(currentPage + 1);
 
+  const handleSearch = () => {
+    if (!locationType || !serviceType) return;
+
+    setIsLoading(true);
+    const payload = {
+      location: locationType,
+      serviceTypes: [serviceType],
+      sortBy,
+      sortOrder,
+      page: 1,
+      limit: 10,
+      serviceFilters: secondaryFilters,
+    };
+
+    getVendors(payload)
+      .then((data) => {
+        setVendorList(data.vendors || []);
+        setPaginationInfo(data.pagination || {});
+        setCurrentPage(1);
+      })
+      .catch((err) => console.error("Error fetching vendors:", err))
+      .finally(() => setIsLoading(false));
+  };
+
+
   return (
     <div className="min-h-screen bg-gray-50">
       <ListingsNav />
-
       <div className="flex flex-col lg:flex-row">
         {/* Sidebar */}
         <div className="w-full lg:w-1/4 bg-white shadow-lg lg:shadow-none lg:border-r border-gray-200">
           <div className="p-4 lg:p-6">
+            {/* Add button to go to booking review */}
+            <button
+              onClick={handleGoToBookingReview}
+              className="mb-4 px-6 py-3 bg-amber-500 text-white rounded-lg font-semibold hover:bg-amber-600 w-full"
+            >
+              Review & Continue Booking
+            </button>
             <h2 className="text-lg sm:text-xl font-bold text-gray-800 mb-4 lg:mb-6">
               Filters
             </h2>
@@ -127,38 +174,7 @@ const VendorList = () => {
               <h3 className="text-sm sm:text-base font-semibold text-gray-700 mb-3">
                 Primary Filters
               </h3>
-              <PrimaryFilters_ListingPage
-                eventType={eventTypeState}
-                setEventType={setEventTypeState}
-                serviceType={serviceTypeState}
-                setServiceType={setServiceTypeState}
-                locationType={locationTypeState}
-                setLocationType={setLocationTypeState}
-                date={dateState}
-                setDate={setDateState}
-                guestCount={guestCountState}
-                setGuestCount={setGuestCountState}
-                onSearch={() => {
-                  setIsLoading(true);
-                  setCurrentPage(1);
-                  const p = {
-                    location: locationTypeState,
-                    serviceTypes: [serviceTypeState],
-                    sortBy,
-                    sortOrder,
-                    page: 1,
-                    limit: 10,
-                    serviceFilters: secondaryFilters,
-                  };
-                  getVendors(p)
-                    .then((data) => {
-                      setVendorList(data.vendors || []);
-                      setPaginationInfo(data.pagination || {});
-                    })
-                    .catch((err) => console.error("Error fetching vendors:", err))
-                    .finally(() => setIsLoading(false));
-                }}
-              />
+              <PrimaryFilters_ListingPage onSearch={handleSearch} />
             </div>
 
             {/* Secondary (vendor-aware) */}
@@ -167,7 +183,7 @@ const VendorList = () => {
                 Additional Filters
               </h3>
               <SecondaryFilters_ListingPage
-                serviceType={serviceTypeState}
+                serviceType={serviceType}
                 vendors={vendorList}
                 onFiltersChange={setSecondaryFilters}
               />
@@ -179,8 +195,8 @@ const VendorList = () => {
                 setIsLoading(true);
                 setCurrentPage(1);
                 const p = {
-                  location: locationTypeState,
-                  serviceTypes: [serviceTypeState],
+                  location: locationType,
+                  serviceTypes: [serviceType],
                   sortBy,
                   sortOrder,
                   page: 1,
@@ -209,20 +225,19 @@ const VendorList = () => {
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
               <div>
                 <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800 mb-1">
-                  {serviceTypeState || "All"} Vendors
+                  {serviceType || "All"} Vendors
                 </h1>
-                
+
               </div>
 
               {/* NEW BUTTON */}
               <button
                 onClick={() => setIsSelectedModalOpen(true)}
                 disabled={compareSelected.length === 0}
-                className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-sm sm:text-base transition ${
-                  compareSelected.length === 0
-                    ? "bg-gray-200 text-gray-500 cursor-not-allowed"
-                    : "bg-[#CCAB4A] text-white hover:bg-[#ab8f39]"
-                }`}
+                className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-sm sm:text-base transition ${compareSelected.length === 0
+                  ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                  : "bg-[#CCAB4A] text-white hover:bg-[#ab8f39]"
+                  }`}
                 title={
                   compareSelected.length === 0
                     ? "No vendors selected yet"
@@ -240,35 +255,35 @@ const VendorList = () => {
 
             {/* Chips row like "Top picks for …" (optional, basic) */}
             <div className="mt-3 flex flex-wrap items-center gap-2">
-              {serviceTypeState && (
+              {serviceType && (
                 <span className="px-2.5 py-1 rounded-full text-xs bg-gray-100 text-gray-700">
-                  {serviceTypeState}
+                  {serviceType}
                 </span>
               )}
-              {locationTypeState && (
+              {locationType && (
                 <span className="px-2.5 py-1 rounded-full text-xs bg-gray-100 text-gray-700">
-                  {locationTypeState}
+                  {locationType}
                 </span>
               )}
-              {dateState && (
+              {date && (
                 <span className="px-2.5 py-1 rounded-full text-xs bg-gray-100 text-gray-700">
-                  {dateState}
+                  {date}
                 </span>
               )}
-              {guestCountState ? (
+              {guestCount ? (
                 <span className="px-2.5 py-1 rounded-full text-xs bg-gray-100 text-gray-700">
-                  {guestCountState} guests
+                  {guestCount} guests
                 </span>
               ) : null}
             </div>
           </div>
 
           <VendorList_ListingPage
-            eventType={eventTypeState}
-            serviceType={serviceTypeState}
-            date={dateState}
-            locationType={locationTypeState}
-            guestCount={guestCountState}
+            eventType={eventType}
+            serviceType={serviceType}
+            date={date}
+            locationType={locationType}
+            guestCount={guestCount}
             vendors={vendorList}
             paginationInfo={paginationInfo}
             handleShowMore={handleShowMore}
@@ -302,11 +317,10 @@ const VendorList = () => {
                         onClick={() =>
                           pageNum > currentPage ? handleShowMore() : fetchPage(pageNum)
                         }
-                        className={`px-3 py-2 text-sm sm:text-base rounded-lg ${
-                          currentPage === pageNum
-                            ? "bg-[#CCAB4A] text-white"
-                            : "bg-white border border-gray-300 hover:bg-gray-50"
-                        }`}
+                        className={`px-3 py-2 text-sm sm:text-base rounded-lg ${currentPage === pageNum
+                          ? "bg-[#CCAB4A] text-white"
+                          : "bg-white border border-gray-300 hover:bg-gray-50"
+                          }`}
                       >
                         {pageNum}
                       </button>
@@ -392,7 +406,7 @@ const VendorList = () => {
                           {v?.name || "Unnamed Vendor"}
                         </div>
                         <div className="text-sm text-gray-600 mt-0.5">
-                          {v?.primaryService || serviceTypeState}
+                          {v?.primaryService || serviceType}
                           {v?.city ? ` • ${v.city}` : ""}
                         </div>
                         {v?.startingPrice != null && (

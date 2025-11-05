@@ -229,12 +229,12 @@ const sidebar_arr = [
     key: 'Users',
   },
   {
-    label: 'Chat',
+    label: 'Chat',   
     icon: <MessageCircle size={22} />,
     key: 'Chat',
   },
   {
-    label: 'Chat - Users',
+    label: 'Chat - Users',       
     icon: <MessagesSquare size={22} />,
     key: 'ChatUsers',
   }

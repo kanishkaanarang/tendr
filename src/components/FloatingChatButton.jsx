@@ -1,5 +1,6 @@
 // src/components/FloatingChatButton.jsx
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, useRef } from "react";
+import { io } from "socket.io-client";
 import { useSelector } from "react-redux";
 import router from "../router";
 import ChatVendorPickerModal from "./ChatVendorPickerModal";
@@ -41,6 +42,7 @@ function SimpleChoiceModal({ open, onClose, onPick }) {
 }
 
 export default function FloatingChatButton({ hideOnRoutes = ["/chat", "/chats"] }) {
+  const socketRef = useRef(null);
   const bookingType = useSelector((s) => s?.eventPlanning?.bookingType) || "";
   const selectedVendors = useSelector((s) => s?.eventPlanning?.selectedVendors) || [];
   const formFilters = useSelector((s) => s?.eventPlanning?.formData) || {};
@@ -107,8 +109,39 @@ export default function FloatingChatButton({ hideOnRoutes = ["/chat", "/chats"] 
     setChoiceOpen(false);
 
     if (choice === "support") {
-      const vendor = { _id: "concierge", name: "Tendr Support", approved: true };
-      router.navigate("/chat", { state: { vendor, filters: formFilters } });
+      // Socket logic for support chat
+      if (!socketRef.current) {
+  socketRef.current = io("https://tendr-backend-75ag.onrender.com", {
+          query: {
+            userId: localStorage.getItem("userId") || "guest",
+            role: "user",
+            chatType: "SUPPORT",
+          },
+        });
+
+        socketRef.current.on("connect", () => {
+          socketRef.current.emit("open_conversation", {
+            requestId: `support_${Date.now()}`,
+            chatType: "SUPPORT",
+          });
+        });
+
+        socketRef.current.on("conversation_opened", (conversation) => {
+          router.navigate("/chat", {
+            state: {
+              chatId: conversation._id,
+              chatType: "SUPPORT",
+            },
+            replace: true,
+          });
+        });
+      } else {
+        // If already connected, emit event directly
+        socketRef.current.emit("open_conversation", {
+          requestId: `support_${Date.now()}`,
+          chatType: "SUPPORT",
+        });
+      }
       return;
     }
 
