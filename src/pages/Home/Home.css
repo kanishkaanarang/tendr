@@ -860,16 +860,17 @@ body {
   margin-bottom: 15px;
     font-size: 1.8rem;
     font-weight: 700;
+    text-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
 }
 
 .footer-brand p {
-  margin: 6px 0;
+  margin: 10px 0;
   font-size: 0.95rem;
   color:#2e1b0f; ; 
 }
 
 .footer-brand a {
-  color: #f0c674;
+  color: #a26320;
   text-decoration: none;
 }
 

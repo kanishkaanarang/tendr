@@ -40,7 +40,7 @@ const Home = () => {
   };
 
   const handleBookingClick = () => {
-    navigate('/booking');
+    navigate('/plan-event/form');
   };
 
   const handlePartnerClick = () => {
@@ -206,11 +206,12 @@ const Home = () => {
       {/* Services Section */}
       <section className="services-section" id="services">
         <div className="services-container">
+          <h2 className="section-title">Explore Services</h2>
           <div className="services-grid">
             {services.map((service) => (
               <div key={service.id} className="service-card">
-                <div
-                  className="service-image"
+                <div 
+                  className="service-image" 
                   style={{ backgroundImage: `url('${service.image}')` }}
                 ></div>
                 <h3>{service.title}</h3>
@@ -269,8 +270,8 @@ const Home = () => {
           <div className="events-grid">
             {events.map((event) => (
               <div key={event.id} className="event-card">
-                <div
-                  className="event-image"
+                <div 
+                  className="event-image" 
                   style={{ backgroundImage: `url('${event.image}')` }}
                 >
                   <div className="event-overlay">
