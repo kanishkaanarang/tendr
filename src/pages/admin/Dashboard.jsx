@@ -10,6 +10,10 @@ import MenuIcon from '@mui/icons-material/Menu';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 
 import { LayoutDashboard, IndianRupee, TicketSlash, ChartColumnDecreasing, UserRound, BriefcaseBusiness, BadgeIndianRupee, MessageCircle, MessagesSquare, CalendarCheck2, CalendarClock, CalendarFold, CalendarX2, Camera, Music, SprayCan, HandPlatter, Store, Handshake, MonitorCheck, MonitorX, UserPlus } from 'lucide-react';
+import useConversations from "../../hooks/useConversations";
+import { getConversationMessages } from "../../apis/conversationsApi";
+
+
 
 
 const formatEarnings = (amount) => {
@@ -17,6 +21,25 @@ const formatEarnings = (amount) => {
     return `₹${Math.round(amount / 1000)}K`;
   }
   return `₹${amount}`;
+};
+
+const getInitials = (name) =>{
+  const names = name.split(" ");
+  const initials = names.map((n) => n.charAt(0).toUpperCase()).join("");
+  return initials;
+}
+
+const formatTimeIST = (isoDate) => {
+  const date = new Date(isoDate);
+  
+  const options = {
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: true,
+    timeZone: 'Asia/Kolkata'
+  }
+
+  return new Intl.DateTimeFormat('en-IN', options).format(date);
 };
 
 const stats_dashboard = [
@@ -190,68 +213,67 @@ const stats_users = [
   }
 ];
 
-const recentChats = [
-  { name: "Alice", vendor: "Vendor One", time: "10:30 AM", unread: 2, initialsUser: "AS", initialsVendor: "V1" },
-  { name: "Michael", vendor: "Vendor Two", time: "11:00 AM", unread: 0, initialsUser: "BJ", initialsVendor: "V2" },
-  { name: "Charles", vendor: "Vendor Three", time: "12:15 PM", unread: 5, initialsUser: "CL", initialsVendor: "V3" },
-];
-
-const userChats = [
-  { name: "David", preview: "Hello there!", time: "09:45 AM", unread: 1, initialsUser: "DB" },
-  { name: "Evelyn", preview: "How are you?", time: "10:00 AM", unread: 0, initialsUser: "EG" },
-  { name: "Franco", preview: "Check this out", time: "10:20 AM", unread: 3, initialsUser: "FW" },
-];
-
-const sidebar_arr = [ 
+const sidebar_arr = [
   {
-    label: 'Dashboard',
+    label: "Dashboard",
     icon: <LayoutDashboard size={22} />,
-    key: 'Dashboard',
+    key: "Dashboard",
   },
   {
-    label: 'Bookings',
+    label: "Bookings",
     icon: <CalendarFold size={22} />,
-    key: 'Bookings',
+    key: "Bookings",
   },
   {
-    label: 'Payments',
+    label: "Payments",
     icon: <BadgeIndianRupee size={22} />,
-    key: 'Payments',
+    key: "Payments",
   },
   {
-    label: 'Vendors',
+    label: "Vendors",
     icon: <BriefcaseBusiness size={22} />,
-    key: 'Vendors',
+    key: "Vendors",
   },
   {
-    label: 'Users',
+    label: "Users",
     icon: <UserRound size={22} />,
-    key: 'Users',
+    key: "Users",
   },
   {
-    label: 'Chat',   
+    label: "Chat",
     icon: <MessageCircle size={22} />,
-    key: 'Chat',
+    key: "Chat",
   },
   {
-    label: 'Chat - Users',       
+    label: 'Chat-Support',       
     icon: <MessagesSquare size={22} />,
-    key: 'ChatUsers',
-  }
+    key: "ChatSupport",
+  },
+  {
+    label: "Chat-Concierge",
+    icon: <MessagesSquare size={22} />,
+    key: "ChatConcierge",
+  },
 ];
+
+
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [activeDropdown, setactiveDropdown] = useState("dashboard")
-
+  const [activeDropdown, setactiveDropdown] = useState("dashboard");
   const [selectedChat, setSelectedChat] = useState(null);
+  const [currentConversation, setCurrentConversation] = useState([])
+  const {recentChats, supportChats, adminChats} = useConversations({ enabled: true });
 
+  const loadConversation = async (id) =>{
+    const convo = await getConversationMessages(id);
+    setCurrentConversation(convo);
+  }
+   
 
   return (
-
     <div className="flex flex-col h-screen">
-
       {/* Navbar */}
       <div className="navbar bg-white border-b-2 border-[#CCAB4A]">
         <Dashboards_Nav />
@@ -259,7 +281,6 @@ const AdminDashboard = () => {
 
       {/* Main content below navbar */}
       <div className="mainbody w-full flex flex-1">
-
         <div
           className="h-full flex"
           style={{
@@ -267,7 +288,6 @@ const AdminDashboard = () => {
             transition: "width 0.3s ease",
           }}
         >
-
           {/* Sidebar */}
           <div
             className="bg-[#fff4d4] h-full flex flex-col items-center py-8 relative"
@@ -277,7 +297,6 @@ const AdminDashboard = () => {
               transition: "all 0.3s ease",
             }}
           >
-
             {/* Sidebar Options */}
             {sidebarOpen && (
               <div className="options flex flex-col items-center w-full">
@@ -290,11 +309,15 @@ const AdminDashboard = () => {
                       <button
                         key={item.key}
                         type="button"
-                        onClick={() => setactiveDropdown(key)}
-                        className={`group cursor-pointer rounded-[16px] pl-2 sm:pl-4 pr-2 flex items-center justify-between font-bold w-[80px] sm:w-[100px] md:w-[140px] lg:w-[180px] xl:w-[250px] h-[40px] transform transition-transform duration-500 ease-in-out hover:scale-105 hover:-translate-y-1 active:scale-95 ${isActive
-                          ? "bg-[#CCAB4A] text-white"
-                          : "bg-white text-[#CCAB4A] hover:bg-[#CCAB4A] hover:text-white"
-                          }`}
+                        onClick={() => {
+                          setSelectedChat(null);
+                          setactiveDropdown(key);
+                        }}
+                        className={`group cursor-pointer rounded-[16px] pl-2 sm:pl-4 pr-2 flex items-center justify-between font-bold w-[80px] sm:w-[100px] md:w-[140px] lg:w-[180px] xl:w-[250px] h-[40px] transform transition-transform duration-500 ease-in-out hover:scale-105 hover:-translate-y-1 active:scale-95 ${
+                          isActive
+                            ? "bg-[#CCAB4A] text-white"
+                            : "bg-white text-[#CCAB4A] hover:bg-[#CCAB4A] hover:text-white"
+                        }`}
                       >
                         <span className="pb-[2px] text-base hidden lg:block">
                           {item.label}
@@ -303,10 +326,11 @@ const AdminDashboard = () => {
                           {item.icon}
                         </span>
                         <span
-                          className={`arrowButton w-[30px] h-[30px] rounded-[13px] flex items-center justify-center transition duration-500 ${isActive
-                            ? "bg-white text-[#CCAB4A]"
-                            : "bg-[#CCAB4A] text-white group-hover:bg-white group-hover:text-[#CCAB4A]"
-                            }`}
+                          className={`arrowButton w-[30px] h-[30px] rounded-[13px] flex items-center justify-center transition duration-500 ${
+                            isActive
+                              ? "bg-white text-[#CCAB4A]"
+                              : "bg-[#CCAB4A] text-white group-hover:bg-white group-hover:text-[#CCAB4A]"
+                          }`}
                         >
                           <EastIcon fontSize="medium" />
                         </span>
@@ -319,9 +343,7 @@ const AdminDashboard = () => {
 
             {/* Bottom Buttons */}
             {sidebarOpen ? (
-
               <div className="mt-auto flex flex-col gap-2 w-full items-center">
-
                 {/* Go Back */}
                 <button
                   type="button"
@@ -344,11 +366,8 @@ const AdminDashboard = () => {
                     Hide
                   </span>
                 </button>
-
               </div>
-
             ) : (
-
               // Collapsed Hamburger
               <div className="absolute top-1/2 left-0 w-full flex justify-center -translate-y-1/2">
                 <button
@@ -358,15 +377,12 @@ const AdminDashboard = () => {
                   <MenuIcon className="text-[#CCAB4A]" />
                 </button>
               </div>
-
             )}
           </div>
-
         </div>
 
         {activeDropdown === "dashboard" && (
           <div className="right-dashboard w-[70%] xs:w-[85%] bg-[#FDFAF0] border-l-2 border-[#CCAB4A] px-10">
-
             {/* Heading */}
             <div className="heading font-semibold text-[32px] xs:text-4xl sm:text-5xl my-4 text-[#d08f4e]">
               Dashboard
@@ -375,7 +391,6 @@ const AdminDashboard = () => {
             {/* Info Cards Upper */}
             <div className="py-4">
               <div className="grid grid-cols-1 xl:grid-cols-4 md:grid-cols-2 gap-6">
-
                 {stats_dashboard.map((item) => (
                   <div
                     key={item.key}
@@ -393,16 +408,13 @@ const AdminDashboard = () => {
                         {item.value}
                       </div>
                     </div>
-
                   </div>
                 ))}
-
               </div>
             </div>
 
             {/* Info Cards Lower */}
             <div className="grid grid-cols-1 mt-4 sm:grid-cols-2 gap-6 mb-10">
-
               {/* New Users and Vendors per month */}
               <div className="h-[400px] w-full px-6 py-5 rounded-[20px] bg-white border-2 border-[#CCAB4A] flex flex-col justify-start">
                 <div className="heading font-semibold text-2xl text-black mb-2">
@@ -422,16 +434,12 @@ const AdminDashboard = () => {
                   <LineChart_BookingsPerMonth_AdminDashboard />
                 </div>
               </div>
-
             </div>
-
           </div>
         )}
 
         {activeDropdown === "bookings" && (
-
           <div className="right-dashboard w-[70%] xs:w-[85%] bg-[#FDFAF0] border-l-2 border-[#CCAB4A] px-10">
-
             {/* Heading */}
             <div className="heading font-semibold text-[32px] xs:text-4xl sm:text-5xl my-4 text-[#d08f4e]">
               Bookings
@@ -440,7 +448,6 @@ const AdminDashboard = () => {
             {/* Info Cards Upper */}
             <div className="py-4">
               <div className="grid grid-cols-1 xl:grid-cols-4 md:grid-cols-2 gap-6">
-
                 {stats_bookings.map((item) => (
                   <div
                     key={item.key}
@@ -458,16 +465,13 @@ const AdminDashboard = () => {
                         {item.value}
                       </div>
                     </div>
-
                   </div>
                 ))}
-
               </div>
             </div>
 
             {/* Info Cards Lower */}
             <div className="grid grid-cols-1 mt-4 sm:grid-cols-2 gap-6 mb-10">
-
               {/* Booking by Category */}
               <div className="h-[400px] w-full px-6 py-5 rounded-[20px] bg-white border-2 border-[#CCAB4A] flex flex-col justify-start">
                 <div className="heading font-semibold text-2xl text-black mb-2">
@@ -487,17 +491,12 @@ const AdminDashboard = () => {
                   <Doughnut_BookingCity_AdminDashboard />
                 </div>
               </div>
-
             </div>
-
           </div>
-
         )}
 
         {activeDropdown === "payments" && (
-
           <div className="right-dashboard w-[70%] xs:w-[85%] bg-[#FDFAF0] border-l-2 border-[#CCAB4A] px-10">
-
             {/* Heading */}
             <div className="heading font-semibold text-[32px] xs:text-4xl sm:text-5xl my-4 text-[#d08f4e]">
               Payments
@@ -506,7 +505,6 @@ const AdminDashboard = () => {
             {/* Info Cards Upper */}
             <div className="py-4">
               <div className="grid grid-cols-1 xl:grid-cols-4 md:grid-cols-2 gap-6">
-
                 {stats_payments.map((item) => (
                   <div
                     key={item.key}
@@ -524,16 +522,13 @@ const AdminDashboard = () => {
                         {item.value}
                       </div>
                     </div>
-
                   </div>
                 ))}
-
               </div>
             </div>
 
             {/* Info Cards Lower */}
             <div className="grid grid-cols-1 mt-4 sm:grid-cols-2 gap-6 mb-10">
-
               {/* Booking by Category */}
               <div className="h-[400px] w-full px-6 py-5 rounded-[20px] bg-white border-2 border-[#CCAB4A] flex flex-col justify-start">
                 <div className="heading font-semibold text-2xl text-black mb-2">
@@ -553,17 +548,12 @@ const AdminDashboard = () => {
                   <Doughnut_BookingCity_AdminDashboard />
                 </div>
               </div>
-
             </div>
-
           </div>
-
         )}
 
         {activeDropdown === "vendors" && (
-
           <div className="right-dashboard w-[70%] xs:w-[85%] bg-[#FDFAF0] border-l-2 border-[#CCAB4A] px-10">
-
             {/* Heading */}
             <div className="heading font-semibold text-[32px] xs:text-4xl sm:text-5xl my-4 text-[#d08f4e]">
               Vendors
@@ -572,7 +562,6 @@ const AdminDashboard = () => {
             {/* Info Cards Upper */}
             <div className="py-4">
               <div className="grid grid-cols-1 xl:grid-cols-4 lg:grid-cols-2 gap-6">
-
                 {stats_vendors.map((item) => (
                   <div
                     key={item.key}
@@ -590,26 +579,25 @@ const AdminDashboard = () => {
                         {item.value}
                       </div>
                     </div>
-
                   </div>
                 ))}
-
               </div>
             </div>
 
             {/* Info Cards Lower */}
             <div className="grid grid-cols-1 mt-4 lg:grid-cols-2 gap-6 mb-10">
-
               {/* Two side-by-side custom columns */}
               <div className="w-full grid grid-cols-1 2xl:grid-cols-2 gap-6">
-
                 {/* Left box */}
                 <div className="flex-1 px-6 py-5 bg-white border-2 border-[#CCAB4A] rounded-[20px] flex flex-col justify-start">
-
                   {/* Heading */}
                   <div className="mb-4">
-                    <div className="text-2xl font-semibold text-black">Top Performers</div>
-                    <div className="text-base text-gray-400 leading-4">Total bookings handled</div>
+                    <div className="text-2xl font-semibold text-black">
+                      Top Performers
+                    </div>
+                    <div className="text-base text-gray-400 leading-4">
+                      Total bookings handled
+                    </div>
                   </div>
 
                   {/* Vendor list */}
@@ -628,7 +616,9 @@ const AdminDashboard = () => {
                             <span className="font-semibold text-xl leading-none break-words">
                               {vendor.name}
                             </span>
-                            <span className="text-sm text-gray-500 mt-2">{vendor.city}</span>
+                            <span className="text-sm text-gray-500 mt-2">
+                              {vendor.city}
+                            </span>
                           </div>
                         </div>
 
@@ -639,16 +629,18 @@ const AdminDashboard = () => {
                       </div>
                     ))}
                   </div>
-
                 </div>
 
                 {/* Right box */}
                 <div className="flex-1 px-6 py-5 bg-white border-2 border-[#CCAB4A] rounded-[20px] flex flex-col justify-start">
-
                   {/* Heading */}
                   <div className="mb-4">
-                    <div className="text-2xl font-semibold text-black">Top Earners</div>
-                    <div className="text-base text-gray-400 leading-4">Total revenue generated</div>
+                    <div className="text-2xl font-semibold text-black">
+                      Top Earners
+                    </div>
+                    <div className="text-base text-gray-400 leading-4">
+                      Total revenue generated
+                    </div>
                   </div>
 
                   {/* Earner list */}
@@ -667,7 +659,9 @@ const AdminDashboard = () => {
                             <span className="font-semibold text-xl leading-none break-words">
                               {earner.name}
                             </span>
-                            <span className="text-sm text-gray-500 mt-2">{earner.city}</span>
+                            <span className="text-sm text-gray-500 mt-2">
+                              {earner.city}
+                            </span>
                           </div>
                         </div>
 
@@ -679,7 +673,6 @@ const AdminDashboard = () => {
                     ))}
                   </div>
                 </div>
-
               </div>
 
               {/* Vendors by City */}
@@ -691,17 +684,12 @@ const AdminDashboard = () => {
                   <Doughnut_VendorCity_AdminDashboard />
                 </div>
               </div>
-
             </div>
-
           </div>
-
         )}
 
         {activeDropdown === "users" && (
-
           <div className="right-dashboard w-[70%] xs:w-[85%] bg-[#FDFAF0] border-l-2 border-[#CCAB4A] px-10">
-
             {/* Heading */}
             <div className="heading font-semibold text-[32px] xs:text-4xl sm:text-5xl my-4 text-[#d08f4e]">
               Users
@@ -710,7 +698,6 @@ const AdminDashboard = () => {
             {/* Info Cards Upper */}
             <div className="py-4">
               <div className="grid grid-cols-1 xl:grid-cols-4 md:grid-cols-2 gap-6">
-
                 {stats_users.map((item) => (
                   <div
                     key={item.key}
@@ -728,16 +715,13 @@ const AdminDashboard = () => {
                         {item.value}
                       </div>
                     </div>
-
                   </div>
                 ))}
-
               </div>
             </div>
 
             {/* Info Cards Lower */}
             <div className="grid grid-cols-1 mt-4 sm:grid-cols-2 gap-6 mb-10">
-
               {/* Users by City */}
               <div className="h-[400px] w-full px-6 py-5 rounded-[20px] bg-white border-2 border-[#CCAB4A] flex flex-col justify-start">
                 <div className="heading font-semibold text-2xl text-black mb-2">
@@ -757,42 +741,41 @@ const AdminDashboard = () => {
                   <LineChart_UserNew_AdminDashboard />
                 </div>
               </div>
-
             </div>
-
           </div>
-
         )}
 
         {activeDropdown === "chat" && (
-
           <div className="right-dashboard w-[70%] xs:w-[85%] bg-[#FDFAF0] border-l-2 border-[#CCAB4A] px-10">
-
             <div className="heading font-semibold text-[32px] xs:text-4xl sm:text-5xl my-4 text-[#d08f4e]">
               Chat
             </div>
 
             <div className="h-[600px] w-full bg-white border-2 border-[#CCAB4A] rounded-[20px] flex overflow-hidden">
-
               {/* LEFT - Recent Conversations */}
               <div className="w-1/3 border-r border-[#F1E1A8] overflow-y-auto">
-
                 {recentChats.map((c, idx) => (
-
                   <div
                     key={idx}
-                    onClick={() => setSelectedChat(c)}
-                    className={`flex items-center justify-between gap-2 p-4 cursor-pointer hover:bg-[#FFF4D4] transition ${selectedChat?.name === c.name ? "bg-[#FFF4D4]" : ""}`}
+                    onClick={() => {
+                      setSelectedChat(c);
+                      loadConversation(c._id);
+                    }}
+                    className={`flex items-center justify-between gap-2 p-4 cursor-pointer hover:bg-[#FFF4D4] transition ${
+                      selectedChat?.customerId.name === c.customerId.name
+                        ? "bg-[#FFF4D4]"
+                        : ""
+                    }`}
                   >
-
                     <div className="flex items-center gap-2 flex-1">
-
                       {/* User */}
                       <div className="flex items-center gap-2">
                         <div className="w-10 h-10 rounded-full bg-[#FFF4D4] border border-[#CCAB4A] flex items-center justify-center font-semibold text-[#CCAB4A]">
-                          {c.initialsUser}
+                          {getInitials(c.customerId.name)}
                         </div>
-                        <span className="font-semibold">{c.name}</span>
+                        <span className="font-semibold">
+                          {c.customerId.name}
+                        </span>
                       </div>
 
                       <span className="mx-2 text-gray-400">-</span>
@@ -800,15 +783,13 @@ const AdminDashboard = () => {
                       {/* Vendor */}
                       <div className="flex items-center gap-2">
                         <div className="w-10 h-10 rounded-full bg-[#FFF4D4] border border-[#CCAB4A] flex items-center justify-center font-semibold text-[#CCAB4A]">
-                          {c.initialsVendor}
+                          {getInitials(c.vendorId.name)}
                         </div>
-                        <span className="font-semibold">{c.vendor}</span>
+                        <span className="font-semibold">{c.vendorId.name}</span>
                       </div>
-
                     </div>
 
                     <div className="flex flex-col items-end text-sm">
-
                       <span className="text-gray-500">{c.time}</span>
 
                       {c.unread > 0 && (
@@ -816,31 +797,25 @@ const AdminDashboard = () => {
                           {c.unread}
                         </span>
                       )}
-
                     </div>
-
                   </div>
-
                 ))}
-
               </div>
 
               {/* RIGHT - Chat Messages */}
               <div className="flex-1 flex flex-col">
-
                 {selectedChat ? (
-
                   <>
-
                     {/* Header */}
                     <div className="p-4 border-b border-[#F1E1A8] flex items-center justify-between">
-
                       {/* User */}
                       <div className="flex items-center gap-2">
                         <div className="w-10 h-10 rounded-full bg-[#FFF4D4] border border-[#CCAB4A] flex items-center justify-center font-semibold text-[#CCAB4A]">
-                          {selectedChat.initialsUser}
+                          {getInitials(selectedChat.customerId.name)}
                         </div>
-                        <span className="font-semibold text-lg">{selectedChat.name}</span>
+                        <span className="font-semibold text-lg">
+                          {selectedChat.customerId.name}
+                        </span>
                       </div>
 
                       <span className="mx-2 text-gray-400">-</span>
@@ -848,23 +823,31 @@ const AdminDashboard = () => {
                       {/* Vendor */}
                       <div className="flex items-center gap-2">
                         <div className="w-10 h-10 rounded-full bg-[#FFF4D4] border border-[#CCAB4A] flex items-center justify-center font-semibold text-[#CCAB4A]">
-                          {selectedChat.initialsVendor}
+                          {getInitials(selectedChat.vendorId.name)}
                         </div>
-                        <span className="font-semibold text-lg">{selectedChat.vendor}</span>
+                        <span className="font-semibold text-lg">
+                          {selectedChat.vendorId.name}
+                        </span>
                       </div>
-
                     </div>
 
                     {/* Messages */}
-                    <div className="flex-1 p-4 overflow-y-auto text-gray-600 flex flex-col space-y-3">
-                      <p className="self-start bg-gray-100 px-3 py-2 rounded-lg w-fit">
-                        Hello, this is a sample message from {selectedChat.name}.
-                      </p>
-
-                      <p className="self-end bg-[#d08f4e] text-white px-3 py-2 rounded-lg w-fit">
-                        Hi {selectedChat.name}, this is a vendor reply.
-                      </p>
-                    </div>
+                    {currentConversation && currentConversation.length > 0 && (
+                      <div className="flex-1 p-4 overflow-y-auto text-gray-600 flex flex-col space-y-3">
+                        {currentConversation.map((msg, index) => (
+                          <p
+                            key={index}
+                            className={`${
+                              msg.senderType === "USER"
+                                ? "self-start bg-gray-100"
+                                : "self-end bg-[#d08f4e] text-white"
+                            } px-3 py-2 rounded-lg w-fit`}
+                          >
+                            {msg.message}
+                          </p>
+                        ))}
+                      </div>
+                    )}
 
                     {/* Input Box */}
                     <div className="p-3 border-t border-[#F1E1A8] flex gap-2">
@@ -877,119 +860,104 @@ const AdminDashboard = () => {
                         Send
                       </button>
                     </div>
-
                   </>
-
                 ) : (
-
                   <div className="flex-1 flex items-center justify-center text-gray-400">
                     Select a conversation to start monitoring
                   </div>
-
                 )}
-
               </div>
-
             </div>
-
           </div>
-
         )}
 
-        {activeDropdown === "chatusers" && (
-
+        {activeDropdown === "chatsupport" && (
           <div className="right-dashboard w-[70%] xs:w-[85%] bg-[#FDFAF0] border-l-2 border-[#CCAB4A] px-10">
-
             <div className="heading font-semibold text-[32px] xs:text-4xl sm:text-5xl my-4 text-[#d08f4e]">
               Chat - Users
             </div>
 
             <div className="h-[600px] w-full bg-white border-2 border-[#CCAB4A] rounded-[20px] flex overflow-hidden">
-
               {/* LEFT - User List */}
               <div className="w-1/3 border-r border-[#F1E1A8] overflow-y-auto">
-
-                {userChats.map((c, idx) => (
-
+                {supportChats.map((c, idx) => (
                   <div
                     key={idx}
-                    onClick={() => setSelectedChat(c)}
-                    className={`flex items-center justify-between p-4 cursor-pointer hover:bg-[#FFF4D4] transition ${selectedChat?.name === c.name ? "bg-[#FFF4D4]" : ""}`}
+                    onClick={() => {
+                      setSelectedChat(c);
+                      loadConversation(c._id);
+                    }}
+                    className={`flex items-center justify-between p-4 cursor-pointer hover:bg-[#FFF4D4] transition ${
+                      selectedChat?.customerId.name === c.customerId.name
+                        ? "bg-[#FFF4D4]"
+                        : ""
+                    }`}
                   >
-
                     <div className="flex items-center gap-2">
-
                       <div className="w-10 h-10 rounded-full bg-[#FFF4D4] border border-[#CCAB4A] flex items-center justify-center font-semibold text-[#CCAB4A]">
-                        {c.initialsUser}
+                        {getInitials(c.customerId.name)}
                       </div>
 
                       <div className="flex flex-col">
-
-                        <span className="font-semibold">{c.name}</span>
-                        <span className="text-xs text-gray-500 truncate max-w-[120px]">
-                          {c.preview}
+                        <span className="font-semibold">
+                          {c.customerId.name}
                         </span>
 
                       </div>
                     </div>
 
                     <div className="flex flex-col items-end text-sm">
-
-                      <span className="text-gray-500">{c.time}</span>
-
-                      {c.unread > 0 && (
-                        <span className="mt-1 w-6 h-6 flex items-center justify-center rounded-full bg-[#d08f4e] text-white text-xs font-semibold">
-                          {c.unread}
-                        </span>
-
-                      )}
-
+                      <span className="text-gray-500">
+                        {formatTimeIST(c.updatedAt)}
+                      </span>
                     </div>
-
                   </div>
-
                 ))}
-
               </div>
 
               {/* RIGHT - Chat Window */}
               <div className="flex-1 flex flex-col">
-
                 {selectedChat ? (
-
                   <>
-
                     <div className="p-4 border-b border-[#F1E1A8] flex items-center justify-between">
-
                       <div className="flex items-center gap-2">
-
                         <div className="w-10 h-10 rounded-full bg-[#FFF4D4] border border-[#CCAB4A] flex items-center justify-center font-semibold text-[#CCAB4A]">
-                          {selectedChat.initialsUser}
+                          {getInitials(selectedChat.customerId.name)}
                         </div>
 
-                        <span className="font-semibold text-lg">{selectedChat.name}</span>
-
+                        <span className="font-semibold text-lg">
+                          {selectedChat.customerId.name}
+                        </span>
                       </div>
 
-                      <span className="text-sm text-gray-500">{selectedChat.time}</span>
-
+                      <span className="text-sm text-gray-500">
+                        {formatTimeIST(selectedChat.updatedAt)}
+                      </span>
                     </div>
 
                     <div className="flex-1 p-4 overflow-y-auto text-gray-600 flex flex-col space-y-3">
-
-                      <p className="self-start bg-gray-100 px-3 py-2 rounded-lg w-fit">
-                        {selectedChat.preview}
-                      </p>
-
-                      <p className="self-end bg-[#d08f4e] text-white px-3 py-2 rounded-lg w-fit">
-                        Hello! This is an admin reply.
-                      </p>
-
+                      {currentConversation &&
+                        currentConversation.length > 0 && (
+                          <div className="flex-1 p-4 overflow-y-auto text-gray-600 flex flex-col space-y-3">
+                            {currentConversation.map((msg, index) => (
+                              <p
+                                key={index}
+                                className={`${
+                                  msg.senderType === "USER"
+                                    ? "self-start bg-gray-100"
+                                    : "self-end bg-[#d08f4e] text-white"
+                                } px-3 py-2 rounded-lg w-fit`}
+                              >
+                                {msg.message}
+                              </p>
+                            ))}
+                          </div>
+                        )}
                     </div>
 
                     <div className="p-3 border-t border-[#F1E1A8] flex gap-2">
-
-                      <input type="text"
+                      <input
+                        type="text"
                         placeholder="Type a message..."
                         className="flex-1 px-4 py-2 rounded-full border border-[#CCAB4A] focus:outline-none"
                       />
@@ -997,31 +965,124 @@ const AdminDashboard = () => {
                       <button className="px-4 py-2 bg-[#CCAB4A] text-white rounded-full font-semibold hover:opacity-90 transition">
                         Send
                       </button>
-
                     </div>
-
                   </>
-
                 ) : (
-
                   <div className="flex-1 flex items-center justify-center text-gray-400">
                     Select a user to start chatting
                   </div>
-
                 )}
-
               </div>
-
             </div>
-
           </div>
-
         )}
 
+        {activeDropdown === "chatconcierge" && (
+          <div className="right-dashboard w-[70%] xs:w-[85%] bg-[#FDFAF0] border-l-2 border-[#CCAB4A] px-10">
+            <div className="heading font-semibold text-[32px] xs:text-4xl sm:text-5xl my-4 text-[#d08f4e]">
+              Chat - Events
+            </div>
+
+            <div className="h-[600px] w-full bg-white border-2 border-[#CCAB4A] rounded-[20px] flex overflow-hidden">
+              {/* LEFT - User List */}
+              <div className="w-1/3 border-r border-[#F1E1A8] overflow-y-auto">
+                {adminChats.map((c, idx) => (
+                  <div
+                    key={idx}
+                    onClick={() => {
+                      setSelectedChat(c);
+                      loadConversation(c._id);
+                    }}
+                    className={`flex items-center justify-between p-4 cursor-pointer hover:bg-[#FFF4D4] transition ${
+                      selectedChat?.customerId.name === c.customerId.name
+                        ? "bg-[#FFF4D4]"
+                        : ""
+                    }`}
+                  >
+                    <div className="flex items-center gap-2">
+                      <div className="w-10 h-10 rounded-full bg-[#FFF4D4] border border-[#CCAB4A] flex items-center justify-center font-semibold text-[#CCAB4A]">
+                        {getInitials(c.customerId.name)}
+                      </div>
+
+                      <div className="flex flex-col">
+                        <span className="font-semibold">
+                          {c.customerId.name}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col items-end text-sm">
+                      <span className="text-gray-500">
+                        {formatTimeIST(c.updatedAt)}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* RIGHT - Chat Window */}
+              <div className="flex-1 flex flex-col">
+                {selectedChat ? (
+                  <>
+                    <div className="p-4 border-b border-[#F1E1A8] flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <div className="w-10 h-10 rounded-full bg-[#FFF4D4] border border-[#CCAB4A] flex items-center justify-center font-semibold text-[#CCAB4A]">
+                          {getInitials(selectedChat.customerId.name)}
+                        </div>
+
+                        <span className="font-semibold text-lg">
+                          {selectedChat.customerId.name}
+                        </span>
+                      </div>
+
+                      <span className="text-sm text-gray-500">
+                        {formatTimeIST(selectedChat.updatedAt)}
+                      </span>
+                    </div>
+
+                    <div className="flex-1 p-4 overflow-y-auto text-gray-600 flex flex-col space-y-3">
+                      {currentConversation &&
+                        currentConversation.length > 0 && (
+                          <div className="flex-1 p-4 overflow-y-auto text-gray-600 flex flex-col space-y-3">
+                            {currentConversation.map((msg, index) => (
+                              <p
+                                key={index}
+                                className={`${
+                                  msg.senderType === "USER"
+                                    ? "self-start bg-gray-100"
+                                    : "self-end bg-[#d08f4e] text-white"
+                                } px-3 py-2 rounded-lg w-fit`}
+                              >
+                                {msg.message}
+                              </p>
+                            ))}
+                          </div>
+                        )}
+                    </div>
+
+                    <div className="p-3 border-t border-[#F1E1A8] flex gap-2">
+                      <input
+                        type="text"
+                        placeholder="Type a message..."
+                        className="flex-1 px-4 py-2 rounded-full border border-[#CCAB4A] focus:outline-none"
+                      />
+
+                      <button className="px-4 py-2 bg-[#CCAB4A] text-white rounded-full font-semibold hover:opacity-90 transition">
+                        Send
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <div className="flex-1 flex items-center justify-center text-gray-400">
+                    Select a user to start chatting
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
-
     </div>
-
   );
 };
 
