@@ -205,3 +205,50 @@ export function mapConversationsToVendors(conversations = []) {
     };
   });
 }
+
+
+/**
+ * Conversation array loading api on admin dashboard 
+ */
+
+export async function getAllConversation({ signal, chatType }) {
+  const path = `/conversations/admin/all?chatType=${chatType}`;
+
+  try {
+    const res = await tryFetch([path] , {
+      method: "GET",
+      signal
+    })
+
+    if(res.ok){
+      const data = await res.json();
+      return data.conversations
+    }
+
+    
+  } catch (error) {
+    throw new Error("Failed to fetch all conversations: " + error.message);
+  }
+}
+
+/**
+ * Get conversation messages by ID
+ */
+export async function getConversationMessages(id) {
+  const path = `/messages/${id}/messages`;
+
+  try {
+    const res = await tryFetch([path] , {
+      method: "GET"
+    })
+
+    if(res.ok){
+      const data = await res.json();
+      return data
+    }
+    
+  } catch (error) {
+    throw new Error("Failed to fetch conversation messages: " + error.message);
+  }
+}
+
