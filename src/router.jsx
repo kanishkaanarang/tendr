@@ -56,6 +56,13 @@ import BookingConfirmation from './pages/booking/BookingConfirmation';
 
 
 import Layout from "./components/Layout.jsx";
+import InvitationFlyerPicker from "./pages/invitation/InvitationFlyerPicker.jsx";
+import TemplateGallery from "./pages/invitation/TemplateGallery.jsx";
+import InvitationCustomizer from "./pages/invitation/InvitationCustomizer.jsx";
+import InvitationPreview from "./pages/invitation/InvitationPreview.jsx";
+import CustomTemplateRequest from "./pages/invitation/CustomTemplateRequest.jsx";
+import AftermoviePicker from "./pages/aftermovie/AftermoviePicker.jsx";
+import AftermovieCustomizer from "./pages/aftermovie/AftermovieCustomizer.jsx";
 
 const router = createBrowserRouter([
   { 
@@ -314,7 +321,6 @@ const router = createBrowserRouter([
     element: <GiftHampersCakes />,
     errorElement: <ErrorPage />,
   },
-<<<<<<< HEAD
   // Invitation routes
   {
     path: '/invitation',
@@ -363,8 +369,6 @@ const router = createBrowserRouter([
     ],
   },
   
-=======
->>>>>>> 69de05720caf49da6f52e1560a11abfc355519e4
 ]);
 
 
