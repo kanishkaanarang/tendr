@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { io } from "socket.io-client";
+
 import {
   ChevronRight,
   ChevronLeft,
@@ -13,8 +15,11 @@ import {
   X,
   Plus,
 } from "lucide-react";
+
 import EastIcon from "@mui/icons-material/East";
+
 import { useSelector, useDispatch } from "react-redux";
+
 import {
   setFormData,
   goToNextStep,
@@ -26,11 +31,75 @@ import {
   setBookingType,
 } from "../../redux/eventPlanningSlice.js";
 
+import { setFilters } from "../../redux/listingFiltersSlice";
+
 import MakeAGroup_Nav from "../../components/MakeAGroup_Nav.jsx";
 import EventFormSummary from "../../components/EventFormSummary.jsx";
 import Navbar from "../../components/Navbar.jsx";
 
 const EventPlanning = () => {
+  const socketRef = useRef(null);
+  const openChatWithSocket = () => {
+    // Agar socket already connected nahi hai to connect karo
+    if (!socketRef.current) {
+      socketRef.current = io("https://tendr-backend-75ag.onrender.com", {
+        query: {
+          userId: localStorage.getItem("userId") || "guest",
+          role: "user",
+          chatType: "EVENT",
+        }
+      });
+
+      // Socket connect hone ke baad event emit karna
+      socketRef.current.on("connect", () => {
+        console.log("Socket connected:", socketRef.current.id);
+
+        socketRef.current.emit("open_conversation", {
+          requestId: formData.eventName || `req_${Date.now()}`,
+          chatType: "EVENT",
+          extraRequirements,
+          extraRequirementsText,
+        });
+      });
+
+      // Backend se response suno
+      socketRef.current.on("conversation_opened", (conversation) => {
+        navigate("/chat", {
+          state: {
+            chatId: conversation._id,
+            chatType: "EVENT",
+            extraRequirements,
+            extraRequirementsText,
+          },
+          replace: true,
+        });
+      });
+
+      // Cleanup on unmount - optional if connection persists
+      // useEffect me return kar sakte ho agar chahiye
+    } else {
+      // Agar socket already connected hai to directly event emit kar do
+      socketRef.current.emit("open_conversation", {
+        requestId: formData.eventName || `req_${Date.now()}`,
+        chatType: "EVENT",
+        extraRequirements,
+        extraRequirementsText,
+      });
+    }
+  };
+
+
+
+
+
+
+  // Navigation handlers for checklist and timeline
+  const handleGoToChecklist = () => {
+    navigate('/prebuilt-checklist');
+  };
+  const handleGoToTimeline = () => {
+    navigate('/prebuilt-timeline');
+  };
   const navigate = useNavigate();
   const location = useLocation();
   const [activeModal, setActiveModal] = useState(null);
@@ -164,6 +233,23 @@ const EventPlanning = () => {
     dispatch(setFormData({ field, value }));
   };
 
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter' && formData[currentQuestion.id]) {
+      nextStep();
+    }
+  };
+
+  const handleSelectKeyPress = (e, option) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      handleInputChange(currentQuestion.id, option);
+      // Auto-advance to next step after selection
+      setTimeout(() => {
+        nextStep();
+      }, 100);
+    }
+  };
+
   /**
    * On Next:
    * - If not last question → advance step.
@@ -192,10 +278,14 @@ const EventPlanning = () => {
   const currentQuestion = questions[currentStep];
   const progress = ((currentStep + 1) / questions.length) * 100;
 
+
+
   /** =======================
    *  END STEP (Both Flows)
    *  ======================= */
+
   if (showVendorScreen) {
+
     // ---- FLOW A: YOU DO IT → keep your current grid screen exactly as-is
     if (bookingType === "you-do-it") {
       return (
@@ -217,24 +307,29 @@ const EventPlanning = () => {
               </p>
             </div>
 
+            {/* Extra Requirements Section ...existing code... */}
+            {/* ...existing extra requirements code... */}
+
+            {/* ...existing extra requirements code... */}
+
+
             {/* Options VendorTypes */}
             <div className="grid md:grid-cols-4 gap-8 mb-12">
               {vendors.map((vendor) => (
                 <div
                   key={vendor.id}
-                  onClick={() =>
-                    navigate("/listings", {
-                      state: {
+                  onClick={() => {
+                    dispatch(
+                      setFilters({
                         serviceType: vendor.id,
                         eventType: formData?.eventType || "",
                         locationType: formData?.location || "",
                         date: formData?.date || "",
                         guestCount: Number(formData?.guests) || 0,
-                        vendors: [],
-                        pagination: {},
-                      },
-                    })
-                  }
+                      })
+                    );
+                    navigate("/listings");
+                  }}
                   className="bg-white rounded-3xl p-8 text-center cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-xl border-2 border-transparent hover:border-[#ffb89e] shadow-lg"
                 >
                   <div className="w-20 h-20 bg-[#ea7e53] rounded-2xl flex items-center justify-center mx-auto mb-6 text-white">
@@ -294,6 +389,42 @@ const EventPlanning = () => {
                   />
                 </div>
               )}
+            </div>
+            {/* <div className="flex flex-row gap-12 justify-center mt-6">
+              <button
+                onClick={handleGoToChecklist}
+                className="px-6 py-3 bg-amber-500 text-white rounded-lg font-semibold hover:bg-amber-600 shadow"
+                style={{ minWidth: 180 }}
+              >
+                View Event Checklist
+              </button>
+              <button
+                onClick={handleGoToTimeline}
+                className="px-6 py-3 bg-amber-500 text-white rounded-lg font-semibold hover:bg-amber-600 shadow"
+                style={{ minWidth: 180 }}
+              >
+                View Event Timeline
+              </button>
+            </div> */}
+
+            {/* Review Booking Button */}
+            <div className="text-center mt-8">
+              <button
+                onClick={() => {
+                  const bookingDetails = {
+                    ...formData,
+                    vendors: selectedVendors,
+                    customerId: localStorage.getItem("userId"),
+                    amount: 250, // You can calculate actual amount here
+                    addons: [],
+                    extraRequirements,
+                  };
+                  navigate('/booking/review', { state: { booking: bookingDetails } });
+                }}
+                className="px-6 py-3 bg-amber-500 text-white rounded-lg font-semibold hover:bg-amber-600"
+              >
+                Review Booking
+              </button>
             </div>
 
             {/* Btn Back to Form */}
@@ -491,19 +622,39 @@ const EventPlanning = () => {
 
             <button
               type="button"
-              onClick={() =>
-                navigate("/chat", {
-                  state: {
-                    from: "booking",
-                    bookingType,
-                    formData,               // your full form object
-                    selectedVendors,        // array of vendor objects/ids
-                    extraRequirements,      // boolean
-                    extraRequirementsText,  // <-- add this so header can show the text
-                  },
-                  replace: true,
-                })
-              }
+              // onClick={async () => {
+              //   // Call backend to start chat with all relevant data
+              //   const res = await fetch("/api/chat/start", {
+              //     method: "POST",
+              //     headers: { "Content-Type": "application/json" },
+              //     body: JSON.stringify({
+              //       chatType: "EVENT",
+              //       formData,             // your full form object
+              //       selectedVendors,      // array of vendor objects/ids
+              //       extraRequirements,    // boolean
+              //       extraRequirementsText // header text
+              //     }),
+              //   });
+
+              //   const data = await res.json();
+              //   console.log("Chat started:", data);
+
+              //   // Navigate to chat screen and pass all needed info, including backend response
+              //   navigate("/chat", {
+              //     state: {
+              //       chatId: data.chatId,           // backend response
+              //       chatType: "EVENT",
+              //       bookingType,
+              //       formData,
+              //       selectedVendors,
+              //       extraRequirements,
+              //       extraRequirementsText,
+              //       from: "booking",               // keep this for compatibility
+              //     },
+              //     replace: true,
+              //   });
+              // }}
+              onClick={openChatWithSocket}
               className="group cursor-pointer bg-white hover:bg-[#ea7e53] hover:text-white rounded-2xl pl-4 pr-2 flex items-center justify-between text-[#ea7e53] font-bold w-[260px] h-[48px] transform transition-transform duration-300 ease-in-out hover:scale-105 hover:-translate-y-1 active:scale-95 shadow-lg"
             >
               <span className="pb-[2px] text-lg">Booking → Open Chat</span>
@@ -515,19 +666,59 @@ const EventPlanning = () => {
               </span>
             </button>
 
+
           </div>
 
           <div className="w-full max-w-4xl mt-6">
             <EventFormSummary />
+            {/* Review Booking & Payment Buttons */}
+            <div className="flex gap-4 mt-4">
+              <button
+                onClick={() => {
+                  const bookingDetails = {
+                    ...formData,
+                    vendors: selectedVendors,
+                    customerId: localStorage.getItem("userId"),
+                    amount: 250, // You can calculate actual amount here
+                    addons: [],
+                    extraRequirements: extraRequirementsText,
+                  };
+                  navigate('/booking/review', { state: { booking: bookingDetails } });
+                }}
+                className="px-6 py-3 bg-amber-500 text-white rounded-lg font-semibold hover:bg-amber-600"
+              >
+                Review Booking
+              </button>
+              <button
+                onClick={() => {
+                  const bookingDetails = {
+                    ...formData,
+                    vendors: selectedVendors,
+                    customerId: localStorage.getItem("userId"),
+                    amount: 250, // You can calculate actual amount here
+                    addons: [],
+                    extraRequirements: extraRequirementsText,
+                  };
+                  navigate('/booking/payment', { state: { booking: bookingDetails } });
+                }}
+                className="px-6 py-3 bg-green-500 text-white rounded-lg font-semibold hover:bg-green-600"
+              >
+                Proceed to Payment
+              </button>
+            </div>
           </div>
         </div>
       </div>
     );
+
   }
+
+
 
   /** =======================
    *  QUESTION-BY-QUESTION FORM
    *  ======================= */
+
   return (
     <div className="min-h-screen bg-[#ffeae2] flex items-center justify-center p-4">
       <div className="w-full max-w-2xl">
@@ -571,6 +762,7 @@ const EventPlanning = () => {
                 onChange={(e) =>
                   handleInputChange(currentQuestion.id, e.target.value)
                 }
+                onKeyPress={handleKeyPress}
                 placeholder={currentQuestion.placeholder}
                 className="w-full p-4 text-xl bg-white border-2 border-[#ff885d] rounded-2xl text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff885d] focus:border-transparent transition-all duration-200"
                 autoFocus
@@ -584,6 +776,7 @@ const EventPlanning = () => {
                 onChange={(e) =>
                   handleInputChange(currentQuestion.id, e.target.value)
                 }
+                onKeyPress={handleKeyPress}
                 placeholder={currentQuestion.placeholder}
                 className="w-full p-4 text-xl bg-white border-2 border-[#ff885d] rounded-2xl text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff885d] focus:border-transparent transition-all duration-200"
                 autoFocus
@@ -597,6 +790,7 @@ const EventPlanning = () => {
                 onChange={(e) =>
                   handleInputChange(currentQuestion.id, e.target.value)
                 }
+                onKeyPress={handleKeyPress}
                 className="w-full p-4 text-xl bg-white border-2 border-[#ff885d] rounded-2xl text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#ff885d] focus:border-transparent transition-all duration-200"
               />
             )}
@@ -607,6 +801,7 @@ const EventPlanning = () => {
                 onChange={(e) =>
                   handleInputChange(currentQuestion.id, e.target.value)
                 }
+                onKeyPress={handleKeyPress}
                 placeholder={currentQuestion.placeholder}
                 rows={4}
                 className="w-full p-4 text-xl bg-white border-2 border-[#ff885d] rounded-2xl text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff885d] focus:border-transparent transition-all duration-200 resize-none"
@@ -620,10 +815,16 @@ const EventPlanning = () => {
                   <button
                     type="button"
                     key={index}
-                    onClick={() =>
-                      handleInputChange(currentQuestion.id, option)
-                    }
-                    className={`w-full text-xl p-4 text-left rounded-2xl transition-all duration-200 border-2 ${formData[currentQuestion.id] === option
+                    tabIndex={0}
+                    onClick={() => {
+                      handleInputChange(currentQuestion.id, option);
+                      // Auto-advance to next step after selection
+                      setTimeout(() => {
+                        nextStep();
+                      }, 100);
+                    }}
+                    onKeyPress={(e) => handleSelectKeyPress(e, option)}
+                    className={`w-full text-xl p-4 text-left rounded-2xl transition-all duration-200 border-2 focus:outline-none focus:ring-2 focus:ring-[#ff885d] focus:ring-offset-2 ${formData[currentQuestion.id] === option
                       ? "bg-[#ffcdb9] border-[#ff885d] text-gray-800 shadow-md"
                       : "bg-white border-[#ffc1ab] text-gray-700 hover:bg-[#fff1eb] hover:border-[#fa9e7d]"
                       }`}
@@ -671,6 +872,7 @@ const EventPlanning = () => {
       </div>
     </div>
   );
+
 };
 
 export default EventPlanning;

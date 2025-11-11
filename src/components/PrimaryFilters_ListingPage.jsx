@@ -1,36 +1,33 @@
-// src/components/PrimaryFilters_ListingPage.jsx
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { setFilters } from "../redux/listingFiltersSlice";
 
-const PrimaryFilters_ListingPage = ({
-  eventType = "",
-  setEventType = () => { },
-  serviceType = "",
-  setServiceType = () => { },
-  locationType = "",
-  setLocationType = () => { },
-  date = "",
-  setDate = () => { },
-  guestCount = "",
-  setGuestCount = () => { },
-  onSearch = () => { },
-}) => {
+const PrimaryFilters_ListingPage = ({ onSearch = () => {} }) => {
+  const dispatch = useDispatch();
+  const filters = useSelector((state) => state.listingFilters);
+
+  const handleChange = (key, value) => {
+    dispatch(setFilters({ [key]: value }));
+  };
+
+
   return (
     <div className="primary-filters space-y-4 sm:space-y-6">
+
       {/* Service Type */}
       <div className="filter-group">
         <label className="block text-sm sm:text-base font-medium text-gray-700 mb-2">
           Service Type
         </label>
         <select
-          value={serviceType}
-          onChange={(e) => setServiceType(e.target.value)}
+          value={filters.serviceType}
+          onChange={(e) => handleChange("serviceType", e.target.value)} // ✅ keeps Redux updated
           className="w-full px-3 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#CCAB4A] focus:border-[#CCAB4A] text-sm sm:text-base"
         >
           <option value="">All Services</option>
           <option value="Caterer">Caterer</option>
           <option value="Decorator">Decorator</option>
           <option value="Photographer">Photographer</option>
-          {/* add more here if your API supports them: DJ, Makeup, Venue, etc. */}
         </select>
       </div>
 
@@ -40,13 +37,11 @@ const PrimaryFilters_ListingPage = ({
           Location
         </label>
         <select
-          value={locationType}
-          onChange={(e) => setLocationType(e.target.value)}
+          value={filters.locationType}
+          onChange={(e) => handleChange("locationType", e.target.value)} // ✅ Redux updates
           className="w-full px-3 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#CCAB4A] focus:border-[#CCAB4A] text-sm sm:text-base"
         >
-          <option value="" disabled>
-            Select Location
-          </option>
+          <option value="">Select Location</option>
           <option value="Delhi">Delhi</option>
           <option value="Noida">Noida</option>
           <option value="Greater Noida">Greater Noida</option>
@@ -61,8 +56,8 @@ const PrimaryFilters_ListingPage = ({
           Event Type
         </label>
         <select
-          value={eventType}
-          onChange={(e) => setEventType(e.target.value)}
+          value={filters.eventType}
+          onChange={(e) => handleChange("eventType", e.target.value)} // ✅ Redux updates
           className="w-full px-3 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#CCAB4A] focus:border-[#CCAB4A] text-sm sm:text-base"
         >
           <option value="">All Event Types</option>
@@ -85,8 +80,8 @@ const PrimaryFilters_ListingPage = ({
         </label>
         <input
           type="date"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
+          value={filters.date}
+          onChange={(e) => handleChange("date", e.target.value)} // ✅ Redux updates
           className="w-full px-3 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#CCAB4A] focus:border-[#CCAB4A] text-sm sm:text-base"
         />
       </div>
@@ -99,14 +94,13 @@ const PrimaryFilters_ListingPage = ({
         <input
           type="number"
           min="1"
-          value={guestCount ?? ""}
-          onChange={(e) => setGuestCount(e.target.value)}
+          value={filters.guestCount || ""}
+          onChange={(e) => handleChange("guestCount", e.target.value)} // ✅ Redux updates
           placeholder="Enter guest count"
           className="w-full px-3 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#CCAB4A] focus:border-[#CCAB4A] text-sm sm:text-base"
         />
       </div>
 
-      {/* Trigger search */}
       <button
         onClick={onSearch}
         className="w-full bg-[#CCAB4A] text-white py-2 sm:py-3 px-4 rounded-lg font-semibold hover:bg-[#ab8f39] transition-colors duration-200 text-sm sm:text-base"

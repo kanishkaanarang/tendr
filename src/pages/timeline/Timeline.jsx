@@ -38,8 +38,8 @@ function Timeline() {
   return (
     <div className="bg-white">
       {/* Dropdown */}
-      <div className="flex items-center justify-center ">
-        <label htmlFor="timeline-select" style={{ marginRight: 8, marginTop:15, marginBottom:10 }}>
+      <div className="flex items-center justify-center">
+        <label htmlFor="timeline-select" style={{ marginRight: 8, marginTop:15, marginBottom:10}}>
           Choose a timeline:
         </label>
         <select
