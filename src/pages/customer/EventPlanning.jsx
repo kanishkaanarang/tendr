@@ -28,6 +28,7 @@ import {
 
 import MakeAGroup_Nav from "../../components/MakeAGroup_Nav.jsx";
 import EventFormSummary from "../../components/EventFormSummary.jsx";
+import Navbar from "../../components/Navbar.jsx";
 
 const EventPlanning = () => {
   const navigate = useNavigate();
@@ -201,7 +202,7 @@ const EventPlanning = () => {
         <div className="min-h-screen bg-[#fff0ea] ">
           {/* Header */}
           <div className="navbar bg-white">
-            <MakeAGroup_Nav />
+            <Navbar />
           </div>
 
           {/* Main Body */}
@@ -398,11 +399,11 @@ const EventPlanning = () => {
       <div className="min-h-screen bg-[#fff0ea]">
         {/* Header */}
         <div className="navbar bg-white">
-          <MakeAGroup_Nav />
+          <Navbar />
         </div>
 
         <div className="w-full px-6 md:px-20 pt-10 pb-6 flex flex-col items-center">
-          <div className="text-left w-full max-w-4xl mb-6">
+          <div className="text-left w-full max-w-4xl mb-6 py-12">
             <h2 className="text-3xl font-bold text-gray-800 mb-1">
               Choose your vendors
             </h2>

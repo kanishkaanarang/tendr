@@ -58,6 +58,8 @@ import CustomTemplateRequest from './pages/invitation/CustomTemplateRequest';
 import AftermoviePicker from './pages/aftermovie/AftermoviePicker';
 import AftermovieCustomizer from './pages/aftermovie/AftermovieCustomizer';
 
+import Layout from "./components/Layout.jsx";
+
 const router = createBrowserRouter([
   { 
     path: "/", 
@@ -328,6 +330,17 @@ const router = createBrowserRouter([
     element: <AftermovieCustomizer />,
     errorElement: <ErrorPage />,
   },
+
+  {
+    element: <Layout />, // 👈 Global layout with Navbar + Footer
+    children: [
+      { path: "/", element: <Home /> },
+      {path: "/corporate", element: <CorporateBooking />},
+      {path:"/gift-hampers-cakes", element:<GiftHampersCakes />},
+      {path:"/booking", element:<ChooseBooking />},
+    ],
+  },
+  
 ]);
 
 export default router;
