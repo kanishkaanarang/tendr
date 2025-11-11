@@ -1,24 +1,35 @@
 // src/hooks/useConversations.js
 import { useEffect, useMemo, useState, useCallback } from "react";
-import { fetchConversations, mapConversationsToVendors } from "../apis/conversationsApi";
+import { fetchConversations, mapConversationsToVendors, getAllConversation } from "../apis/conversationsApi";
 
 export default function useConversations({ enabled = true } = {}) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [conversations, setConversations] = useState([]);
+  const [recentChats, setRecentChats] = useState([]);
+  const [supportChats, setSupportChats] = useState([]);
+  const [adminChats, setAdminChats] = useState([]);
 
   const refetch = useCallback(async (signal) => {
     try {
       setLoading(true);
       setError("");
-      const list = await fetchConversations({ signal });
-      setConversations(Array.isArray(list) ? list : []);
+      const list = await getAllConversation({ signal , chatType: "vendor"});
+      setRecentChats(Array.isArray(list) ? list : []);
+
+      const supportList = await getAllConversation({ signal , chatType: "support"});
+      setSupportChats(Array.isArray(supportList) ? supportList : []);
+
+      const adminList = await getAllConversation({ signal , chatType: "event"});
+      setAdminChats(Array.isArray(adminList) ? adminList : []);
+
     } catch (e) {
       const status = e?.status ?? e?.response?.status;
       const msg = e?.message || String(e) || "";
       // Treat 404 like "no conversations yet" (don’t leak dev-ish text into UI)
       if (status === 404 || (/\/conversations/.test(msg) && /404/.test(msg))) {
-        setConversations([]);
+        setRecentChats([]);
+        setSupportChats([]);
+        setAdminChats([]);
         setError("");
       } else {
         setError(msg);
@@ -36,12 +47,12 @@ export default function useConversations({ enabled = true } = {}) {
   }, [enabled, refetch]);
 
   const vendors = useMemo(
-    () => mapConversationsToVendors(conversations || []),
-    [conversations]
+    () => mapConversationsToVendors(recentChats || []),
+    [recentChats]
   );
 
   // Public API
   const reload = useCallback(() => refetch(), [refetch]);
 
-  return { loading, error, conversations, vendors, reload };
+  return { loading, error, recentChats, supportChats, adminChats, vendors, reload };
 }

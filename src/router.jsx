@@ -31,6 +31,7 @@ import ContactUs from "./pages/info/ContactUs.jsx";
 import ChooseBooking from "./pages/customer/ChooseBooking";
 import AltBookingFlow from "./pages/customer/AltBookingFlow";
 
+import Corporate from "./components/corporateEventPlanning.jsx";
 import CorporateDashboard from './pages/corporate/Dashboard.jsx';
 import TimelineBuilder from './pages/timeline/TimelineBuilder';
 import Timeline from './pages/timeline/Timeline';
@@ -90,6 +91,11 @@ const router = createBrowserRouter([
   { 
     path: '/corporate/booking', 
     element: <CorporateBooking />,
+    errorElement: <ErrorPage />
+  },
+  {
+    path: '/corporateEventPlanning',
+    element: <CorporateLogin />,
     errorElement: <ErrorPage />
   },
 
